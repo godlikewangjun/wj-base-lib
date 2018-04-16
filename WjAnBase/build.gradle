@@ -1,0 +1,66 @@
+apply plugin: 'com.android.library'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+    }
+}
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        // dex突破65535的限制
+//        multiDexEnabled true
+
+//        ndk {
+//            moduleName "wjandbase"
+//            abiFilters "armeabi","arm64-v8a"
+//            ldLibs "log"
+//        }
+    }
+    /* 忽略相同文件 */
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'APK_LICENSE.txt'
+        exclude 'LICENSE.txt'
+    }
+
+    //忽略编译资源检查
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(includes: ['*.jar'], dir: 'libs')
+    //依赖libs 文件里面所有jar
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
+    compile 'com.alibaba:fastjson:1.2.38'
+//    compile 'com.yalantis:ucrop:2.2.0'
+    compile 'com.wj.libs:wjEventBus:1.0.0'
+    //    compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    //    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
+    //provided
+    compile 'com.github.bumptech.glide:glide:4.5.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+}
+//上传插件
+apply from: "bintray.gradle"
