@@ -777,7 +777,7 @@ public class OhHttpClient {
                     //打印成功返回的日志
                     if (isJsonFromMat) {
                         try {
-                            AbLogUtil.i(OhHttpClient.class, url + ",\n" + AbStrUtil.jsonFormat(body));
+                            AbLogUtil.i(OhHttpClient.class, url + ",\n" + AbStrUtil.formatJson(body));
                         } catch (Exception e) {
                             e.printStackTrace();
                             if (failNum == 3) {

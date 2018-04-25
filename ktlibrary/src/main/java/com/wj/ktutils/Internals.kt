@@ -32,10 +32,6 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
-import com.sre.almighty.tools.ktutils.AnkoException
-import com.sre.almighty.tools.ktutils.Orientation
-import com.sre.almighty.tools.ktutils.ScreenSize
-import com.sre.almighty.tools.ktutils.UiMode
 import java.io.Serializable
 import java.util.*
 

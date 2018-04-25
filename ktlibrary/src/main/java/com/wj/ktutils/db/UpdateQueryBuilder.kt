@@ -19,7 +19,7 @@ package com.wj.ktutils.db
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import com.sre.almighty.tools.ktutils.AnkoException
+import com.wj.ktutils.AnkoException
 
 abstract class UpdateQueryBuilder(
         val tableName: String,

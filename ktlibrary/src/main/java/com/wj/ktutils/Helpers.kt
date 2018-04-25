@@ -15,14 +15,12 @@
  */
 
 @file:Suppress("unused")
-package com.sre.almighty.tools.ktutils
+package com.wj.ktutils
 
 import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.os.Build
-import com.wj.ktutils.AnkoContext
-import com.wj.ktutils.AnkoInternals
 
 open class AnkoException(message: String = "") : RuntimeException(message)
 

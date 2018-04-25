@@ -19,7 +19,7 @@ package com.wj.ktutils.db
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.sre.almighty.tools.ktutils.AnkoException
+import com.wj.ktutils.AnkoException
 import com.wj.ktutils.AnkoInternals
 
 abstract class SelectQueryBuilder(val tableName: String) {

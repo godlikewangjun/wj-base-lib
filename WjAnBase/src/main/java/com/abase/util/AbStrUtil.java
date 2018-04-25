@@ -421,53 +421,60 @@ public class AbStrUtil {
     	ip = ip.replace(".", ",");
     	String[]items = ip.split(","); 
     	return Long.valueOf(items[0])<<24 |Long.valueOf(items[1])<<16 |Long.valueOf(items[2])<<8 |Long.valueOf(items[3]); 
-    } 
-
-    /**格式化json*/
-    public static String jsonFormat(String jsonStr) {
-        try {
-            new JSONObject(jsonStr);
-        } catch (JSONException e) {
-            return jsonStr;
-        }
-        int level = 0;
-        StringBuffer jsonForMatStr = new StringBuffer();
-        for(int i=0;i<jsonStr.length();i++){
-            char c = jsonStr.charAt(i);
-            if(level>0&&'\n'==jsonForMatStr.charAt(jsonForMatStr.length()-1)){
-                jsonForMatStr.append(getLevelStr(level));
-            }
-            switch (c) {
-                case '{':
-                case '[':
-                    jsonForMatStr.append(c+"\n");
-                    level++;
-                    break;
-                case ',':
-                    jsonForMatStr.append(c+"\n");
-                    break;
-                case '}':
-                case ']':
-                    jsonForMatStr.append("\n");
-                    level--;
-                    jsonForMatStr.append(getLevelStr(level));
-                    jsonForMatStr.append(c);
-                    break;
-                default:
-                    jsonForMatStr.append(c);
-                    break;
-            }
-        }
-
-        return jsonForMatStr.toString();
-
     }
 
-    private static String getLevelStr(int level){
-        StringBuffer levelStr = new StringBuffer();
-        for(int levelI = 0;levelI<level ; levelI++){
-            levelStr.append("\t");
-        }
-        return levelStr.toString();
-    }
+	/**
+	 * 对json字符串格式化输出
+	 * @param jsonStr
+	 * @return
+	 */
+	public static String formatJson(String jsonStr) {
+		if (null == jsonStr || "".equals(jsonStr)) return "";
+		StringBuilder sb = new StringBuilder();
+		char last = '\0';
+		char current = '\0';
+		int indent = 0;
+		for (int i = 0; i < jsonStr.length(); i++) {
+			last = current;
+			current = jsonStr.charAt(i);
+			switch (current) {
+				case '{':
+				case '[':
+					sb.append(current);
+					sb.append('\n');
+					indent++;
+					addIndentBlank(sb, indent);
+					break;
+				case '}':
+				case ']':
+					sb.append('\n');
+					indent--;
+					addIndentBlank(sb, indent);
+					sb.append(current);
+					break;
+				case ',':
+					sb.append(current);
+					if (last != '\\') {
+						sb.append('\n');
+						addIndentBlank(sb, indent);
+					}
+					break;
+				default:
+					sb.append(current);
+			}
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * 添加space
+	 * @param sb
+	 * @param indent
+	 */
+	private static void addIndentBlank(StringBuilder sb, int indent) {
+		for (int i = 0; i < indent; i++) {
+			sb.append('\t');
+		}
+	}
 }

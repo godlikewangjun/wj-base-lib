@@ -2,9 +2,9 @@ package com.abase.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.IdRes;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +96,8 @@ public class AndroidKeyboardHeight {
                 if (usableHeightSansKeyboard-getScreenWH(mChildOfContent.getContext())[1]!=statusBarHeight){
                     //frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
                     frameLayoutParams.height = usableHeightSansKeyboard - heightDifference + statusBarHeight;
+                }else if(isTranslucentStatus()){
+                    frameLayoutParams.height = usableHeightSansKeyboard - heightDifference + statusBarHeight;
                 } else {
                     frameLayoutParams.height = usableHeightSansKeyboard -heightDifference;
                 }
@@ -113,6 +115,19 @@ public class AndroidKeyboardHeight {
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
         return (r.bottom - r.top);
+    }
+
+    /**
+     * 是否是状态透明的style
+     * @return
+     */
+    private boolean isTranslucentStatus(){
+        boolean b = false;
+        int[] attrsArray = {android.R.attr.windowTranslucentStatus};
+        TypedArray typedArray = activity.obtainStyledAttributes(attrsArray);
+        b = typedArray.getBoolean(0, b);
+        typedArray.recycle();
+        return b;
     }
 
     /**

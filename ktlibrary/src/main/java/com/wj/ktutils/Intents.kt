@@ -15,7 +15,7 @@
  */
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
-package com.sre.almighty.tools.ktutils
+package com.wj.ktutils
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -25,8 +25,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
-import com.wj.ktutils.AnkoContext
-import com.wj.ktutils.AnkoInternals
 
 
 inline fun <reified T: Activity> Context.startActivity(vararg params: Pair<String, Any?>) =

@@ -1,4 +1,4 @@
-package com.ad.aituo.views.interfaces
+package com.wj.ui.interfaces
 
 import android.view.View
 

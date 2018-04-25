@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.ad.aituo.views.interfaces.RecyerViewItemListener
+import com.wj.ui.interfaces.RecyerViewItemListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.wj.ui.base.viewhoder.CustomVhoder
