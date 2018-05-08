@@ -148,7 +148,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            mWebView.loadUrl("file:///android_asset/load_fail.html");
+//            mWebView.loadUrl("file:///android_asset/load_fail.html");
             WjEventBus.getInit().post(LoadWeb.LOADERROE,"");
         }
 
@@ -160,13 +160,13 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            mWebView.loadUrl("file:///android_asset/load_fail.html");
+//            mWebView.loadUrl("file:///android_asset/load_fail.html");
             WjEventBus.getInit().post(LoadWeb.LOADERROE,"");
         }
 
         @Override
         public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-            mWebView.loadUrl("file:///android_asset/load_fail.html");
+//            mWebView.loadUrl("file:///android_asset/load_fail.html");
             WjEventBus.getInit().post(LoadWeb.LOADERROE,"");
         }
         @Override
