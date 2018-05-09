@@ -206,9 +206,11 @@ public class OhHttpClient {
      *  销毁
      */
     public static synchronized OhHttpClient destory() {
-        ohHttpClient.client.dispatcher().cancelAll();
-        ohHttpClient.client=null;
-        ohHttpClient=null;
+        if(ohHttpClient!=null && ohHttpClient.client!=null){
+            ohHttpClient.client.dispatcher().cancelAll();
+            ohHttpClient.client=null;
+            ohHttpClient=null;
+        }
         return ohHttpClient;
     }
 
