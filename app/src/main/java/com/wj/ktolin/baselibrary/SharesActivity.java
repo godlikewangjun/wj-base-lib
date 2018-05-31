@@ -11,19 +11,17 @@ import android.view.View;
 import com.abase.okhttp.OhHttpClient;
 import com.abase.okhttp.OhObjectListener;
 import com.abase.util.AbAppUtil;
-import com.abase.util.AbStrUtil;
 import com.abase.util.Tools;
 import com.abase.view.parent.BaseActivity;
 import com.abase.view.weight.RecyclerSpace;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Headers;
-import okhttp3.RequestBody;
 
 /**
  * @author Admin
@@ -119,18 +117,18 @@ public class SharesActivity extends BaseActivity implements RecyListViewOnItemCl
 
             @Override
             public void onSuccess(String content) {
-                JSONObject jsonObject = JSON.parseObject(content);
-                if (jsonObject.getInteger("state") == 1) {
-                    if(sharesActivities.size()>0){
-                        sharesActivities.addAll(JSON.parseArray(jsonObject.getJSONObject("data").getString("adlist"), ShareWzModel.class));
-                        shareListAdapter.notifyDataSetChanged();
-                    }else{
-                        sharesActivities.addAll(JSON.parseArray(jsonObject.getJSONObject("data").getString("adlist"), ShareWzModel.class));
-                        shareListAdapter = new ShareListAdapter(sharesActivities);
-                        recycler_list.setAdapter(shareListAdapter);
-                        shareListAdapter.setRecyListViewOnItemClick(SharesActivity.this);
-                    }
-                }
+//                JSONObject jsonObject = JSON.parseObject(content);
+//                if (jsonObject.getInteger("state") == 1) {
+//                    if(sharesActivities.size()>0){
+//                        sharesActivities.addAll(JSON.parseArray(jsonObject.getJSONObject("data").getString("adlist"), ShareWzModel.class));
+//                        shareListAdapter.notifyDataSetChanged();
+//                    }else{
+//                        sharesActivities.addAll(JSON.parseArray(jsonObject.getJSONObject("data").getString("adlist"), ShareWzModel.class));
+//                        shareListAdapter = new ShareListAdapter(sharesActivities);
+//                        recycler_list.setAdapter(shareListAdapter);
+//                        shareListAdapter.setRecyListViewOnItemClick(SharesActivity.this);
+//                    }
+//                }
             }
 
             @Override
@@ -166,18 +164,18 @@ public class SharesActivity extends BaseActivity implements RecyListViewOnItemCl
 
             @Override
             public void onSuccess(String content) {
-                JSONObject jsonObject = JSON.parseObject(content);
-                if (jsonObject.getInteger("state") == 1) {
-                    if(sharesActivities.size()>0){
-                        sharesActivities.addAll(JSON.parseArray(jsonObject.getString("data"), ShareWzModel.class));
-                        shareListAdapter.notifyDataSetChanged();
-                    }else{
-                        sharesActivities.addAll(JSON.parseArray(jsonObject.getString("data"), ShareWzModel.class));
-                        shareListAdapter = new ShareListAdapter(sharesActivities);
-                        recycler_list.setAdapter(shareListAdapter);
-                        shareListAdapter.setRecyListViewOnItemClick(SharesActivity.this);
-                    }
-                }
+//                JSONObject jsonObject = JSON.parseObject(content);
+//                if (jsonObject.getInteger("state") == 1) {
+//                    if(sharesActivities.size()>0){
+//                        sharesActivities.addAll(JSON.parseArray(jsonObject.getString("data"), ShareWzModel.class));
+//                        shareListAdapter.notifyDataSetChanged();
+//                    }else{
+//                        sharesActivities.addAll(JSON.parseArray(jsonObject.getString("data"), ShareWzModel.class));
+//                        shareListAdapter = new ShareListAdapter(sharesActivities);
+//                        recycler_list.setAdapter(shareListAdapter);
+//                        shareListAdapter.setRecyListViewOnItemClick(SharesActivity.this);
+//                    }
+//                }
             }
 
             @Override

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
+import com.abase.okhttp.OhHttpParams
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
@@ -33,7 +34,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         start.setOnClickListener(this)
         pause.setOnClickListener(this)
         stop.setOnClickListener(this)
-
+        val web = OhHttpParams()
+        web.put("asd","asd")
+        println(web.jsonString+" --------------- ")
     }
 
     override fun onClick(view: View) {

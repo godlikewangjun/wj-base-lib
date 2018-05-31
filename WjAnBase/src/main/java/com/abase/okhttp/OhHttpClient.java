@@ -20,7 +20,7 @@ import com.abase.util.AbFileUtil;
 import com.abase.util.AbLogUtil;
 import com.abase.util.AbStrUtil;
 import com.abase.util.Tools;
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -764,7 +764,7 @@ public class OhHttpClient {
                     String body = response.body().string();
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
                         try {
-                            callbackListener.sendSucessMessage(JSON.parseObject(body, ((OhObjectListener) callbackListener).classname));
+                            callbackListener.sendSucessMessage(new Gson().fromJson(body, ((OhObjectListener) callbackListener).classname));
                         } catch (Exception e) {
                             e.printStackTrace();
                             AbLogUtil.e(OhHttpClient.class, ((OhObjectListener) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);

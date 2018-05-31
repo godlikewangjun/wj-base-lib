@@ -1,7 +1,8 @@
 package com.abase.okhttp;
 
 import com.abase.util.AbStrUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,11 +72,11 @@ public class OhHttpParams {
 	}
     /**获取拼接的字符串*/
     public String getJSONString(){
-        JSONObject jsonObject=new JSONObject();
+        JsonObject jsonObject=new JsonObject();
         for (int i = 0; i < keys.size(); i++) {
-            jsonObject.put(keys.get(i),params.get(keys.get(i)));
+            jsonObject.addProperty(keys.get(i),params.get(keys.get(i)));
         }
-        return jsonObject.toJSONString();
+        return jsonObject.toString();
     }
 	@Override
 	public String toString() {

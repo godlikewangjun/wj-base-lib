@@ -5,7 +5,7 @@ import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.OhHttpParams
 import com.abase.okhttp.OhObjectListener
-import com.alibaba.fastjson.JSON
+import com.google.gson.Gson
 import java.io.File
 
 /**
@@ -152,7 +152,7 @@ private fun executeForResult(wrap: HttpRequests) {
     if (wrap.listener == null) {
         httplistener = object : OhObjectListener<String>() {
             override fun onSuccess(p0: String?) {
-                if (wrap.classType == null) wrap.success(p0!!) else wrap.success(JSON.parseObject(p0!!, wrap.classType))
+                if (wrap.classType == null) wrap.success(p0!!) else wrap.success(Gson().fromJson(p0!!, wrap.classType))
             }
 
             override fun onFailure(p0: Int, p1: String?, p2: Throwable?) {
