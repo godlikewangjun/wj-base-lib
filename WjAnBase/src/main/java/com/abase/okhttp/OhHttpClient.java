@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 
 import com.abase.global.AbAppConfig;
-import com.abase.okhttp.Interceptor.DownInterceptor;
 import com.abase.okhttp.Interceptor.GzipRequestInterceptor;
 import com.abase.okhttp.body.FileRequestBody;
 import com.abase.okhttp.body.MultipartBodyRbody;
@@ -19,8 +18,8 @@ import com.abase.task.AbThreadFactory;
 import com.abase.util.AbFileUtil;
 import com.abase.util.AbLogUtil;
 import com.abase.util.AbStrUtil;
+import com.abase.util.GsonUtil;
 import com.abase.util.Tools;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +52,6 @@ import okhttp3.Callback;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.Credentials;
-import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -764,7 +762,7 @@ public class OhHttpClient {
                     String body = response.body().string();
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
                         try {
-                            callbackListener.sendSucessMessage(new Gson().fromJson(body, ((OhObjectListener) callbackListener).classname));
+                            callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener) callbackListener).classname));
                         } catch (Exception e) {
                             e.printStackTrace();
                             AbLogUtil.e(OhHttpClient.class, ((OhObjectListener) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);

@@ -33,6 +33,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
@@ -73,17 +74,34 @@ public class AbAppUtil {
      * @param context the context
      * @param file    apk文件路径
      */
+    @RequiresPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES)
     public static void installApk(Context context, File file) {
+        //判断是否是8.0,8.0需要处理未知应用来源权限问题,否则直接安装
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            boolean b = context.getPackageManager().canRequestPackageInstalls();
+//            if (!b) {
+//                ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES},1235);
+//                Tools.showTip(context,"请打开'允许未知来源程序安装权限'");
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+//                context.startActivity(intent);
+//                return;
+//            }
+//        }
         Intent intent = new Intent();
-        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setAction(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileProvider", file);
-            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-        } else {
-            intent.setDataAndType(Uri.fromFile(file),
-                    "application/vnd.android.package-archive");
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, "com.wj.lib.fileProvider", file);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            } else {
+                intent.setDataAndType(Uri.fromFile(file),
+                        "application/vnd.android.package-archive");
+            }
+//            intent.setClassName("com.android.packageinstaller", "com.android.packageinstaller.PackageInstallerActivity");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         context.startActivity(intent);
     }
