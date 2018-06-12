@@ -41,9 +41,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile project(':WjAnBase')
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api project(':WjAnBase')
 }
 
 //上传插件

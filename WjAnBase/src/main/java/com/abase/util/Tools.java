@@ -351,24 +351,6 @@ public class Tools {
     }
 
     /**
-     * 清空fragmnet缓存
-     */
-    public static void cleanFragment(FragmentManager manager, Fragment fragment) {
-        try {
-            // 跳转页面
-            for (int i = 0; i < manager.getBackStackEntryCount(); i++) {
-                manager.popBackStack();
-            }
-            if (fragment != null) {
-                manager.beginTransaction().remove(fragment).commit();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * 处理电话号码
      *
      * @param phonenum
@@ -383,50 +365,6 @@ public class Tools {
         return phonenum.substring(0, 3) + "*****" + phonenum.substring(8);
     }
 
-    /**
-     * 判断是不是加密
-     *
-     * @param str
-     * @return
-     */
-    public static boolean isJiaMi(String str) {
-        Pattern pattern = Pattern.compile("([0-9]*?|([abc]*?)([xyz]*?))([+-/*=])");
-        Matcher m = pattern.matcher(str);
-        return m.matches();
-    }
-
-    /**
-     * 返回适应屏幕的bitmap
-     */
-    public static Bitmap getSCBitmap(int drawID, Context context) {
-        try {
-            mBitmap = AbImageUtil.getScaleBitmap(AbImageUtil
-                            .drawableToBitmap(context.getResources()
-                                    .getDrawable(drawID)),
-                    Tools.getScreenWH(context)[0],
-                    Tools.getScreenWH(context)[1]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return mBitmap;
-    }
-
-    /**
-     * 返回适应屏幕的bitmap
-     */
-    public static Bitmap getSCBitmap(int drawID, Context context, int height) {
-        Bitmap mBitmap = null;
-        try {
-            mBitmap = AbImageUtil.getScaleBitmap(AbImageUtil
-                            .drawableToBitmap(context.getResources()
-                                    .getDrawable(drawID)),
-                    Tools.getScreenWH(context)[0], height);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        return mBitmap;
-    }
 
     /**
      * 字符串加密
@@ -536,50 +474,6 @@ public class Tools {
         return LayoutInflater.from(context).inflate(id, null);
     }
 
-    /**
-     * 保存到本地的加密算法 salt md5(public_salt+substr(md5(private_salt+pwd),6,15))
-     * <p>
-     * 账号
-     *
-     * @param pwd 密码
-     * @return 加密后的字符串
-     */
-    public static String setSecret(String pwd) {
-        String public_salt = "r1eO*rE1!";
-        String private_salt = randompwd(16);
-        String y = null;
-        try {
-            y = Tools.setMD5(private_salt + pwd);// 用户名密码
-            if (y.length() < 15) {
-                y = y + y.substring(0, 15 - y.length());
-            }
-            y = y + public_salt;
-            y = Tools.setMD5(y);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return y;
-    }
-
-    /**
-     * user-agent加密算法
-     */
-    /**
-     * agent加密 md5(substr(md5(salt+8个随机字符,5,14))+8个随机字符，一共40个字符。
-     * <p>
-     * 账号
-     * 密码
-     *
-     * @return 加密后的字符串
-     */
-    public static String setAgent(String salt) {
-        String f = randompwd(8);
-        String hj = Tools.setMD5(salt + f);
-        hj = hj.substring(5, 14);
-        hj = Tools.setMD5(hj);
-        hj += f;
-        return hj;
-    }
 
     /**
      * 随机生成一个多少位的大小写字母加数字组成的字串
@@ -908,69 +802,7 @@ public class Tools {
         return bitmap;
     }
 
-    /**
-     * 缩放drawable
-     *
-     * @param drawable
-     * @param w        宽
-     * @param h        高
-     * @return 缩放之后drawable
-     */
-    public static Drawable zoomDrawable(Drawable drawable, int w, int h) {
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-        Bitmap oldbmp = drawableToBitmap(drawable);// drawable转换成bitmap
-        Matrix matrix = new Matrix(); // 创建操作图片用的Matrix对象
-        float scaleWidth = ((float) width / w); // 计算缩放比例
-        float scaleHeight = ((float) height / h);
-        matrix.postScale(scaleWidth, scaleHeight); // 设置缩放比例
-        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
-                matrix, true); // 建立新的bitmap，其内容是对原bitmap的缩放后的图
-        Drawable drawable2 = new BitmapDrawable(newbmp);
-        // newbmp.recycle();//回收
-        return drawable2; // 把bitmap转换成drawable并返回
-    }
 
-    /**
-     * 缩放drawable
-     *
-     * @param w 宽
-     * @param h 高
-     * @return 缩放之后drawable
-     */
-    public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        Matrix matrix = new Matrix(); // 创建操作图片用的Matrix对象
-        float scaleWidth = ((float) w / width); // 计算缩放比例
-        float scaleHeight = ((float) h / height);
-        matrix.postScale(scaleWidth, scaleHeight); // 设置缩放比例
-        Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height,
-                matrix, true); // 建立新的bitmap，其内容是对原bitmap的缩放后的图
-        // newbmp.recycle();//回收
-        return newbmp; // 把bitmap转换成drawable并返回
-    }
-
-    /**
-     * 按照比率缩放drawable
-     *
-     * @param drawable 宽
-     *                 高
-     * @return 缩放之后drawable
-     */
-    public static Drawable zoomDrawable(Drawable drawable, float scaleWidth,
-                                        float scaleHeight) {
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-        Bitmap oldbmp = drawableToBitmap(drawable);// drawable转换成bitmap
-        Matrix matrix = new Matrix(); // 创建操作图片用的Matrix对象
-        matrix.postScale(scaleWidth, scaleHeight); // 设置缩放比例
-        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
-                matrix, true); // 建立新的bitmap，其内容是对原bitmap的缩放后的图
-        Drawable drawable2 = new BitmapDrawable(newbmp);
-        // newbmp.recycle();//回收
-        return drawable2; // 把bitmap转换成drawable并返回
-    }
 
     /**
      * 获取屏幕大小
@@ -1155,18 +987,6 @@ public class Tools {
     public static boolean isMobileNum(String mobiles) {
         Pattern p = Pattern
                 .compile("^((\\+86)|(86))?1(3[0-9]|7[0-9]|8[0-9]|47|5[0-3]|5[5-9])\\d{8}$");
-        Matcher m = p.matcher(mobiles);
-        return m.matches();
-    }
-
-    /**
-     * 是否式香港电话
-     *
-     * @return
-     */
-    public static boolean isHongKongMobile(String mobiles) {
-        Pattern p = Pattern
-                .compile("^([0-9])\\d{7}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
     }
@@ -1423,39 +1243,6 @@ public class Tools {
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
-
-    /**替换图片为[图片]*/
-//	public static  String replaceImgForHtml(String bodyHtml){
-//		if(bodyHtml==null||bodyHtml.equals("")){
-//			return "";
-//		}
-//		String relpaceStr=null;
-//		Document document=Jsoup.parseBodyFragment(bodyHtml);
-//		List<Element> imgs=document.select("img");
-//		for (int i = 0; i < imgs.size(); i++) {
-//			imgs.get(i).after("[图片]");
-//			imgs.get(i).before("");
-//			imgs.get(i).remove();
-//		}
-//		imgs=document.select("p");
-//		for (int i = 0; i < imgs.size(); i++) {
-//			if(AbStrUtil.isEmpty(imgs.get(i).text())){
-//				imgs.get(i).remove();
-//			}
-//			imgs.get(i).text(imgs.get(i).text().toString().replace(" ", ""));
-//		}
-//		imgs=document.select("br");
-//		for (int i = 0; i < imgs.size(); i++) {
-//			imgs.get(i).remove();
-//		}
-//
-//		imgs=document.select("a");
-//		for (int i = 0; i < imgs.size(); i++) {
-//			imgs.get(i).remove();
-//		}
-//		relpaceStr=document.toString();
-//		return relpaceStr;
-//	}
 
     /**
      * asset 转 string

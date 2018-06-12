@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012 www.amsoft.cn
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,6 +16,7 @@
 package com.abase.util;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -77,16 +78,6 @@ public class AbAppUtil {
     @RequiresPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES)
     public static void installApk(Context context, File file) {
         //判断是否是8.0,8.0需要处理未知应用来源权限问题,否则直接安装
-//        if (Build.VERSION.SDK_INT >= 26) {
-//            boolean b = context.getPackageManager().canRequestPackageInstalls();
-//            if (!b) {
-//                ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES},1235);
-//                Tools.showTip(context,"请打开'允许未知来源程序安装权限'");
-//                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-//                context.startActivity(intent);
-//                return;
-//            }
-//        }
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -105,6 +96,7 @@ public class AbAppUtil {
         }
         context.startActivity(intent);
     }
+
 
     /**
      * 描述：卸载程序.
@@ -773,21 +765,6 @@ public class AbAppUtil {
     }
 
     /**
-     * 根据包名检查手机中app是否已经存在
-     *
-     * @param packageName
-     * @return
-     */
-    public static boolean isPackageExist(Context context, String packageName) {
-        PackageInfo pi = null;
-        try {
-            pi = context.getPackageManager().getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        return pi != null;
-    }
-
-    /**
      * 根据包名启动指定的应用
      *
      * @param context
@@ -810,40 +787,6 @@ public class AbAppUtil {
         return false;
     }
 
-
-    /**
-     * 通过chrome打开url失败就弹出打开方式让用户选择用什么浏览器打开这个url
-     *
-     * @param context
-     * @param url
-     * @param flags
-     * @param title
-     * @return
-     */
-    public static boolean openUrlWithChromeElseShowBrowserSelector(Context context, String url, int flags, String title) {
-        if (url == null || url.trim().length() <= 0) {
-            return false;
-        }
-        try {
-            // 先尝试使用chrome打开url
-            try {
-                Intent intent = context.getPackageManager().getLaunchIntentForPackage("com.android.chrome");
-                if (intent != null) {
-                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                    intent.setData(Uri.parse(url));
-                    context.startActivity(intent);
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // 失败之后弹出选择器让用户选择用哪个浏览器打开这个url
-            return startActivityByUriWithChooser(context, url, flags, title);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     /**
      * 打开选择器，通过uri打开activity
@@ -876,6 +819,7 @@ public class AbAppUtil {
      */
     private static StringBuilder deviceidStr = null;
 
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getDeviceId(Context context) {
         if (context == null) {
             return "";
@@ -943,11 +887,12 @@ public class AbAppUtil {
 
     /**
      * 添加IMEI
+     *
      * @param strings
      * @param id
      */
     private static void addString(ArrayList<String> strings, String id) {
-        if (id != null && !strings.contains(id)  && (id.length() == 14 || id.length() == 15)) {
+        if (id != null && !strings.contains(id) && (id.length() == 14 || id.length() == 15)) {
             strings.add(id);
         }
     }
@@ -977,8 +922,9 @@ public class AbAppUtil {
      * @param className null就返回 “”表示检测包名
      * @return
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static synchronized boolean isTopActivity(Context context, String className, boolean isPack) {
-        if (className == null) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || className == null) {
             return false;
         }
         try {
@@ -1041,8 +987,9 @@ public class AbAppUtil {
      * @param className null就返回 “”表示检测包名
      * @return
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static synchronized boolean haveActivity(Context context, String className, boolean isPack) {
-        if (className == null) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || className == null) {
             return false;
         }
         if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {//版本判断
@@ -1089,7 +1036,11 @@ public class AbAppUtil {
      * @param className
      * @return
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String[] getTopActivity(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
         if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {//版本判断
             UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
             if (m != null) {
@@ -1143,6 +1094,7 @@ public class AbAppUtil {
      * @param context
      * @return
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getDeviceInfo(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         StringBuilder sb = new StringBuilder();
