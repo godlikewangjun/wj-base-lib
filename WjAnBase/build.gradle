@@ -49,12 +49,6 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
-
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt" //构建规则 主要是判断是否是模拟器
-        }
-    }
 }
 
 dependencies {
