@@ -22,6 +22,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
+import com.abase.okhttp.OhFileCallBakListener;
+import com.abase.okhttp.OhHttpClient;
 import com.wj.eventbus.WjEventBus;
 
 
@@ -37,14 +39,10 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     public WebView mWebView;//网页
     //    private Map<String, String> extraHeaders;//请求头;
     private OnClickListener onClickListener;
-    private boolean isSuccess=true;
     private ProgressDialog alertDialog=null;
-    private boolean isTask=false;
     public static String LOADERROE="webLoadError";
+    public static String LOADFINSH="webLoadFinsh";
 
-    public void setTask(boolean task) {
-        isTask = task;
-    }
 
     @Override
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -89,6 +87,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     /**
      * web设置
      */
+    @SuppressLint("SetJavaScriptEnabled")
     private void webSetting() {
         addView(mWebView);
 
@@ -112,6 +111,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         defaultSetting();
     }
 
+    @SuppressLint("AddJavascriptInterface")
     private void defaultSetting() {
         mWebView.addJavascriptInterface(new Object() {
             /**错误重新加载*/
@@ -134,6 +134,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
                 if(onClickListener!=null){
                     onClickListener.onClick(null);
                 }
+                WjEventBus.getInit().post(LoadWeb.LOADFINSH,0);
             } else {
                 mWebView.setVisibility(GONE);//显示
             }
@@ -176,7 +177,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     };
 
     //**设置提供web调用的事件*//*
-    @SuppressLint("JavascriptInterface")
+    @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
     public void addWebEvent(Object object) {
         mWebView.addJavascriptInterface(object, "javaop");
     }
@@ -200,27 +201,45 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     /**
      * 设置js调用java的接口
      */
-    @SuppressLint("JavascriptInterface")
+    @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
     public void setJavaToJs(Object obj, String interfaceName) {
         mWebView.addJavascriptInterface(obj, interfaceName);
     }
 
     @Override
     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-//        Uri uri = Uri.parse(url);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//        getContext().startActivity(intent);
-        if(!isSuccess){
-            return;
-        }
-        isSuccess=false;
         Activity activity=(Activity)getContext();
         if(alertDialog==null){
             alertDialog=new ProgressDialog(getContext());
-            alertDialog.setMessage("正在下载应用");
+            alertDialog.setMessage("正在下载"+contentDisposition);
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
-            alertDialog.setMessage("正在下载0%");
+            OhHttpClient.getInit().downFile(getContext(), url, new OhFileCallBakListener() {
+                @Override
+                public void onSuccess(String content) {
+
+                }
+
+                @Override
+                public void onFailure(String code, String content) {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onFinish() {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    alertDialog.setMessage("正在下载"+(int)(bytesWritten/contentLength)+"%");
+                }
+            });
         }
     }
 
