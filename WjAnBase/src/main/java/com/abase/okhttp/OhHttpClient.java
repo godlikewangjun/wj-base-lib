@@ -790,6 +790,8 @@ public class OhHttpClient {
                     }
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
                     if (callbackListener.ohtype == 0) {// 上传
+                        String body = response.body().string();
+                        AbLogUtil.i(OhHttpClient.class, url + "," + body);
                         callbackListener.sendSucessMessage(response.body().string());
                     } else if (callbackListener.ohtype == 1) {// 下载
                         final String name = Tools.setMD5(url);
