@@ -3,6 +3,7 @@
 @file:kotlin.jvm.JvmName("WjStringsKt")
 package com.wj.ktutils
 
+import android.app.Fragment
 import android.content.Context
 import com.abase.util.AbStrUtil
 import com.abase.util.Tools
@@ -24,3 +25,6 @@ inline fun CharSequence?.isEmail(): Boolean =
 
 inline fun Context?.showTip(string: String) =
        Tools.showTip(this,string)
+
+inline fun Fragment?.showTip(string: String) =
+        Tools.showTip(this!!.activity,string)
