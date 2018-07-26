@@ -64,6 +64,23 @@ public class AbWifiUtil {
     }
 
     /**
+     * 判断当前网络是否是流量网络
+     *
+     * @param context the context
+     * @return boolean
+     */
+    public static boolean isMobileConnectivity(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetInfo != null
+                && activeNetInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 描述：得到所有的WiFi列表.
      *
      * @param context
@@ -142,17 +159,17 @@ public class AbWifiUtil {
      * @return
      */
     public static String getNetworkState(Context context) {
-//获取系统的网络服务
+        //获取系统的网络服务
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//如果当前没有网络
+        //如果当前没有网络
         if (null == connManager)
             return NETWORN_NONE;
-//获取当前网络类型，如果为空，返回无网络
+        //获取当前网络类型，如果为空，返回无网络
         NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
         if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
             return NETWORN_NONE;
         }
-// 判断是不是连接的是不是wifi
+        // 判断是不是连接的是不是wifi
         NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if (null != wifiInfo) {
             NetworkInfo.State state = wifiInfo.getState();
