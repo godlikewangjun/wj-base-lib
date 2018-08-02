@@ -33,6 +33,7 @@ import android.widget.ScrollView;
 
 import com.abase.adapter.AbViewPagerAdapter;
 import com.abase.util.AbViewUtil;
+import com.abase.view.viewpager.CirclePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class SlidBar extends RelativeLayout {
     private int playingDirection = 0;
 
     /*导航点*/
-    private com.abase.view.viewpager.CirclePageIndicator circlePageIndicator;
+    private CirclePageIndicator circlePageIndicator;
 
     /** 播放的开关. */
     private boolean play = false;
@@ -95,7 +96,7 @@ public class SlidBar extends RelativeLayout {
     private boolean isTouch=false;
 
     /**获取导航条*/
-    public com.abase.view.viewpager.CirclePageIndicator getCirclePageIndicator() {
+    public CirclePageIndicator getCirclePageIndicator() {
         return circlePageIndicator;
     }
 
@@ -176,7 +177,7 @@ public class SlidBar extends RelativeLayout {
         //手动创建的ViewPager,如果用fragment必须调用setId()方法设置一个id
 //        mViewPager.setId(1985);
         //导航的点
-        circlePageIndicator=new com.abase.view.viewpager.CirclePageIndicator(context);
+        circlePageIndicator=new CirclePageIndicator(context);
         circlePageIndicator.setPadding(5,5,5,5);
         circlePageIndicator.setFillColor(Color.WHITE);
         circlePageIndicator.setPageColor(Color.LTGRAY);
