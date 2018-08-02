@@ -63,8 +63,6 @@ public class AbViewPager extends ViewPager {
 	}
 
 	/**
-	 * 描述：TODO.
-	 *
 	 * @version v1.0
 	 * @param event the event
 	 * @return true, if successful
