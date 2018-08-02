@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- 自动适应大小的textview -->
-    <declare-styleable name="AutofitTextView">
+    <!--toast的属性-->
+    <declare-styleable name="StyleableToast">
+        <attr name="textBold" format="boolean" />
+        <attr name="textColor" format="color" />
+        <attr name="font" format="reference" />
+        <attr name="textSize" format="dimension" />
+        <attr name="colorBackground" format="color" />
+        <attr name="solidBackground" format="boolean" />
+        <attr name="radius" />
+        <attr name="strokeWidth"  />
+        <attr name="strokeColor" />
+        <attr name="iconStart" format="reference" />
+        <attr name="iconEnd" format="reference" />
+        <attr name="length" format="integer">
+            <enum name="LONG" value="1" />
+            <enum name="SHORT" value="0" />
+        </attr>
+        <attr name="gravity" format="integer">
+            <enum name="center" value="1" />
+            <enum name="top" value="2" />
+        </attr>
 
-        <!-- Minimum size of the text. -->
-        <attr name="minTextSize" format="dimension" />
-        <!--
-        Amount of precision used to calculate the correct text size to fit within its
-        bounds. Lower precision is more precise and takes more time.
-        -->
-        <attr name="precision" format="float" />
-        <!-- Defines whether to automatically resize text to fit to the view's bounds. -->
-        <attr name="sizeToFit" format="boolean" />
     </declare-styleable>
     <!-- 圆形图片 -->
     <declare-styleable name="roundedimageview">
@@ -65,13 +75,5 @@
         <attr name="vpiTabPageIndicatorStyle" format="reference"/>
         <!-- Style of the underline indicator. -->
         <attr name="vpiUnderlinePageIndicatorStyle" format="reference"/>
-    </declare-styleable>
-    <!--wowoviewpager的属性-->
-    <declare-styleable name="WoWoPathView">
-        <attr name="pathColor" format="color"/>
-        <attr name="pathWidth" format="float"/>
-        <attr name="headImageId" format="integer"/>
-        <attr name="headImageWidth" format="float"/>
-        <attr name="headImageHeight" format="float"/>
     </declare-styleable>
 </resources>

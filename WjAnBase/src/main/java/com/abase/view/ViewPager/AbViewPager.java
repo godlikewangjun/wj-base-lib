@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.abase.view.ViewPager;
+package com.abase.view.viewpager;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-// TODO: Auto-generated Javadoc
-
-/**
- * © 2012 amsoft.cn
- * 名称：AbViewPager.java 
- * 描述：可设置是否滑动的ViewPager.
- *
- * @author 还如一梦中
- * @version v1.0
- * @date：2013-05-17 下午6:46:29
- */
 public class AbViewPager extends ViewPager {
 
 	/** The enabled. */

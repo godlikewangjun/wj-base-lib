@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.abase.view.ViewPager;
+package com.abase.view.viewpager;
 
 import android.support.v4.view.ViewPager;
 

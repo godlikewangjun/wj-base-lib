@@ -54,7 +54,6 @@
 
 #保持
 -keep class com.abase.**{ *; }
--keep class com.wj.**{ *; }
 #fastjson
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.**{ *;}
@@ -69,3 +68,7 @@
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
+#
+-dontnote android.net.http.*
+-dontnote org.apache.commons.codec.**
+-dontnote org.apache.http.**

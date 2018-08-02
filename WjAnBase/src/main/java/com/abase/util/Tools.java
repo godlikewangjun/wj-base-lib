@@ -75,19 +75,8 @@ import java.util.regex.Pattern;
  * @版本 1.0
  */
 public class Tools {
-    public static Toast toast;// 提示
-    private static Handler handler = new Handler();// 控制线程
-    private static boolean isShowDeBug = true;// 提示
     public static int[] wh;// 屏幕的宽和高
     public static Bitmap mBitmap = null;
-
-    private static final int SHOWTOAST = 3000;
-    private static Runnable runnable = new Runnable() {
-        public void run() {
-            toast.cancel();
-        }
-    };
-
     /**
      * 读取properties
      */
@@ -238,40 +227,7 @@ public class Tools {
         return context.getResources().getDrawable(drawable);
     }
 
-    /**
-     * 显示toast
-     *
-     * @param context activity
-     * @param text    显示的内容
-     */
-    public static void showTip(final Context context, final String text) {
-        handler.removeCallbacks(runnable);// 消除
-        if (toast != null) {
-            toast.setText(text);
-        } else {
-            toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-        }
-        handler.postDelayed(runnable, SHOWTOAST + 2000);
-        toast.show();
-    }
 
-    /**
-     * 显示toast
-     *
-     * @param context activity
-     * @param text    显示的内容
-     */
-    public static void showTipOne(final Context context, final String text, final int gravity) {
-        handler.removeCallbacks(runnable);// 消除
-        if (toast != null) {
-            toast.setText(text);
-        } else {
-            toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-            toast.setGravity(gravity, 0, 0);
-        }
-        handler.postDelayed(runnable, SHOWTOAST + 2000);
-        toast.show();
-    }
 
     /**
      * <p>将文件转成base64 字符串</p>

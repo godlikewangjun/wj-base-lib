@@ -11,8 +11,8 @@ import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
-import com.abase.util.AndroidKeyboardHeight
 import com.abase.util.GsonUtil
+import com.abase.util.ToastUtil
 import java.io.File
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AndroidKeyboardHeight.assistActivity(this)
+//        AndroidKeyboardHeight.assistActivity(this)
         cpc = findViewById(R.id.cpc)
         cpc!!.setOnClickListener { startActivity(Intent(this@MainActivity, SharesActivity::class.java)) }
         val start = findViewById<Button>(R.id.start)
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         pause.setOnClickListener(this)
         stop.setOnClickListener(this)
 
+        ToastUtil.showTip(this,"asdasdasds")
         println(GsonUtil.getGson().fromJson("{name:‘sadfsdf’}",ShareModel::class.java).toString()+" ------------- ")
     }
 
