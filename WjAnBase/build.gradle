@@ -57,7 +57,7 @@ dependencies {
     api 'com.android.support:appcompat-v7:27.1.1'
     api 'com.android.support:recyclerview-v7:27.1.1'
     api 'com.google.code.gson:gson:2.8.5'
-    api 'com.wj.libs:wjEventBus:1.0.1'
+    api 'com.wj.libs:wjEventBus:1.0.2'
     //provided
     api 'com.github.bumptech.glide:glide:4.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
