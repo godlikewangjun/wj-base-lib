@@ -279,7 +279,7 @@ public class StyleableToast extends LinearLayout {
         private int iconEnd;
         private int textColor;
         private int font;
-        private int length;
+        private int length=Toast.LENGTH_LONG;
         private float textSize;
         private boolean solidBackground;
         private boolean textBold;
@@ -374,6 +374,10 @@ public class StyleableToast extends LinearLayout {
         }
 
         public void show() {
+            if(toast!=null) {
+                toast.textView.setText(text);
+                return;
+            }
             toast = new StyleableToast(this);
             toast.show();
         }

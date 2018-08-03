@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         stop.setOnClickListener(this)
 
         ToastUtil.showTip(this,"asdasdasds")
+        ToastUtil.showTip(this,"改变")
         println(GsonUtil.getGson().fromJson("{name:‘sadfsdf’}",ShareModel::class.java).toString()+" ------------- ")
     }
 
