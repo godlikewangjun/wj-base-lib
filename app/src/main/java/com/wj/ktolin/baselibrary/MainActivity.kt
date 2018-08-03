@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         pause.setOnClickListener(this)
         stop.setOnClickListener(this)
 
-        ToastUtil.showTip(this,"asdasdasds")
-        ToastUtil.showTip(this,"改变")
         println(GsonUtil.getGson().fromJson("{name:‘sadfsdf’}",ShareModel::class.java).toString()+" ------------- ")
     }
 
@@ -63,8 +61,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     textView!!.text = AbDoubleTool.div(bytesWritten.toDouble(), contentLength.toDouble()).toString() + "%"
                 }
             })
-            R.id.pause -> if (downLoad != null) {
-                downLoad!!.cancle()
+            R.id.pause -> {
+                ToastUtil.showTip(this,"asdasdasds")
+                ToastUtil.showTip(this,"改变")
+                if (downLoad != null) {
+                    downLoad!!.cancle()
+                }
             }
             R.id.stop -> if (downLoad != null) {
                 downLoad!!.stop()

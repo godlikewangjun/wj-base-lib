@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.FontRes;
@@ -287,9 +288,11 @@ public class StyleableToast extends LinearLayout {
         private int gravity = Gravity.BOTTOM;
         private StyleableToast toast;
         private final Context context;
+        private Handler mHandler;
 
         public Builder(@NonNull Context context) {
             this.context = context;
+            mHandler=new Handler();
         }
 
         public Builder text(String text) {
@@ -380,6 +383,12 @@ public class StyleableToast extends LinearLayout {
             }
             toast = new StyleableToast(this);
             toast.show();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toast=null;
+                }
+            },3000);
         }
         public StyleableToast build() {
             toast = new StyleableToast(this);
