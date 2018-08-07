@@ -153,7 +153,7 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childSize; i++) {
             final View child = parent.getChildAt(i);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
-            if (i < other) {
+            if (i < other) {//横线
                 top = child.getBottom() + layoutParams.bottomMargin;
                 bottom = top + space;
                 left = (layoutParams.leftMargin + space) * (i + 1);
@@ -166,7 +166,7 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
                     canvas.drawRect(left, top, right, bottom, mPaint);
                 }
             }
-            if (i != spancount) {
+            if (i != spancount) {//竖线
                 top = (layoutParams.topMargin + space) * (i / linearLayoutManager.getSpanCount() + 1);
                 bottom = (child.getMeasuredHeight() + space) * (i / linearLayoutManager.getSpanCount() + 1) + space;
                 left = child.getRight() + layoutParams.rightMargin;
@@ -179,7 +179,7 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
                     canvas.drawRect(left, top, right, bottom, mPaint);
                 }
             } else {
-                spancount += 4;
+                spancount += spancount+1;
             }
         }
     }

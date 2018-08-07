@@ -58,6 +58,7 @@ public class ToastUtil {
      */
     private static StyleableToast.Builder cusBuild(final Context context){
        return new StyleableToast.Builder(context)
+               .textColor(context.getResources().getColor(android.R.color.white))
                 .backgroundColor(Color.parseColor("#507DFE"));
     }
 }

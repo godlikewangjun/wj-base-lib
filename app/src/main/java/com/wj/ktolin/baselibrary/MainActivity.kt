@@ -3,6 +3,7 @@ package com.wj.ktolin.baselibrary
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -13,6 +14,9 @@ import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.GsonUtil
 import com.abase.util.ToastUtil
+import com.abase.view.weight.RecyclerSpace
+import com.wj.ktolin.baselibrary.weight.TestAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -36,6 +40,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         stop.setOnClickListener(this)
 
         println(GsonUtil.getGson().fromJson("{name:‘sadfsdf’}",ShareModel::class.java).toString()+" ------------- ")
+        recycler_list.adapter=TestAdapter()
+        recycler_list.layoutManager=GridLayoutManager(this,6)
+        recycler_list.addItemDecoration(RecyclerSpace(2,R.color.default_text_color))
     }
 
     override fun onClick(view: View) {
