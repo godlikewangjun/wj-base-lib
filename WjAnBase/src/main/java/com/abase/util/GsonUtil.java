@@ -1,8 +1,10 @@
 package com.abase.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +62,7 @@ public class GsonUtil {
 
     /**
      * JSON转成list集合 有可能直接转换会报错 需要指定类型
+     *
      * @param s
      * @param clazz
      * @param <T>
@@ -93,5 +96,25 @@ public class GsonUtil {
                 new TypeToken<List<Map<String, T>>>() {
                 }.getType());
     }
+
+    /**
+     * 解析json纯数组
+     *
+     * @param json
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz) {
+        Type type = new TypeToken<ArrayList<JsonObject>>() {
+        }.getType();
+        ArrayList<JsonObject> jsonObjects = new Gson().fromJson(json, type);
+        ArrayList<T> arrayList = new ArrayList<>();
+        for (JsonObject jsonObject : jsonObjects) {
+            arrayList.add(new Gson().fromJson(jsonObject, clazz));
+        }
+        return arrayList;
+    }
+
 
 }
