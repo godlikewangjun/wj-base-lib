@@ -29,14 +29,14 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
     private int footerCount = 0;// 尾的数量
 
     public RecyclerSpace(int lineWidth,int color) {
+        init();
         this.dividerDrawable = new ColorDrawable(color);
         this.lineWidth = lineWidth;
-        init();
     }
 
     public RecyclerSpace(int lineWidth) {
-        this.lineWidth = lineWidth;
         init();
+        this.lineWidth = lineWidth;
     }
 
     public RecyclerSpace() {

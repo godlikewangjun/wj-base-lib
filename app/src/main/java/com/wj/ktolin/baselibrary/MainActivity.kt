@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         recycler_list.adapter= TestAdapter()
         recycler_list.layoutManager= GridLayoutManager(this,6)
-        recycler_list.addItemDecoration(RecyclerSpace(2,android.R.color.holo_red_dark))
+        recycler_list.addItemDecoration(RecyclerSpace(2,resources.getColor(R.color.colorAccent)))
 
         println(SqlTool.createTable(TestMode::class.java)+" ==================== ")
 
