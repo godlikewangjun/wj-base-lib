@@ -1,7 +1,6 @@
 package com.wj.ktolin.baselibrary
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Button
@@ -13,15 +12,22 @@ import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
+import com.abase.view.parent.WebActivity
 import com.abase.view.weight.RecyclerSpace
+import com.abase.view.weight.web.ObservableScrollViewCallbacks
+import com.abase.view.weight.web.ScrollState
 import com.wj.ktolin.baselibrary.weight.TestAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : WebActivity(), View.OnClickListener {
     private var cpc: Button? = null
     private var downLoad: DownLoad? = null
     private var textView: TextView? = null
+
+    override fun before() {
+        sonicFast(this,1,"http://baidu.com")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         recycler_list.addItemDecoration(RecyclerSpace(2,resources.getColor(R.color.colorAccent)))
 
         println(SqlTool.createTable(TestMode::class.java)+" ==================== ")
+        bindWebView(web)
+        web.setUrl("http://baidu.com")
+        web.mWebView.addScrollViewCallbacks(object : ObservableScrollViewCallbacks{
+            override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
+                println(" ===========$scrollY")
+            }
+
+            override fun onDownMotionEvent() {
+            }
+
+            override fun onUpOrCancelMotionEvent(scrollState: ScrollState?) {
+            }
+
+        })
 
     }
 

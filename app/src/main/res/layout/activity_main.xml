@@ -40,5 +40,10 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/stop"
         android:layout_margin="10dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
+    <com.abase.view.weight.LoadWeb
+        android:id="@+id/web"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/recycler_list"/>
 </RelativeLayout>
