@@ -2,6 +2,7 @@ package com.wj.ktolin.baselibrary
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -12,6 +13,9 @@ import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
+import com.abase.view.weight.RecyclerSpace
+import com.wj.ktolin.baselibrary.weight.TestAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -31,6 +35,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         start.setOnClickListener(this)
         pause.setOnClickListener(this)
         stop.setOnClickListener(this)
+
+        recycler_list.adapter= TestAdapter()
+        recycler_list.layoutManager= GridLayoutManager(this,6)
+        recycler_list.addItemDecoration(RecyclerSpace(2,android.R.color.holo_red_dark))
 
         println(SqlTool.createTable(TestMode::class.java)+" ==================== ")
 
