@@ -476,13 +476,13 @@ public class OhHttpClient {
                           OhCallBackListener callbackListener, int type) {
         RequestBody body;
         if(requestParams!=null && requestParams.getKeys().contains(JSONTYE)){
-            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestParams.get(JSONTYE));
+            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (String)requestParams.get(JSONTYE));
         }else{
             Builder requestBody = new Builder();
             if (requestParams != null) {
                 ArrayList<String> keys = requestParams.getKeys();
                 for (int i = 0; i < keys.size(); i++) {
-                    requestBody.add(keys.get(i), requestParams.get(keys.get(i)));
+                    requestBody.add(keys.get(i), requestParams.get(keys.get(i)).toString());
                 }
             }
             body=requestBody.build();
@@ -528,7 +528,7 @@ public class OhHttpClient {
             Iterator<String> iterator = requestParams.getParams().keySet().iterator();
             while (iterator.hasNext()) {
                 key = iterator.next();
-                multipartBody.addFormDataPart(key, requestParams.get(key));
+                multipartBody.addFormDataPart(key, requestParams.get(key).toString());
             }
         }
         // 封装请求
@@ -568,7 +568,7 @@ public class OhHttpClient {
             Iterator<String> iterator = requestParams.getParams().keySet().iterator();
             while (iterator.hasNext()) {
                 key = iterator.next();
-                multipartBody.addFormDataPart(key, requestParams.get(key));
+                multipartBody.addFormDataPart(key, requestParams.get(key).toString());
             }
         }
         // 封装请求
@@ -600,7 +600,7 @@ public class OhHttpClient {
             Iterator<String> iterator = requestParams.getParams().keySet().iterator();
             while (iterator.hasNext()) {
                 key = iterator.next();
-                multipartBody.addFormDataPart(key, requestParams.get(key));
+                multipartBody.addFormDataPart(key, requestParams.get(key).toString());
             }
         }
         // 封装请求

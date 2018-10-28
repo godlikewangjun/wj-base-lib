@@ -1,5 +1,7 @@
 package com.abase.okhttp;
 
+import android.util.Log;
+
 import com.abase.util.AbStrUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -15,10 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2016年2月16日
  */
 public class OhHttpParams {
-	private ConcurrentHashMap<String, String> params = new ConcurrentHashMap<String, String>();
+	private ConcurrentHashMap<String, Object> params = new ConcurrentHashMap<String, Object>();
 	private ArrayList<String> keys = new ArrayList<String>();
 
-    public ConcurrentHashMap<String, String> getParams() {
+    public ConcurrentHashMap<String, Object> getParams() {
         return params;
     }
 
@@ -55,7 +57,7 @@ public class OhHttpParams {
 	/**
 	 * get value
 	 */
-	public <T> String get(T key) {
+	public <T> Object get(T key) {
 		return params.get(key);
 	}
 	/**获取拼接的字符串*/
@@ -74,7 +76,12 @@ public class OhHttpParams {
     public String getJSONString(){
         JsonObject jsonObject=new JsonObject();
         for (int i = 0; i < keys.size(); i++) {
-            jsonObject.addProperty(keys.get(i),params.get(keys.get(i)));
+        	Object value=params.get(keys.get(i));
+        	if(value instanceof String){
+				jsonObject.addProperty(keys.get(i),(String) value);
+			}else if(value instanceof Number){
+				jsonObject.addProperty(keys.get(i),(Number) value);
+			}
         }
         return jsonObject.toString();
     }

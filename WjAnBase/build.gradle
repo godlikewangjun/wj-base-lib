@@ -12,7 +12,7 @@ buildscript {
 }
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 15
@@ -64,6 +64,10 @@ android {
 
 dependencies {
     api fileTree(includes: ['*.jar'], dir: 'libs')
+    configurations.all {
+        resolutionStrategy.force 'com.android.support:appcompat-v7:27.1.1'
+        resolutionStrategy.force 'com.android.support:support-v4:27.1.1'
+    }
     //依赖libs 文件里面所有jar
     api 'com.android.support:appcompat-v7:27.1.1'
     api 'com.android.support:recyclerview-v7:27.1.1'
