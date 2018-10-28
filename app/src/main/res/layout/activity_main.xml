@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wj.ktolin.baselibrary.MainActivity">
+    tools:context="com.wj.ktolin.baselibrary.MainActivityBase">
     <TextView
         android:id="@+id/progress"
         android:layout_width="wrap_content"

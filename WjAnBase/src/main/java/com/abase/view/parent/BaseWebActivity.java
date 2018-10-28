@@ -35,7 +35,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2018/10/28/028
  */
-public class WebActivity extends BaseActivity{
+public class BaseWebActivity extends BaseActivity{
     //加载速度
     private SonicSession sonicSession;
     private SonicSessionClientImpl sonicSessionClient = null;
