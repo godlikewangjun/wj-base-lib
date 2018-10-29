@@ -20,7 +20,7 @@ package com.wj.ktutils.db
 import android.database.Cursor
 import android.database.sqlite.SQLiteException
 import com.wj.ktutils.AnkoInternals
-import java.util.*
+import java.util.ArrayList
 
 interface RowParser<out T> {
     fun parseRow(columns: Array<Any?>): T
