@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.support.annotation.UiThread;
 
 import com.abase.global.AbAppConfig;
 import com.abase.okhttp.Interceptor.GzipRequestInterceptor;
@@ -707,8 +708,8 @@ public class OhHttpClient {
                 };
             }
             this.callbackListener = callbackListener;
-            // 设置hander
             this.callbackListener.setHandler(new ResponderHandler(callbackListener));
+            // 设置hander
             this.callbackListener.sendStartMessage();//开始
             if (isPrintTime) {
                 time = System.currentTimeMillis();
@@ -732,15 +733,7 @@ public class OhHttpClient {
                             "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    callbackListener
-                            .getHandler()
-                            .post(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    client.newCall(request).enqueue(OKHttpCallBack.this);
-                                }
-                            });
+                    client.newCall(request).enqueue(OKHttpCallBack.this);
                     failNum++;
                 }
             }else{
@@ -807,13 +800,7 @@ public class OhHttpClient {
                             request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    callbackListener.getHandler().post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            client.newCall(request).enqueue(OKHttpCallBack.this);
-                        }
-                    });
+                    client.newCall(request).enqueue(OKHttpCallBack.this);
                     failNum++;
                 }
 
@@ -857,7 +844,7 @@ public class OhHttpClient {
      * 描述：请求返回
      */
     @SuppressLint("HandlerLeak")
-    private class ResponderHandler extends Handler {
+    private class ResponderHandler implements OhCallBackMessageInterface {
 
         /**
          * 响应数据.
@@ -876,10 +863,13 @@ public class OhHttpClient {
             this.responseListener = responseListener;
         }
 
-        @Override
-        public void handleMessage(Message msg) {
-            response = (Object[]) msg.obj;
-            switch (msg.what) {
+        /**
+         * 处理消息
+         * @param what
+         * @param response
+         */
+        private void callBack(int what){
+            switch (what) {
                 case SUCCESS_MESSAGE:// 成功
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
                         ((OhObjectListener) responseListener).onSuccess(
@@ -926,6 +916,17 @@ public class OhHttpClient {
                     }
                     break;
             }
+        }
+        @Override
+        public void handedMessage(final Message msg) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    response = (Object[]) msg.obj;
+                    callBack(msg.what);
+                }
+            });
+
         }
     }
 
