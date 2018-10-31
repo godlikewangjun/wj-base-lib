@@ -733,7 +733,12 @@ public class OhHttpClient {
                             "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    client.newCall(request).enqueue(OKHttpCallBack.this);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            client.newCall(request).enqueue(OKHttpCallBack.this);
+                        }
+                    });
                     failNum++;
                 }
             }else{
@@ -800,7 +805,13 @@ public class OhHttpClient {
                             request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    client.newCall(request).enqueue(OKHttpCallBack.this);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            client.newCall(request).enqueue(OKHttpCallBack.this);
+                        }
+                    });
+
                     failNum++;
                 }
 
