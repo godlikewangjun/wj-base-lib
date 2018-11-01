@@ -28,7 +28,7 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
     private int headerCount = 0;// 头的数量
     private int footerCount = 0;// 尾的数量
 
-    public RecyclerSpace(int lineWidth,int color) {
+    public RecyclerSpace(int lineWidth, int color) {
         init();
         this.dividerDrawable = new ColorDrawable(color);
         this.lineWidth = lineWidth;
@@ -46,7 +46,7 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
     /**
      * 公用设置
      */
-    private void init(){
+    private void init() {
         dividerDrawable = new ColorDrawable(Color.TRANSPARENT);
     }
 
@@ -172,7 +172,8 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
         canvas.save();
         int spanCount = getSpanCount(parent);// 水平个数，线性布局为-1
         int childCount = parent.getChildCount();// 显示的个数
-        int adapterCount = parent.getAdapter().getItemCount();// 总个数
+        int adapterCount = childCount;
+        if (parent.getAdapter() != null) adapterCount = parent.getAdapter().getItemCount();// 总个数
         if (parent.getClipToPadding()) {
             canvas.clipRect(parent.getPaddingLeft(), parent.getPaddingTop(),
                     parent.getWidth() - parent.getPaddingRight(),
@@ -233,7 +234,8 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
         }
         int spanCount = getSpanCount(parent);// 水平个数，线性布局为-1
         int childCount = parent.getChildCount();
-        int adapterCount = parent.getAdapter().getItemCount();// 总个数
+        int adapterCount = childCount;
+        if (parent.getAdapter() != null) adapterCount = parent.getAdapter().getItemCount();// 总个数
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             int currentPosition = parent.getChildAdapterPosition(child);
