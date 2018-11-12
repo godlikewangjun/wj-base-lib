@@ -1135,4 +1135,22 @@ public class AbAppUtil {
         }
         return true;
     }
+
+    /**
+     * 判断是否安装apk
+     * @param context
+     * @param packageName
+     * @return
+     */
+    public boolean isInstallApk(Context context, String packageName) {
+        if (packageName == null || "".equals(packageName))
+            return false;
+        try {
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(packageName,
+                    PackageManager.GET_UNINSTALLED_PACKAGES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
 }

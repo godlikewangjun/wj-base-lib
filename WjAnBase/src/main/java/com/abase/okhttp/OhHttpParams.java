@@ -25,7 +25,7 @@ public class OhHttpParams {
     }
 
     /** 添加值 */
-	public OhHttpParams put(String key, String value) {
+	public OhHttpParams put(String key, Object value) {
 		if (key != null && value != null) {
 			if(!keys.contains(key)){
 				keys.add(key);

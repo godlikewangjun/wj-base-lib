@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.UiThread;
@@ -147,7 +148,7 @@ public class OhHttpClient {
     private OkHttpClient client;
     private static Headers headers = null;
     private PersistentCookieStore cookieStore;//cookies
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     /**
      * 获取销毁的urls 存量 最大缓存10条
@@ -733,6 +734,7 @@ public class OhHttpClient {
                             "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
+                    if(Looper.myLooper()==null)Looper.prepare();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -805,6 +807,7 @@ public class OhHttpClient {
                             request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
+                    if(Looper.myLooper()==null)Looper.prepare();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -930,6 +933,7 @@ public class OhHttpClient {
         }
         @Override
         public void handedMessage(final Message msg) {
+            if(Looper.myLooper()==null)Looper.prepare();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
