@@ -21,7 +21,7 @@ android {
 //        multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi"
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
 
         externalNativeBuild {
@@ -34,11 +34,11 @@ android {
         release {
             minifyEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro','x5-roguard.cfg'
         }
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro','x5-roguard.cfg'
         }
     }
     /* 忽略相同文件 */

@@ -1,5 +1,6 @@
 package com.wj.ktolin.baselibrary
 
+import android.graphics.PixelFormat
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
@@ -13,6 +14,7 @@ import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
 import com.abase.view.parent.BaseWebActivity
+import com.abase.view.weight.QqWebHelper
 import com.abase.view.weight.RecyclerSpace
 import com.abase.view.weight.web.ObservableScrollViewCallbacks
 import com.abase.view.weight.web.ScrollState
@@ -31,6 +33,7 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFormat(PixelFormat.TRANSLUCENT)
         setContentView(R.layout.activity_main)
 //        AndroidKeyboardHeight.assistActivity(this)
         val start = findViewById<Button>(R.id.start)
@@ -47,9 +50,9 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
         recycler_list.layoutManager= GridLayoutManager(this,6)
 
         println(SqlTool.createTable(TestMode::class.java)+" ==================== ")
-        bindWebView(web)
+        QqWebHelper.X5Init(this)
         web.setUrl("http://baidu.com")
-        web.mWebView.addScrollViewCallbacks(object : ObservableScrollViewCallbacks{
+        web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks{
             override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
                 println(" ===========$scrollY")
             }

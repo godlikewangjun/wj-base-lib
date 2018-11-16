@@ -158,12 +158,12 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            mWebView.loadUrl("file:///android_asset/load_fail.html");
+//            mWebView.loadUrl("file:///android_asset/load_fail.html");
         }
 
         @Override
         public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-            mWebView.loadUrl("file:///android_asset/load_fail.html");
+//            mWebView.loadUrl("file:///android_asset/load_fail.html");
         }
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.view.WindowManager;
-import android.webkit.WebView;
 
 import com.abase.util.Tools;
 import com.abase.view.weight.LoadWeb;
@@ -39,6 +39,13 @@ public class BaseWebActivity extends BaseActivity{
     //加载速度
     private SonicSession sonicSession;
     private SonicSessionClientImpl sonicSessionClient = null;
+
+    @Override
+    public void before() {
+        super.before();
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+    }
+
     @Override
     public int setContentView() {
         return 0;

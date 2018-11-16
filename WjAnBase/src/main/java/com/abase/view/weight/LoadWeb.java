@@ -190,7 +190,6 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
                 if (onClickListener != null) {
                     onClickListener.onClick(null);
                 }
-                WjEventBus.getInit().post(LoadWeb.LOADFINSH, 0);
             } else {
                 mWebView.setVisibility(GONE);//显示
             }
@@ -208,6 +207,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
             if (sonicSession != null) {
                 sonicSession.getSessionClient().pageFinish(url);
             }
+            WjEventBus.getInit().post(LoadWeb.LOADFINSH, 0);
         }
         @TargetApi(21)
         @Override
@@ -277,10 +277,15 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
             } else { // default mode
                 mWebView.loadUrl(url);
             }
-        }else{
-            mWebView.loadData(url, "text/html; charset=UTF-8", null);//这种写法可以正确解码
         }
+    }
 
+    /**
+     * 加载html
+     * @param html
+     */
+    public void loadHtml(String html){
+        mWebView.loadData(html, "text/html; charset=UTF-8", null);//这种写法可以正确解码
     }
 
     /**

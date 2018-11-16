@@ -41,7 +41,7 @@
         android:layout_below="@+id/stop"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"/>
-    <com.abase.view.weight.LoadWeb
+    <com.abase.view.weight.web.ObservableX5WebView
         android:id="@+id/web"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
