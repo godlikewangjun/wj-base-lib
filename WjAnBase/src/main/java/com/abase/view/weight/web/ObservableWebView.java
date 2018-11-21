@@ -276,7 +276,7 @@ public class ObservableWebView extends WebView implements Scrollable {
         return mCallbacks == null && mCallbackCollection == null;
     }
 
-    static class SavedState extends BaseSavedState {
+    class SavedState extends BaseSavedState {
         int prevScrollY;
         int scrollY;
 
@@ -303,7 +303,7 @@ public class ObservableWebView extends WebView implements Scrollable {
             out.writeInt(scrollY);
         }
 
-        public static final Creator<SavedState> CREATOR
+        public  final Creator<SavedState> CREATOR
             = new Creator<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in) {

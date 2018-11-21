@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * X5webview监听滑动
+ *
  * @author Administrator
  * @version 1.0
  * @date 2018/11/14/014
@@ -45,16 +46,21 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        ObservableWebView.SavedState ss = (ObservableWebView.SavedState) state;
-        mPrevScrollY = ss.prevScrollY;
-        mScrollY = ss.scrollY;
+        ObservableX5WebView.SavedState ss = null;
+        try {
+            ss = (ObservableX5WebView.SavedState) state;
+            mPrevScrollY = ss.prevScrollY;
+            mScrollY = ss.scrollY;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onRestoreInstanceState(ss.getSuperState());
     }
 
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        ObservableWebView.SavedState ss = new ObservableWebView.SavedState(superState);
+        ObservableX5WebView.SavedState ss = new ObservableX5WebView.SavedState(superState);
         ss.prevScrollY = mPrevScrollY;
         ss.scrollY = mScrollY;
         return ss;
@@ -260,7 +266,7 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
         return mCallbacks == null && mCallbackCollection == null;
     }
 
-    static class SavedState extends BaseSavedState {
+    class SavedState extends BaseSavedState {
         int prevScrollY;
         int scrollY;
 
@@ -287,7 +293,7 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
             out.writeInt(scrollY);
         }
 
-        public static final Creator<ObservableX5WebView.SavedState> CREATOR
+        public  final Creator<ObservableX5WebView.SavedState> CREATOR
                 = new Creator<ObservableX5WebView.SavedState>() {
             @Override
             public ObservableX5WebView.SavedState createFromParcel(Parcel in) {
