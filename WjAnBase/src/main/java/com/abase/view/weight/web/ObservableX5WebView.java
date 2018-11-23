@@ -54,7 +54,9 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.onRestoreInstanceState(ss.getSuperState());
+        if (state != null)
+            super.onRestoreInstanceState(ss.getSuperState());
+        else super.onRestoreInstanceState(state);
     }
 
     @Override
@@ -293,7 +295,7 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
             out.writeInt(scrollY);
         }
 
-        public  final Creator<ObservableX5WebView.SavedState> CREATOR
+        public final Creator<ObservableX5WebView.SavedState> CREATOR
                 = new Creator<ObservableX5WebView.SavedState>() {
             @Override
             public ObservableX5WebView.SavedState createFromParcel(Parcel in) {

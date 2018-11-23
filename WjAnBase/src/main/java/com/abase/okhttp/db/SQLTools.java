@@ -111,6 +111,15 @@ public class SQLTools {
     }
 
     /**
+     * 清理上传记录
+     *
+     * @param id
+     */
+    public void clearUploadTab(String id) {
+        database.delete(SQLHelper.TABLE_UPLOAD, "", null);
+    }
+
+    /**
      * 保存下载的数据
      *
      * @param id          任务ID
@@ -168,6 +177,14 @@ public class SQLTools {
         database.delete(SQLHelper.TABLE_DOWMLOAD, "id='" + id + "'", null);
     }
 
+    /**
+     * 清理下载任务的记录
+     *
+     * @param id
+     */
+    public void clearDownLoadTab(String id) {
+        database.delete(SQLHelper.TABLE_DOWMLOAD, "", null);
+    }
 
     /**
      * 在应用退出的时候销毁数据库连接
