@@ -115,7 +115,7 @@ public class SQLTools {
      *
      * @param id
      */
-    public void clearUploadTab(String id) {
+    public void clearUploadTab() {
         database.delete(SQLHelper.TABLE_UPLOAD, "", null);
     }
 
@@ -182,7 +182,7 @@ public class SQLTools {
      *
      * @param id
      */
-    public void clearDownLoadTab(String id) {
+    public void clearDownLoadTab() {
         database.delete(SQLHelper.TABLE_DOWMLOAD, "", null);
     }
 
