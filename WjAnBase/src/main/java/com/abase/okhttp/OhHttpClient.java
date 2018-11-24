@@ -655,6 +655,7 @@ public class OhHttpClient {
                 }
             }
             builder.header("range", "bytes=" + file.length() + "-"+total);//断点续传要用到的，指示下载的区间
+            System.out.println("bytes=" + file.length() + "-"+total+"  本地存的文件长度："+jsonObject.toString());
         }
 
         Request request = builder.build();

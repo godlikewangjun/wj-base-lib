@@ -5,6 +5,7 @@ import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.OhHttpParams
 import com.abase.okhttp.OhObjectListener
+import com.abase.okhttp.util.DownLoad
 import com.abase.util.GsonUtil
 import java.io.File
 
@@ -49,6 +50,10 @@ class HttpFile {
      * 必须填写
      */
     var context: Context? = null
+    /**
+     * 方便操作下载的逻辑
+     */
+    var dowmLoad:DownLoad?=null
 
     var requestType: String? = null
     var ohhttpparams: OhHttpParams? = null
@@ -130,7 +135,7 @@ private fun httpDU(wrap: HttpFile) {
     }
 
     when (wrap.requestType) {
-        HttpFile.DOWN -> http.downFile(wrap.context, wrap.url, httplistener)
+        HttpFile.DOWN -> wrap.dowmLoad=http.downFile(wrap.context, wrap.url, httplistener)
         HttpFile.UPLOAD -> http.upFiles(wrap.url, wrap.ohhttpparams, wrap.upFile, httplistener)
     }
 }

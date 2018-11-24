@@ -29,7 +29,7 @@ import okio.Okio;
 
 public class DownLoad {
     //下载速度
-    private static int bufferSize = 10*1024;
+    private static int bufferSize = 100*1024;
     //下载延迟时间
     public static int time = 5;
     private boolean isPause = false;
@@ -110,7 +110,6 @@ public class DownLoad {
                 bufferedSink.emit();
                 sum += len;
                 Thread.sleep(time);
-//                System.out.println( Thread.activeCount()+" ----------");
                 callbackListener.sendProgressMessage(sum, total, false);
                 if (file.length() >= total) {
                     File newFile=new File(dir, destFileName.replace(".temp", "."+AbFileUtil.getFileType(file)));

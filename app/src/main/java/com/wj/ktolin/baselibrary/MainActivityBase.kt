@@ -68,8 +68,9 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "http://comsystem.webfile.test.mxlemon.com/api/file/GetSource//8637a28e8e2546a092458fbd6630c68b?buskey=67f777d627394fae8a62fb5917046e3a&buscode=0e863d3893054d718fc43c20e01a454f&timespan=1523505607&sign=1f3d0c6691b80cd25e2d86068b7eb216", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/76D7A91C7CF1F646A2EA46CAA7FF588C.apk?fsname=com.tencent.mm_6.7.3_1360.apk&csr=1bbd", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
+                    println(content+" ------------- ")
                    AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }
 

@@ -127,14 +127,14 @@ public class SQLTools {
      */
     public void saveDowmloadInfo(String id, String totallength) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id", id);
         contentValues.put("totallength", totallength);
 
         Cursor cursor = database.rawQuery("select * from " + SQLHelper.TABLE_DOWMLOAD + " where id='" + id + "'", null);
         if (cursor.getCount() > 0) {
             cursor.close();
-//            database.update(SQLHelper.TABLE_UPLOAD,contentValues,"id='"+id+"'",null);
+            database.update(SQLHelper.TABLE_UPLOAD,contentValues,"id='"+id+"'",null);
         } else {
+            contentValues.put("id", id);
             database.insert(SQLHelper.TABLE_DOWMLOAD, null, contentValues);
         }
         cursor.close();
