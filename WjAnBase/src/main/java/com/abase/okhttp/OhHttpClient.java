@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.support.annotation.UiThread;
 
 import com.abase.global.AbAppConfig;
 import com.abase.okhttp.Interceptor.GzipRequestInterceptor;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.nio.charset.Charset;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -65,6 +65,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import okio.Buffer;
+import okio.Utf8;
 
 /**
  * okhttp封装类的客户端
