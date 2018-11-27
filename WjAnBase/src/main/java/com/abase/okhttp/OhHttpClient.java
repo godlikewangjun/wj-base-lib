@@ -14,11 +14,11 @@ import com.abase.okhttp.body.FileRequestBody;
 import com.abase.okhttp.body.MultipartBodyRbody;
 import com.abase.okhttp.cookies.PersistentCookieStore;
 import com.abase.okhttp.db.SQLTools;
+import com.abase.okhttp.log.HttpLoggingInterceptor;
 import com.abase.okhttp.util.DownLoad;
 import com.abase.task.AbThreadFactory;
 import com.abase.util.AbFileUtil;
 import com.abase.util.AbLogUtil;
-import com.abase.util.AbStrUtil;
 import com.abase.util.GsonUtil;
 import com.abase.util.Tools;
 
@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.nio.charset.Charset;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -65,7 +64,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import okio.Buffer;
-import okio.Utf8;
 
 /**
  * okhttp封装类的客户端
@@ -129,13 +127,9 @@ public class OhHttpClient {
      */
     public static String DOWNDIR = "/storage/emulated/0/Download";
     /**
-     * 是否打印请求的时间
-     */
-    public static boolean isPrintTime = false;
-    /**
      * 是否格式化请求成功的json字符串
      */
-    private boolean isJsonFromMat = false;
+    private boolean isJsonFromMat = true;
     /**
      * 限制上传下载的速度即是时间间隔
      */
@@ -150,6 +144,7 @@ public class OhHttpClient {
     private static Headers headers = null;
     private PersistentCookieStore cookieStore;//cookies
     private Handler handler = new Handler(Looper.getMainLooper());
+    private HttpLoggingInterceptor logging;//打印日志
 
     /**
      * 获取销毁的urls 存量 最大缓存10条
@@ -172,8 +167,10 @@ public class OhHttpClient {
     public void setClient(OkHttpClient client) {
         this.client = client;
     }
+
     //json类型传入的参数 自动转
-    public static  String JSONTYE="MediaTypeJson";
+    public static String JSONTYE = "MediaTypeJson";
+
     /**
      * 设置格式化请求成功的json
      */
@@ -204,15 +201,22 @@ public class OhHttpClient {
     }
 
     /**
-     *  销毁
+     * 销毁
      */
     public static synchronized OhHttpClient destory() {
-        if(ohHttpClient!=null && ohHttpClient.client!=null){
+        if (ohHttpClient != null && ohHttpClient.client != null) {
             ohHttpClient.client.dispatcher().cancelAll();
-            ohHttpClient.client=null;
-            ohHttpClient=null;
+            ohHttpClient.client = null;
+            ohHttpClient = null;
         }
         return ohHttpClient;
+    }
+
+    /**
+     * 关闭自己的日志
+     */
+    public void closeLog() {
+
     }
 
     /**
@@ -352,6 +356,10 @@ public class OhHttpClient {
         builder.writeTimeout(WRITETIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
+        //默认就设置日志打印
+        if(logging==null)logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addNetworkInterceptor(logging);
         client = builder.build();
     }
 
@@ -478,9 +486,9 @@ public class OhHttpClient {
     private void haveBody(String url, OhHttpParams requestParams,
                           OhCallBackListener callbackListener, int type) {
         RequestBody body;
-        if(requestParams!=null && requestParams.getKeys().contains(JSONTYE)){
-            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (String)requestParams.get(JSONTYE));
-        }else{
+        if (requestParams != null && requestParams.getKeys().contains(JSONTYE)) {
+            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (String) requestParams.get(JSONTYE));
+        } else {
             Builder requestBody = new Builder();
             if (requestParams != null) {
                 ArrayList<String> keys = requestParams.getKeys();
@@ -488,7 +496,7 @@ public class OhHttpClient {
                     requestBody.add(keys.get(i), requestParams.get(keys.get(i)).toString());
                 }
             }
-            body=requestBody.build();
+            body = requestBody.build();
         }
 
         okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag
@@ -547,17 +555,18 @@ public class OhHttpClient {
 
     /**
      * 上传文件流
-     * @param url 地址
-     * @param requestParams 携带的参数
-     * @param file 文件
-     * @param type 默认是application/octet-stream
+     *
+     * @param url              地址
+     * @param requestParams    携带的参数
+     * @param file             文件
+     * @param type             默认是application/octet-stream
      * @param callbackListener 回调
      * @return
      */
     public FileRequestBody upFileStream(String url, OhHttpParams requestParams, File file, String type,
                                         OhFileCallBakListener callbackListener) {
-        if(type==null){
-            type="application/octet-stream";
+        if (type == null) {
+            type = "application/octet-stream";
         }
         // 写入文件流 用于单个文件上传
         // text/x-markdown; charset=utf-8
@@ -595,7 +604,7 @@ public class OhHttpClient {
         okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         // 添加多个文件
         for (int i = 0; i < files.size(); i++) {
-            multipartBody.addFormDataPart("file", files.get(i).getName(),RequestBody.create(MediaType.parse("image/*"), files.get(i)));
+            multipartBody.addFormDataPart("file", files.get(i).getName(), RequestBody.create(MediaType.parse("image/*"), files.get(i)));
         }
         // 添加post参数
         if (requestParams != null) {
@@ -611,7 +620,7 @@ public class OhHttpClient {
         if (headers != null) {
             builder.headers(headers);
         }
-        builder.post(new MultipartBodyRbody(multipartBody.build(),callbackListener));
+        builder.post(new MultipartBodyRbody(multipartBody.build(), callbackListener));
         Request request = builder.build();
         callbackListener.ohtype = 0;// 设置类型是上传
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
@@ -619,11 +628,12 @@ public class OhHttpClient {
 
     /**
      * 下载文件
+     *
      * @param url
-     * @param isBreakpoint 是否支持断点下载
+     * @param isBreakpoint     是否支持断点下载
      * @param callbackListener
      */
-    public DownLoad downFile(Context context,String url,final OhFileCallBakListener callbackListener) {
+    public DownLoad downFile(Context context, String url, final OhFileCallBakListener callbackListener) {
         boolean isLoading = false;
         synchronized (client.dispatcher().getClass()) { //当前任务在下载队列就返回
             for (Call call : client.dispatcher().queuedCalls()) {
@@ -643,29 +653,29 @@ public class OhHttpClient {
         if (headers != null) {
             builder.headers(headers);
         }
-        String id=Tools.setMD5(url);
-        File file=new File(DOWNDIR,id+".temp");
-        if(file.exists()) {
-            String total="";
+        String id = Tools.setMD5(url);
+        File file = new File(DOWNDIR, id + ".temp");
+        if (file.exists()) {
+            String total = "";
             JSONObject jsonObject = SQLTools.init(context).selectDownLoad(id);
             if (jsonObject != null && jsonObject.has("id")) {
                 try {
-                    total = jsonObject.getLong("totallength")+"";
+                    total = jsonObject.getLong("totallength") + "";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            builder.header("range", "bytes=" + file.length() + "-"+total);//断点续传要用到的，指示下载的区间
-            System.out.println("bytes=" + file.length() + "-"+total+"  本地存的文件长度："+jsonObject.toString());
+            builder.header("range", "bytes=" + file.length() + "-" + total);//断点续传要用到的，指示下载的区间
+            System.out.println("bytes=" + file.length() + "-" + total + "  本地存的文件长度：" + jsonObject.toString());
         }
 
         Request request = builder.build();
 //        client=client.newBuilder().addNetworkInterceptor(new DownInterceptor(callbackListener)).build();
         //清理请求的
         destoryUrls.clear();
-        DownLoad downLoad=new DownLoad(context);
+        DownLoad downLoad = new DownLoad(context);
         callbackListener.ohtype = 1;// 设置类型是下载
-        client.newCall(request).enqueue(new OKHttpCallBack(request,downLoad, callbackListener));
+        client.newCall(request).enqueue(new OKHttpCallBack(request, downLoad, callbackListener));
         return downLoad;
     }
 
@@ -714,9 +724,6 @@ public class OhHttpClient {
             this.callbackListener.setHandler(new ResponderHandler(callbackListener));
             // 设置hander
             this.callbackListener.sendStartMessage();//开始
-            if (isPrintTime) {
-                time = System.currentTimeMillis();
-            }
         }
 
 
@@ -736,7 +743,7 @@ public class OhHttpClient {
                             "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    if(Looper.myLooper()==null)Looper.prepare();
+                    if (Looper.myLooper() == null) Looper.prepare();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -745,7 +752,7 @@ public class OhHttpClient {
                     });
                     failNum++;
                 }
-            }else{
+            } else {
                 callbackListener.sendFailureMessage(-1, e.getMessage(), e);
             }
         }
@@ -759,7 +766,7 @@ public class OhHttpClient {
 //				body = gunzip(body);
 //			}
 //            WjEventBus.getInit().post(response.headers());
-            if (code == 200 || code==206) {// 服务器响应成功 206是断点
+            if (code == 200 || code == 206) {// 服务器响应成功 206是断点
                 if (callbackListener instanceof OhObjectListener) {// 请求sring的监听
                     String body = response.body().string();
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
@@ -769,27 +776,13 @@ public class OhHttpClient {
                             e.printStackTrace();
                             AbLogUtil.e(OhHttpClient.class, ((OhObjectListener) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);
                             if (failNum == 3) {
-                                ((OhObjectListener) callbackListener).onFailure(400, "格式化错误", e);
+                                ((OhObjectListener) callbackListener).onFailure(400, "类格式化错误", e);
                             }
                             return;
                         }
                     } else
                         callbackListener.sendSucessMessage(body);
 
-                    //打印成功返回的日志
-                    if (isJsonFromMat) {
-                        try {
-                            AbLogUtil.i(OhHttpClient.class, url + ",\n" + AbStrUtil.formatJson(body));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            if (failNum == 3) {
-                                ((OhObjectListener) callbackListener).onFailure(400, "格式化错误", e);
-                            }
-                            AbLogUtil.i(OhHttpClient.class, url + "," + body);
-                        }
-                    } else {
-                        AbLogUtil.i(OhHttpClient.class, url + "," + body);
-                    }
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
                     if (callbackListener.ohtype == 0) {// 上传
                         String body = response.body().string();
@@ -798,7 +791,7 @@ public class OhHttpClient {
                     } else if (callbackListener.ohtype == 1) {// 下载
                         final String name = Tools.setMD5(url);
                         downLoad.saveFile(response, callbackListener, DOWNDIR, name + ".temp");
-                        downLoad=null;
+                        downLoad = null;
                         return;
                     }
                 }
@@ -809,7 +802,7 @@ public class OhHttpClient {
                             request.url().toString() + ",重试超过最大的次数" + failNum, null);
                     callbackListener.sendFinshMessage();
                 } else {
-                    if(Looper.myLooper()==null)Looper.prepare();
+                    if (Looper.myLooper() == null) Looper.prepare();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -843,17 +836,13 @@ public class OhHttpClient {
 
             try {
                 callbackListener.sendFinshMessage();
-                if (isPrintTime) {
-                    AbFileUtil.writeAppend("jk", "\n接口:" + request.url().toString() + ",时间:" + (System.currentTimeMillis() - time));
-                }
+//                AbFileUtil.writeAppend("jk", "\n接口:" + request.url().toString() + ",时间:" + (System.currentTimeMillis() - time));
             } catch (Exception e) {
                 e.printStackTrace();
                 AbLogUtil.i(getClass(), url + ",错误");
             }
         }
     }
-
-
 
 
     /**
@@ -881,10 +870,11 @@ public class OhHttpClient {
 
         /**
          * 处理消息
+         *
          * @param what
          * @param response
          */
-        private void callBack(int what){
+        private void callBack(int what) {
             switch (what) {
                 case SUCCESS_MESSAGE:// 成功
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
@@ -933,9 +923,10 @@ public class OhHttpClient {
                     break;
             }
         }
+
         @Override
         public void handedMessage(final Message msg) {
-            if(Looper.myLooper()==null)Looper.prepare();
+            if (Looper.myLooper() == null) Looper.prepare();
             handler.post(new Runnable() {
                 @Override
                 public void run() {

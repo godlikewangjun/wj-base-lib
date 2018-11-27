@@ -31,7 +31,6 @@ class TestAdapter : BaseAdapter() {
         mediaPlayer.setDataSource("http://www.ytmp3.cn/down/51447.mp3")
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            println(" ------------ ")
             holder.itemView.play.setOnClickListener {
                 holder.itemView.play.isSelected = !holder.itemView.play.isSelected
                 if (holder.itemView.play.isSelected) {

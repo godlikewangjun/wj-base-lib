@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
+import com.abase.okhttp.OhObjectListener
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
@@ -64,6 +65,7 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
             }
 
         })
+
     }
 
     override fun onClick(view: View) {
@@ -97,8 +99,21 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
                     downLoad!!.cancle()
                 }
             }
-            R.id.stop -> if (downLoad != null) {
-                downLoad!!.stop()
+            R.id.stop -> {
+                if (downLoad != null) {
+                    downLoad!!.stop()
+                }
+                OhHttpClient.getInit().get("https://www.baidu.com/",object : OhObjectListener<String>(){
+                    override fun onFailure(code: Int, content: String?, error: Throwable?) {
+                    }
+
+                    override fun onSuccess(content: String?) {
+                    }
+
+                    override fun onFinish() {
+                    }
+
+                })
             }
         }
     }
