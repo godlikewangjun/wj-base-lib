@@ -122,8 +122,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-                AbLogUtil.i(HttpLoggingInterceptor.class, message);
-//                Platform.get().log(INFO, message, null);
+//                AbLogUtil.i(HttpLoggingInterceptor.class, message);
+                Platform.get().log(INFO, message, null);
             }
         };
     }

@@ -103,7 +103,8 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
                 if (downLoad != null) {
                     downLoad!!.stop()
                 }
-                OhHttpClient.getInit().get("https://www.baidu.com/",object : OhObjectListener<String>(){
+//                OhHttpClient.getInit().isJsonFromMat=false
+                OhHttpClient.getInit().get("https://app-api-ali.zysc.dchost.cn/v1/content/recommend/palyer/recommend/more.api?authCode=5AFC725FAA7B4220AA3B6A4DD5A142C0&access_key=bcc00105941a4a128b5ffbb5ceed9794&areaCode=0001%2F0002%2F",object : OhObjectListener<String>(){
                     override fun onFailure(code: Int, content: String?, error: Throwable?) {
                     }
 

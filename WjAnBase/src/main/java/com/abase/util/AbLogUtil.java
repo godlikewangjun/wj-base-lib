@@ -123,11 +123,12 @@ public class AbLogUtil {
 			for (int i = 0; i < count; i++) {
 				//剩下的文本还是大于规定长度则继续重复截取并输出
 				if (strLength > end) {
-					if(i==0){
-						Log.i(tag, message.substring(start, end));
-					}else{
-						Log.i(tag+" append top "+i, message.substring(start, end));
-					}
+//					if(i==0){
+//						Log.i(tag, message.substring(start, end));
+//					}else{
+//						Log.i(tag+" append top "+i, message.substring(start, end));
+//					}
+					Log.d(tag, message.substring(start, end));
 
 					start = end;
 					if(strLength>end+LOG_MAXLENGTH){
@@ -136,7 +137,7 @@ public class AbLogUtil {
 						end=strLength;
 					}
 				} else {
-					Log.i(tag, message.substring(start, strLength));
+					Log.d(tag, message.substring(start, strLength));
 					break;
 				}
 			}
