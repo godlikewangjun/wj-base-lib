@@ -17,11 +17,14 @@ package com.abase.okhttp.log;
 
 import com.abase.okhttp.OhHttpClient;
 import com.abase.okhttp.OhObjectListener;
+import com.abase.task.AbThreadFactory;
 import com.abase.util.AbLogUtil;
 import com.abase.util.AbStrUtil;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Set;
@@ -44,6 +47,7 @@ import okio.BufferedSource;
 import okio.GzipSource;
 
 import static okhttp3.internal.platform.Platform.INFO;
+import static okhttp3.internal.platform.Platform.WARN;
 
 /**
  * An OkHttp interceptor which logs request and response information. Can be applied as an
@@ -54,6 +58,18 @@ import static okhttp3.internal.platform.Platform.INFO;
  */
 public final class HttpLoggingInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
+
+    /**
+     * 处理body解析,防止卡顿放在线程处理
+     */
+    interface BodyParsing{
+        String bodyResult(String inputBody);
+    }
+    private BodyParsing mBodyParsing;
+
+    public void setmBodyParsing(BodyParsing mBodyParsing) {
+        this.mBodyParsing = mBodyParsing;
+    }
 
     public enum Level {
         /**
@@ -122,8 +138,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-//                AbLogUtil.i(HttpLoggingInterceptor.class, message);
-                Platform.get().log(INFO, message, null);
+                AbLogUtil.i(HttpLoggingInterceptor.class, message);
+//                Platform.get().log(INFO, message, null);
             }
         };
     }
@@ -224,15 +240,17 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
                 logger.log("");
                 if (isPlaintext(buffer)) {
+                    String bodyStr=(buffer.readString(charset));
+                    bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
                     if (OhHttpClient.getInit().isJsonFromMat()) {
                         try {
-                            logger.log("\n" + AbStrUtil.formatJson(buffer.readString(charset)));
+                            logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            logger.log(buffer.clone().readString(charset));
+                            logger.log(bodyStr);
                         }
                     } else {
-                        logger.log(buffer.readString(charset));
+                        logger.log(bodyStr);
                     }
 
                     logger.log("--> END " + request.method()
@@ -264,12 +282,10 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 + " (" + tookMs + "ms" + (!logHeaders ? ", " + bodySize + " body" : "") + ')');
 
         if (logHeaders) {
-            logger.log("headers----------------->>>");
             Headers headers = response.headers();
             for (int i = 0, count = headers.size(); i < count; i++) {
                 logHeader(headers, i);
             }
-            logger.log("<<<-----------------headers");
             if (!logBody || !HttpHeaders.hasBody(response)) {
                 logger.log("<-- END HTTP");
             } else if (bodyHasUnknownEncoding(response.headers())) {
@@ -299,7 +315,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
                 }
-                logger.log("body----------------->>>");
                 if (!isPlaintext(buffer)) {
                     logger.log("");
                     logger.log("<-- END HTTP (binary " + buffer.size() + "-byte body omitted)");
@@ -307,19 +322,20 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 }
 
                 if (contentLength != 0) {
+                    String bodyStr=buffer.clone().readString(charset);
+                    if(mBodyParsing!=null) bodyStr=mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat()) {
                         try {
-                            logger.log("\n" + AbStrUtil.formatJson(buffer.clone().readString(charset)));
+                            logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            logger.log(buffer.clone().readString(charset));
+                            logger.log(bodyStr);
                         }
                     } else {
                         logger.log("");
-                        logger.log(buffer.clone().readString(charset));
+                        logger.log(bodyStr);
                     }
                 }
-                logger.log("<<<-----------------body");
                 if (gzippedLength != null) {
                     logger.log("<-- END HTTP (" + buffer.size() + "-byte, "
                             + gzippedLength + "-gzipped-byte body)");
