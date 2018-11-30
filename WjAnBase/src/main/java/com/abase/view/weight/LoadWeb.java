@@ -198,7 +198,8 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     //**client*//*
     WebViewClient client = new WebViewClient() {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
+            view.loadUrl(url);
+            return true;
         }
 
         @Override

@@ -35,10 +35,10 @@ public class X5WebView extends WebView {
 		/**
 		 * 防止加载网页时调起系统浏览器
 		 */
-//		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//			view.loadUrl(url);
-//			return true;
-//		}
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			view.loadUrl(url);
+			return true;
+		}
 
 		@Override
 		public void onPageFinished(WebView webView, String s) {
