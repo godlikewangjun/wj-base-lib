@@ -239,10 +239,11 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 }
 
                 logger.log("");
+                logger.log("--> RequestParams");
                 if (isPlaintext(buffer)) {
                     String bodyStr=(buffer.readString(charset));
                     bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
-                    if (OhHttpClient.getInit().isJsonFromMat()) {
+                    if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
@@ -253,9 +254,11 @@ public final class HttpLoggingInterceptor implements Interceptor {
                         logger.log(bodyStr);
                     }
 
+                    logger.log("<-- RequestParams");
                     logger.log("--> END " + request.method()
                             + " (" + requestBody.contentLength() + "-byte body)");
                 } else {
+                    logger.log("<-- RequestParams");
                     logger.log("--> END " + request.method() + " (binary "
                             + requestBody.contentLength() + "-byte body omitted)");
                 }
@@ -324,7 +327,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (contentLength != 0) {
                     String bodyStr=buffer.clone().readString(charset);
                     if(mBodyParsing!=null) bodyStr=mBodyParsing.bodyResult(bodyStr);
-                    if (OhHttpClient.getInit().isJsonFromMat()) {
+                    if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
