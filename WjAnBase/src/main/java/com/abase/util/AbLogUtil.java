@@ -128,7 +128,7 @@ public class AbLogUtil {
 //					}else{
 //						Log.i(tag+" append top "+i, message.substring(start, end));
 //					}
-					Log.d(tag, message.substring(start, end));
+					Log.i(tag, message.substring(start, end));
 
 					start = end;
 					if(strLength>end+LOG_MAXLENGTH){
