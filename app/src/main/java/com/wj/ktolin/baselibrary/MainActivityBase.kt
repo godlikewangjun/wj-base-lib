@@ -53,7 +53,7 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
         println(SqlTool.createTable(TestMode::class.java)+" ==================== ")
         QqWebHelper.X5Init(this)
-        web.setUrl("http://baidu.com")
+        web.loadHtml("<a href=\"jrz://open\">open Android app</a>")
         web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks{
             override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
                 println(" ===========$scrollY")

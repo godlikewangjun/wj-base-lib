@@ -34,7 +34,7 @@ public class AbLogUtil {
 	public static boolean D = true;
 	
 	/**每行日志最多好长 长了就换行继续显示*/
-	private static int LOG_MAXLENGTH=1024*3;
+	private static int LOG_MAXLENGTH=1024*4;
 
 	/**
 	 * debug日志
@@ -60,12 +60,12 @@ public class AbLogUtil {
 			for (int i = 0; i < count; i++) {
 				//剩下的文本还是大于规定长度则继续重复截取并输出
 				if (strLength > end) {
-					if(i==0){
-						Log.d(tag, message.substring(start, end));
-					}else{
-						Log.d(tag+" append top "+i, message.substring(start, end));
-					}
-
+//					if(i==0){
+//						Log.d(tag, message.substring(start, end));
+//					}else{
+//						Log.d(tag+" append top "+i, message.substring(start, end));
+//					}
+					Log.d(tag, message.substring(start, end));
 					start = end;
 					if(strLength>end+LOG_MAXLENGTH){
 						end += LOG_MAXLENGTH;
