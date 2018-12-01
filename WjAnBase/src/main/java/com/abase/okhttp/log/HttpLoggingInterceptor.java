@@ -23,6 +23,7 @@ import com.abase.util.AbStrUtil;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -240,9 +241,14 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
                 logger.log("");
                 logger.log("--> RequestParams");
-                if (isPlaintext(buffer)) {
+                if (isPlaintext(buffer)) {//form-data
                     String bodyStr=(buffer.readString(charset));
-                    bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
+//                    try {
+                        System.out.println(contentType.subtype()+" -----------");
+//                        bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));

@@ -649,6 +649,7 @@ public class AbFileUtil {
             is.read(b, 0, b.length);
             value = bytesToHexString(b);
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (null != is) {
                 try {
@@ -657,7 +658,6 @@ public class AbFileUtil {
                 }
             }
         }
-
         return mFileTypes.get(value);
     }
     /**
@@ -682,6 +682,7 @@ public class AbFileUtil {
             is.read(b, 0, b.length);
             value = bytesToHexString(b);
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (null != is) {
                 try {
