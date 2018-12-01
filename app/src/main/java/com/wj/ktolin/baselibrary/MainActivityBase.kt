@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.util.DownLoad
-import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
@@ -69,9 +68,9 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543660141096&di=07687ab6807aacf0b3ecfd70260f5a3e&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F91ef76c6a7efce1b5ef04082a251f3deb58f659b.jpg", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543692887742&di=8f8269ddad398e8ca4501f515f686c56&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F91ef76c6a7efce1b5ef04082a251f3deb58f659b.jpg", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
-                    AbAppUtil.installApk(this@MainActivityBase, File(content))
+//                    AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }
 
                 override fun onFailure(code: String, content: String) {

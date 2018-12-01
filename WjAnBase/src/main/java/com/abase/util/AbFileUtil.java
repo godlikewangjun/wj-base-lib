@@ -598,6 +598,7 @@ public class AbFileUtil {
     static {
         // images
         mFileTypes.put("FFD8FF", "jpg");
+        mFileTypes.put("FFD8FFE0", "jpg");
         mFileTypes.put("89504E47", "png");
         mFileTypes.put("47494638", "gif");
         mFileTypes.put("49492A00", "tif");

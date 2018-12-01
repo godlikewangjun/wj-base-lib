@@ -241,14 +241,13 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
                 logger.log("");
                 logger.log("--> RequestParams");
-                if (isPlaintext(buffer)) {//form-data
+                if (isPlaintext(buffer) ) {//form-data
                     String bodyStr=(buffer.readString(charset));
-//                    try {
-                        System.out.println(contentType.subtype()+" -----------");
-//                        bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                       if(contentType.subtype().equals("form-data")) bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
