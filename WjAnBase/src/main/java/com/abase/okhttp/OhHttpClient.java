@@ -146,6 +146,14 @@ public class OhHttpClient {
     private Handler handler = new Handler(Looper.getMainLooper());
     private HttpLoggingInterceptor logging;//打印日志
 
+    public HttpLoggingInterceptor getLogging() {
+        return logging;
+    }
+
+    public void setLogging(HttpLoggingInterceptor logging) {
+        this.logging = logging;
+    }
+
     /**
      * 获取销毁的urls 存量 最大缓存10条
      *

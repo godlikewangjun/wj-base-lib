@@ -63,13 +63,17 @@ public final class HttpLoggingInterceptor implements Interceptor {
     /**
      * 处理body解析,防止卡顿放在线程处理
      */
-    interface BodyParsing{
+    public interface BodyParsing{
         String bodyResult(String inputBody);
     }
     private BodyParsing mBodyParsing;
 
-    public void setmBodyParsing(BodyParsing mBodyParsing) {
+    public void setBodyParsing(BodyParsing mBodyParsing) {
         this.mBodyParsing = mBodyParsing;
+    }
+
+    public BodyParsing getBodyParsing() {
+        return mBodyParsing;
     }
 
     public enum Level {

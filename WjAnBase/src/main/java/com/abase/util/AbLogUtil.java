@@ -137,7 +137,7 @@ public class AbLogUtil {
 						end=strLength;
 					}
 				} else {
-					Log.d(tag, message.substring(start, strLength));
+					Log.i(tag, message.substring(start, strLength));
 					break;
 				}
 			}
