@@ -63,9 +63,10 @@ public final class HttpLoggingInterceptor implements Interceptor {
     /**
      * 处理body解析,防止卡顿放在线程处理
      */
-    public interface BodyParsing{
+    public interface BodyParsing {
         String bodyResult(String inputBody);
     }
+
     private BodyParsing mBodyParsing;
 
     public void setBodyParsing(BodyParsing mBodyParsing) {
@@ -137,14 +138,17 @@ public final class HttpLoggingInterceptor implements Interceptor {
     public interface Logger {
         void log(String message);
 
+        int style_log = 0;//默认是0 自定义i的打印 1是okhttp的打印
         /**
          * A {@link Logger} defaults output appropriate for the current platform.
          */
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-                AbLogUtil.i(HttpLoggingInterceptor.class, message);
-//                Platform.get().log(INFO, message, null);
+                if (style_log == 0)
+                    AbLogUtil.i(HttpLoggingInterceptor.class, message);
+                else
+                    Platform.get().log(INFO, message, null);
             }
         };
     }
@@ -245,10 +249,11 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
                 logger.log("");
                 logger.log("--> RequestParams");
-                if (isPlaintext(buffer) ) {//form-data
-                    String bodyStr=(buffer.readString(charset));
+                if (isPlaintext(buffer)) {//form-data
+                    String bodyStr = (buffer.readString(charset));
                     try {
-                       if(contentType.subtype().equals("form-data")) bodyStr=URLDecoder.decode(bodyStr,"utf-8");//反编码请求的参数
+                        if (contentType.subtype().equals("form-data"))
+                            bodyStr = URLDecoder.decode(bodyStr, "utf-8");//反编码请求的参数
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -334,9 +339,12 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 }
 
                 if (contentLength != 0) {
-                    String bodyStr=buffer.clone().readString(charset);
-                    if(mBodyParsing!=null) bodyStr=mBodyParsing.bodyResult(bodyStr);
+                    String bodyStr = buffer.clone().readString(charset);
+                    if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
+                        logger.log("FormatJsonIng-->");
+                        logger.log(bodyStr);
+                        logger.log("<--FormatJsonIng");
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
