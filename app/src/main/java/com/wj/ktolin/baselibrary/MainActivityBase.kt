@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
+import com.abase.okhttp.OhHttpParams
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
@@ -112,7 +113,11 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 //                    }
 //
 //                })
-                OhHttpClient.getInit().upFile("http://zysc.ffs.dtc.dchost.cn/Upload.ashx",null, File("/mnt/sdcard/Download/36f5f1cd0fa12fbdfe1acf5a1530333a.null"),object :OhFileCallBakListener(){
+                val ohHttpParams = OhHttpParams()
+                ohHttpParams.put("authCode","5AFC725FAA7B4220AA3B6A4DD5A142C0")
+                ohHttpParams.put("access_key", "48b113270316439e90b8e2c3f43f8d0e")
+                ohHttpParams.put("token", "c0b9077507b545e5b8edd3ee4fcc8534")
+                OhHttpClient.getInit().upFiles("http://zysc.ffs.dtc.dchost.cn/Upload.ashx",ohHttpParams, arrayListOf<File>(File("/mnt/sdcard/Download/835c7cf2f4c9a24bca567200eff98203.jpg")),object :OhFileCallBakListener(){
                     override fun onSuccess(content: String?) {
                     }
 

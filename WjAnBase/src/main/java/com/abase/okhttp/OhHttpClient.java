@@ -612,7 +612,7 @@ public class OhHttpClient {
         okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         // 添加多个文件
         for (int i = 0; i < files.size(); i++) {
-            multipartBody.addFormDataPart("file", files.get(i).getName(), RequestBody.create(MediaType.parse("image/*"), files.get(i)));
+            multipartBody.addFormDataPart("file", files.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), files.get(i)));
         }
         // 添加post参数
         if (requestParams != null) {

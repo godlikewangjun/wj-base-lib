@@ -16,8 +16,6 @@
 package com.abase.okhttp.log;
 
 import com.abase.okhttp.OhHttpClient;
-import com.abase.okhttp.OhObjectListener;
-import com.abase.task.AbThreadFactory;
 import com.abase.util.AbLogUtil;
 import com.abase.util.AbStrUtil;
 
@@ -25,7 +23,6 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Set;
@@ -33,9 +30,11 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Connection;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -45,10 +44,10 @@ import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.platform.Platform;
 import okio.Buffer;
 import okio.BufferedSource;
+import okio.ByteString;
 import okio.GzipSource;
 
 import static okhttp3.internal.platform.Platform.INFO;
-import static okhttp3.internal.platform.Platform.WARN;
 
 /**
  * An OkHttp interceptor which logs request and response information. Can be applied as an
@@ -224,6 +223,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 }
             }
 
+//            request= request.newBuilder().removeHeader("Connection").addHeader("Connection", "close").build();
             Headers headers = request.headers();
             for (int i = 0, count = headers.size(); i < count; i++) {
                 String name = headers.name(i);
@@ -238,8 +238,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
             } else if (bodyHasUnknownEncoding(request.headers())) {
                 logger.log("--> END " + request.method() + " (encoded body omitted)");
             } else {
-                Buffer buffer = new Buffer();
-                requestBody.writeTo(buffer);
 
                 Charset charset = UTF8;
                 MediaType contentType = requestBody.contentType();
@@ -247,10 +245,16 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     charset = contentType.charset(UTF8);
                 }
 
+                Buffer buffer = new Buffer();
+                if (!contentType.subtype().equals("form-data")) {
+                    requestBody.writeTo(buffer);
+                }else{
+                    logger.log("form-data is not print RequestParams");
+                }
                 logger.log("");
                 logger.log("--> RequestParams");
                 if (isPlaintext(buffer)) {//form-data
-                    String bodyStr = (buffer.readString(charset));
+                    String bodyStr = buffer.readString(charset);
                     try {
                         if (!contentType.subtype().equals("form-data"))
                             bodyStr = URLDecoder.decode(bodyStr, "utf-8");//反编码请求的参数
@@ -267,7 +271,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     } else {
                         logger.log(bodyStr);
                     }
-
                     logger.log("<-- RequestParams");
                     logger.log("--> END " + request.method()
                             + " (" + requestBody.contentLength() + "-byte body)");
@@ -276,6 +279,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     logger.log("--> END " + request.method() + " (binary "
                             + requestBody.contentLength() + "-byte body omitted)");
                 }
+                buffer.close();//关闭流
             }
         }
 
