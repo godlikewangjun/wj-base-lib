@@ -346,9 +346,9 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     String bodyStr = buffer.clone().readString(charset);
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
-                        logger.log("FormatJsonIng-->");
-                        logger.log(bodyStr);
-                        logger.log("<--FormatJsonIng");
+//                        logger.log("FormatJsonIng-->");
+//                        logger.log(bodyStr);
+//                        logger.log("<--FormatJsonIng");
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
