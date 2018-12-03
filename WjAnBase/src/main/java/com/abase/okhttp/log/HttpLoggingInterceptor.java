@@ -252,7 +252,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (isPlaintext(buffer)) {//form-data
                     String bodyStr = (buffer.readString(charset));
                     try {
-                        if (contentType.subtype().equals("form-data"))
+                        if (!contentType.subtype().equals("form-data"))
                             bodyStr = URLDecoder.decode(bodyStr, "utf-8");//反编码请求的参数
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
