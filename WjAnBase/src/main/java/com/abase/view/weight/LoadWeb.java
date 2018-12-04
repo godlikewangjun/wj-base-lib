@@ -4,15 +4,16 @@ package com.abase.view.weight;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.WindowManager;
 import android.webkit.DownloadListener;
+import android.webkit.GeolocationPermissions;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -27,28 +28,11 @@ import android.widget.RelativeLayout;
 
 import com.abase.okhttp.OhFileCallBakListener;
 import com.abase.okhttp.OhHttpClient;
-import com.abase.util.Tools;
 import com.abase.view.weight.web.ObservableWebView;
-import com.abase.view.weight.web.SonicJavaScriptInterface;
-import com.abase.view.weight.web.SonicRuntimeImpl;
 import com.abase.view.weight.web.SonicSessionClientImpl;
-import com.tencent.sonic.sdk.SonicCacheInterceptor;
-import com.tencent.sonic.sdk.SonicConfig;
-import com.tencent.sonic.sdk.SonicConstants;
-import com.tencent.sonic.sdk.SonicEngine;
+import com.abase.view.weight.web.WebMethodsListener;
 import com.tencent.sonic.sdk.SonicSession;
-import com.tencent.sonic.sdk.SonicSessionConfig;
-import com.tencent.sonic.sdk.SonicSessionConnection;
-import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
 import com.wj.eventbus.WjEventBus;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -62,12 +46,12 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     public String url;//加载的地址
     public ObservableWebView mWebView;//网页
     //    private Map<String, String> extraHeaders;//请求头;
-    private OnClickListener onClickListener;
     private ProgressDialog alertDialog = null;
     public static String LOADERROE = "webLoadError";
     public static String LOADFINSH = "webLoadFinsh";
     private SonicSession sonicSession;
     private SonicSessionClientImpl sonicSessionClient = null;
+    public WebMethodsListener webMethodsListener;
 
     public void setSonicSession(SonicSession sonicSession) {
         this.sonicSession = sonicSession;
@@ -77,10 +61,6 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         this.sonicSessionClient = sonicSessionClient;
     }
 
-    @Override
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
 
 
     public LoadWeb(Context context) {
@@ -125,7 +105,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
      * 设置没有加载完成时的界面
      */
     private void loading() {
-        mWebView.setVisibility(GONE);//隐藏
+//        mWebView.setVisibility(GONE);//隐藏
     }
 
     /**
@@ -159,6 +139,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         String appCachePath = getContext().getCacheDir().getAbsolutePath();
         setting.setAppCachePath(appCachePath);
         setting.setAllowFileAccess(true);
+        setting.setGeolocationEnabled(true);//允许地理位置可用
 
         setting.setAppCacheEnabled(true);
         mWebView.setDownloadListener(this);//设置下载监听
@@ -184,22 +165,43 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
     //**Chrome*//*
     WebChromeClient chromeClient = new WebChromeClient() {
+        @Override
         public void onProgressChanged(WebView view, int progress) {
-            if (progress == 100) {
-                mWebView.setVisibility(VISIBLE);//显示
-                if (onClickListener != null) {
-                    onClickListener.onClick(null);
-                }
-            } else {
-                mWebView.setVisibility(GONE);//显示
+            if(webMethodsListener!=null){
+                webMethodsListener.onProgressChanged(view,progress);
             }
+
+        }
+        //处理定位权限
+        @Override
+        public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
+            if(webMethodsListener!=null){
+                if(webMethodsListener.onGeolocationPermissionsShowPrompt(origin,callback)){
+                    return;
+                }
+            }
+            final boolean remember = true;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("位置信息");
+            builder.setMessage(origin + "允许获取您的地理位置信息吗？").setCancelable(true).setPositiveButton("允许", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    callback.invoke(origin, true, remember);
+                }
+            }).setNegativeButton("不允许", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    callback.invoke(origin, false, remember);
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     };
     //**client*//*
     WebViewClient client = new WebViewClient() {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
+            return false;
         }
 
         @Override

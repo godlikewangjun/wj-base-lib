@@ -64,7 +64,6 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
             }
 
         })
-
     }
 
     override fun onClick(view: View) {

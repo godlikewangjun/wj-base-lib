@@ -5,39 +5,32 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.abase.util.AbFileUtil;
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
-import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.abase.view.weight.web.WebMethodsListener;
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.CookieSyncManager;
-import com.tencent.smtt.sdk.DownloadListener;
-import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
-import com.tencent.smtt.utils.TbsLog;
 import com.wj.eventbus.WjEventBus;
 
 public class X5WebView extends WebView {
 	public String url;//加载的地址
-	TextView title;
+	public WebMethodsListener webMethodsListener;
 	private WebViewClient client = new WebViewClient() {
 		/**
 		 * 防止加载网页时调起系统浏览器
 		 */
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			view.loadUrl(url);
-			return true;
+			return false;
 		}
 
 		@Override
@@ -93,6 +86,8 @@ public class X5WebView extends WebView {
 		webSetting.setDomStorageEnabled(true);
 		webSetting.setJavaScriptEnabled(true);
 		webSetting.setGeolocationEnabled(true);
+		setWebChromeClient(chromeClient);
+		webSetting.setGeolocationEnabled(true);//允许地理位置可用
 		webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
 		webSetting.setAppCachePath(AbFileUtil.getCacheDownloadDir(getContext()));
 		webSetting.setDatabasePath(getContext().getDir("databases", 0).getPath());
@@ -104,6 +99,42 @@ public class X5WebView extends WebView {
 		CookieSyncManager.createInstance(getContext());
 		CookieSyncManager.getInstance().sync();
 	}
+	//**Chrome*//*
+	com.tencent.smtt.sdk.WebChromeClient chromeClient = new com.tencent.smtt.sdk.WebChromeClient() {
+		@Override
+		public void onProgressChanged(WebView webView, int i) {
+			if(webMethodsListener!=null){
+				webMethodsListener.onProgressChanged(webView,i);
+			}
+		}
+
+		//处理定位权限
+		@Override
+		public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissionsCallback callback) {
+			if(webMethodsListener!=null){
+				if(webMethodsListener.onGeolocationPermissionsShowPrompt(origin,callback)){
+					return;
+				}
+			}
+			final boolean remember = true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+			builder.setTitle("位置信息");
+			builder.setMessage(origin + "允许获取您的地理位置信息吗？").setCancelable(true).setPositiveButton("允许", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					callback.invoke(origin, true, remember);
+				}
+			}).setNegativeButton("不允许", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					callback.invoke(origin, false, remember);
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+
+	};
 	/**
 	 * 重新加载url
 	 *

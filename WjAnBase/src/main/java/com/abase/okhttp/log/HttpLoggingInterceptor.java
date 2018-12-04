@@ -58,6 +58,11 @@ import static okhttp3.internal.platform.Platform.INFO;
  */
 public final class HttpLoggingInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
+    /**
+     * 是否打印json格式化之前的数据
+     * 默认是false
+     */
+    private boolean isPrintResult=false;
 
     /**
      * 处理body解析,防止卡顿放在线程处理
@@ -346,9 +351,12 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     String bodyStr = buffer.clone().readString(charset);
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
-//                        logger.log("FormatJsonIng-->");
-//                        logger.log(bodyStr);
-//                        logger.log("<--FormatJsonIng");
+                        if(isPrintResult){
+                            logger.log("FormatJsonIng-->");
+                            logger.log(bodyStr);
+                            logger.log("<--FormatJsonIng");
+                        }
+
                         try {
                             logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
