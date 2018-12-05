@@ -34,7 +34,7 @@ public class AbLogUtil {
 	public static boolean D = true;
 	
 	/**每行日志最多好长 长了就换行继续显示*/
-	private static int LOG_MAXLENGTH=1024*3;
+	private static int LOG_MAXLENGTH=1024*4-10;
 
 	/**
 	 * debug日志
