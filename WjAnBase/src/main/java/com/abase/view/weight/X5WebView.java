@@ -104,7 +104,7 @@ public class X5WebView extends WebView {
 		@Override
 		public void onProgressChanged(WebView webView, int i) {
 			if(webMethodsListener!=null){
-				webMethodsListener.onProgressChanged(webView,i);
+				webMethodsListener.onX5ProgressChanged(webView,i);
 			}
 		}
 
@@ -112,7 +112,7 @@ public class X5WebView extends WebView {
 		@Override
 		public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissionsCallback callback) {
 			if(webMethodsListener!=null){
-				if(webMethodsListener.onGeolocationPermissionsShowPrompt(origin,callback)){
+				if(webMethodsListener.onX5GeolocationPermissionsShowPrompt(origin,callback)){
 					return;
 				}
 			}
