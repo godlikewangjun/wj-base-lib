@@ -36,7 +36,7 @@ public abstract class WebMethodsListener {
      * @param view
      * @param progress
      */
-    public void onProgressChanged(com.tencent.smtt.sdk.WebView view, int progress){
+    public void onX5ProgressChanged(com.tencent.smtt.sdk.WebView view, int progress){
 
     }
 
@@ -46,7 +46,7 @@ public abstract class WebMethodsListener {
      * @param callback
      * @return 返回true是拦截 false是使用默认的
      */
-    public boolean onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissionsCallback callback){
+    public boolean onX5GeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissionsCallback callback){
         return false;
     }
 

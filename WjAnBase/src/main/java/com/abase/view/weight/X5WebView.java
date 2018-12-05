@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.abase.util.AbFileUtil;
 import com.abase.view.weight.web.WebMethodsListener;
@@ -108,7 +108,7 @@ public class X5WebView extends WebView {
 			}
 		}
 
-		//处理定位权限
+            //处理定位权限
 		@Override
 		public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissionsCallback callback) {
 			if(webMethodsListener!=null){
