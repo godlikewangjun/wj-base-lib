@@ -1,6 +1,9 @@
 package com.abase.util.cockroach;
 
+import android.app.Activity;
+import android.app.Application;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -189,6 +192,10 @@ public final class Cockroach {
      * view measure layout draw时抛出异常会导致Choreographer挂掉
      * <p>
      * 建议直接杀死app。以后的版本会只关闭黑屏的Activity
+     * 可以配合 Application registerActivityLifecycleCallbacks 使用关掉黑屏的activity
+     * example
+     * Application.registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks)
+     * Application.unregisterActivityLifecycleCallbacks(ActivityLifecycleCallbacks)
      *
      * @param e
      */
@@ -215,6 +222,5 @@ public final class Cockroach {
 
         }
     }
-
 
 }
