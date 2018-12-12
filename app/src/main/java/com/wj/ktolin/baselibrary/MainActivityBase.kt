@@ -1,7 +1,6 @@
 package com.wj.ktolin.baselibrary
 
 import android.graphics.PixelFormat
-import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Button
@@ -13,28 +12,33 @@ import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
-import com.abase.view.parent.BaseWebActivity
+import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.QqWebHelper
 import com.abase.view.weight.RecyclerSpace
 import com.abase.view.weight.web.ObservableScrollViewCallbacks
 import com.abase.view.weight.web.ScrollState
+import com.abase.view.weight.web.WebMethodsListener
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
 import com.wj.ktolin.baselibrary.weight.TestAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
-class MainActivityBase : BaseWebActivity(), View.OnClickListener {
+class MainActivityBase : BaseActivity(), View.OnClickListener {
+
+    override fun setContentView(): Int {
+        return R.layout.activity_main
+    }
+
     private var cpc: Button? = null
     private var downLoad: DownLoad? = null
     private var textView: TextView? = null
 
-    override fun before() {
-        sonicFast(this, 1, "http://baidu.com")
-    }
+//    override fun before() {
+//        sonicFast(this, 1, "http://baidu.com")
+//    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun afertOp() {
         window.setFormat(PixelFormat.TRANSLUCENT)
-        setContentView(R.layout.activity_main)
 //        AndroidKeyboardHeight.assistActivity(this)
         val start = findViewById<Button>(R.id.start)
         val pause = findViewById<Button>(R.id.pause)
@@ -51,7 +55,13 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
         println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
         QqWebHelper.X5Init(this)
-        web.loadHtml("<a href=\"jrz://open\">open Android app</a>")
+        web.loadUrl("https://app-h5.zysc.dchost.cn/smalltour/yanhuachi.html")
+        web.webMethodsListener=object : WebMethodsListener(){
+            override fun onX5GeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissionsCallback?): Boolean {
+                callback!!.invoke(origin, true, false)
+                return true
+            }
+        }
         web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
             override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
                 println(" ===========$scrollY")

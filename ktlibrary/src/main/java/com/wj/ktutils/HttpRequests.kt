@@ -157,7 +157,11 @@ private fun executeForResult(wrap: HttpRequests) {
     if (wrap.listener == null) {
         httplistener = object : OhObjectListener<String>() {
             override fun onSuccess(p0: String?) {
-                if (wrap.classType == null) wrap.success(p0!!) else wrap.success(GsonUtil.getGson().fromJson(p0!!, wrap.classType))
+                if (wrap.classType == null) wrap.success(p0!!) else try {
+                    wrap.success(GsonUtil.getGson().fromJson(p0!!, wrap.classType))
+                }catch (e:java.lang.Exception){
+                    println("error: $p0")
+                }
             }
 
             override fun onFailure(p0: Int, p1: String?, p2: Throwable?) {
