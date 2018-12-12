@@ -29,7 +29,7 @@ import okio.Okio;
 
 public class DownLoad {
     //下载速度
-    private static int bufferSize = 100*1024;
+    private static int bufferSize = 20*1024;
     //下载延迟时间
     public static int time = 5;
     private boolean isPause = false;

@@ -101,7 +101,7 @@ public class OhHttpClient {
     /**
      * 连接超时的时间
      */
-    public static int CONNECTTIMEOUT = 10;
+    public static int CONNECTTIMEOUT = 30;
     /**
      * 写入的超的时间
      */

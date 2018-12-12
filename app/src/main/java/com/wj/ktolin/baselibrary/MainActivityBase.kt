@@ -65,10 +65,9 @@ class MainActivityBase : BaseWebActivity(), View.OnClickListener {
 
         })
     }
-
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543692887742&di=8f8269ddad398e8ca4501f515f686c56&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F91ef76c6a7efce1b5ef04082a251f3deb58f659b.jpg", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/D21910E083EA4C497C5BD59A76C5577B.apk?fsname=com.tencent.mm_6.7.3_1360.apk&csr=1bbd", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
 //                    AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }

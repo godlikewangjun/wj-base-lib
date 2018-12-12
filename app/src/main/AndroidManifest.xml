@@ -16,15 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme_status"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".MainActivityBase"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustResize">
+        <activity android:name=".PermissionCheckActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivityBase"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustResize">
+
         </activity>
 
         <!--     在AndroidManifest.xml中增加内核首次加载时优化Service声明；    该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。  -->
