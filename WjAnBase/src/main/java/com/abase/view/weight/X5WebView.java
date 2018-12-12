@@ -62,6 +62,15 @@ public class X5WebView extends WebView {
 		}
 	};
 
+	public X5WebView(Context arg0) {
+		super(arg0);
+		this.setWebViewClient(client);
+		// this.setWebChromeClient(chromeClient);
+		// WebStorage webStorage = WebStorage.getInstance();
+		initWebViewSettings();
+		this.getView().setClickable(true);
+	}
+
 	@SuppressLint("SetJavaScriptEnabled")
 	public X5WebView(Context arg0, AttributeSet arg1) {
 		super(arg0, arg1);
@@ -165,10 +174,6 @@ public class X5WebView extends WebView {
 		addJavascriptInterface(obj, interfaceName);
 	}
 
-	public X5WebView(Context arg0) {
-		super(arg0);
-		setBackgroundColor(85621);
-	}
 
 	@Override
 	protected void onDetachedFromWindow() {

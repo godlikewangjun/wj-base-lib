@@ -17,6 +17,8 @@ import com.abase.view.weight.QqWebHelper
 import com.abase.view.weight.RecyclerSpace
 import com.abase.view.weight.web.ObservableScrollViewCallbacks
 import com.abase.view.weight.web.ScrollState
+import com.abase.view.weight.web.WebMethodsListener
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
 import com.wj.ktolin.baselibrary.weight.TestAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -53,7 +55,13 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 
         println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
         QqWebHelper.X5Init(this)
-        web.loadHtml("<a href=\"jrz://open\">open Android app</a>")
+        web.loadUrl("https://app-h5.zysc.dchost.cn/smalltour/yanhuachi.html")
+        web.webMethodsListener=object : WebMethodsListener(){
+            override fun onX5GeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissionsCallback?): Boolean {
+                callback!!.invoke(origin, true, false)
+                return true
+            }
+        }
         web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
             override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
                 println(" ===========$scrollY")
