@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -757,31 +758,33 @@ public class OhHttpClient {
 
         @Override
         public void onFailure(Call call, IOException e) {
-            if (e.getMessage() == null) {
+            if (e.getCause().equals(SocketTimeoutException.class)) {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + ", 请检查网络,连接超时");
+
+                //网络不好重试
+                if (e.getMessage() != null && e.getMessage().contains("connect to") || e.getMessage() == null) {
+                    AbLogUtil.d(OhHttpClient.class, "连接不到:" + request.url().toString() + ",重试" + failNum + "次");
+                    if (failNum > 2) {//失败消息为0
+                        callbackListener.sendFailureMessage(0,
+                                "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
+                        callbackListener.sendFinshMessage();
+                    } else {
+                        if (Looper.myLooper() == null) Looper.prepare();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                client.newCall(request).enqueue(OKHttpCallBack.this);
+                            }
+                        });
+                        failNum++;
+                    }
+                } else {
+                    callbackListener.sendFailureMessage(-1, e.getMessage(), e);
+                }
+
             } else {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + "," + e.getMessage());
                 e.printStackTrace();
-            }
-            //网络不好重试
-            if (e.getMessage() != null && e.getMessage().contains("connect to") || e.getMessage() == null) {
-                AbLogUtil.d(OhHttpClient.class, "连接不到:" + request.url().toString() + ",重试" + failNum + "次");
-                if (failNum > 2) {//失败消息为0
-                    callbackListener.sendFailureMessage(0,
-                            "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
-                    callbackListener.sendFinshMessage();
-                } else {
-                    if (Looper.myLooper() == null) Looper.prepare();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            client.newCall(request).enqueue(OKHttpCallBack.this);
-                        }
-                    });
-                    failNum++;
-                }
-            } else {
-                callbackListener.sendFailureMessage(-1, e.getMessage(), e);
             }
         }
 
