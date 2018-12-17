@@ -17,9 +17,14 @@ import java.lang.ref.WeakReference;
  * @date 2018/8/2
  */
 public class ToastUtil {
-    private static SoftReference<StyleableToast.Builder> toast;// 提示
+    public static SoftReference<StyleableToast.Builder> toast;// 提示
     private static boolean isShowDeBug = true;// 提示
     private static final int SHOWTOAST = 3000;
+    public static ToastBuilderListener toastBuilderListener;
+
+    public interface ToastBuilderListener{
+        void create(StyleableToast.Builder builder);
+    }
     /**
      * 显示toast
      *
@@ -51,22 +56,15 @@ public class ToastUtil {
     }
 
     /**
-     * 设置弹出框样式
-     */
-    public static StyleableToast.Builder setStyle(){
-        if (toast != null &&  toast.get()!=null) {
-            return toast.get();
-        }
-        return null;
-    }
-    /**
      * 返回公共的构建参数
      * @param context
      * @return
      */
     private static StyleableToast.Builder cusBuild(final Context context){
-       return new StyleableToast.Builder(context)
-               .textColor(context.getResources().getColor(android.R.color.white))
+        StyleableToast.Builder builder=new StyleableToast.Builder(context)
+                .textColor(context.getResources().getColor(android.R.color.white))
                 .backgroundColor(Color.parseColor("#507DFE"));
+        if(toastBuilderListener!=null) toastBuilderListener.create(builder);
+       return builder;
     }
 }
