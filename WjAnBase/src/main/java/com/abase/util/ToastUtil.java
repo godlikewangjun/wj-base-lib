@@ -20,7 +20,6 @@ public class ToastUtil {
     private static SoftReference<StyleableToast.Builder> toast;// 提示
     private static boolean isShowDeBug = true;// 提示
     private static final int SHOWTOAST = 3000;
-    public static int backgroundColor=Color.parseColor("#507DFE");//背景色
     /**
      * 显示toast
      *
@@ -51,6 +50,15 @@ public class ToastUtil {
         toast.get().show();
     }
 
+    /**
+     * 设置弹出框样式
+     */
+    public StyleableToast.Builder setStyle(){
+        if (toast != null &&  toast.get()!=null) {
+            return toast.get();
+        }
+        return null;
+    }
     /**
      * 返回公共的构建参数
      * @param context
