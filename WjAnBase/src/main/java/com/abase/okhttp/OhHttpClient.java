@@ -30,8 +30,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -531,6 +533,7 @@ public class OhHttpClient {
 
     /**
      * 上传文件
+     * 模拟表单提交，因为头不能有中文,所有文件名要进行编码
      */
     public void upFile(String url, OhHttpParams requestParams, File file,
                        OhFileCallBakListener callbackListener) {
@@ -540,7 +543,7 @@ public class OhHttpClient {
 
         // 调用多个文件上传的body 封装进入
         okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("files", null, requestBody);
+                .addFormDataPart("files", getFileEndCode(file.getName()), requestBody);
         // 添加post参数
         if (requestParams != null) {
             String key;
@@ -560,6 +563,53 @@ public class OhHttpClient {
         callbackListener.ohtype = 0;// 设置类型是上传
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
     }
+
+    /**
+     * 上传文件
+     * 模拟表单提交，因为头不能有中文,所有文件名要进行编码
+     */
+    public void upFiles(String url, OhHttpParams requestParams, List<File> files,
+                        OhFileCallBakListener callbackListener) {
+        // 调用多个文件上传的body 封装进入
+        okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        // 添加多个文件
+        for (int i = 0; i < files.size(); i++) {
+            multipartBody.addFormDataPart("file", getFileEndCode(files.get(i).getName()), RequestBody.create(MediaType.parse("application/octet-stream"), files.get(i)));
+        }
+        // 添加post参数
+        if (requestParams != null) {
+            String key;
+            Iterator<String> iterator = requestParams.getParams().keySet().iterator();
+            while (iterator.hasNext()) {
+                key = iterator.next();
+                multipartBody.addFormDataPart(key, requestParams.get(key).toString());
+            }
+        }
+        // 封装请求
+        okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag
+        if (headers != null) {
+            builder.headers(headers);
+        }
+        builder.post(new MultipartBodyRbody(multipartBody.build(), callbackListener));
+        Request request = builder.build();
+        callbackListener.ohtype = 0;// 设置类型是上传
+        client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
+    }
+
+    /**
+     * 编码文件名，防止okHttp3在header中出现中文报错
+     * @param fileName
+     * @return
+     */
+    private String getFileEndCode(String fileName){
+        try {
+            return URLEncoder.encode(fileName,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return Tools.setMD5(fileName);
+    }
+
 
     /**
      * 上传文件流
@@ -603,36 +653,6 @@ public class OhHttpClient {
         return requestBody;
     }
 
-    /**
-     * 上传文件
-     */
-    public void upFiles(String url, OhHttpParams requestParams, List<File> files,
-                        OhFileCallBakListener callbackListener) {
-        // 调用多个文件上传的body 封装进入
-        okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        // 添加多个文件
-        for (int i = 0; i < files.size(); i++) {
-            multipartBody.addFormDataPart("file", files.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), files.get(i)));
-        }
-        // 添加post参数
-        if (requestParams != null) {
-            String key;
-            Iterator<String> iterator = requestParams.getParams().keySet().iterator();
-            while (iterator.hasNext()) {
-                key = iterator.next();
-                multipartBody.addFormDataPart(key, requestParams.get(key).toString());
-            }
-        }
-        // 封装请求
-        okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag
-        if (headers != null) {
-            builder.headers(headers);
-        }
-        builder.post(new MultipartBodyRbody(multipartBody.build(), callbackListener));
-        Request request = builder.build();
-        callbackListener.ohtype = 0;// 设置类型是上传
-        client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
-    }
 
     /**
      * 下载文件
