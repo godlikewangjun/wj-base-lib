@@ -53,7 +53,7 @@ public class ToastUtil {
     /**
      * 设置弹出框样式
      */
-    public StyleableToast.Builder setStyle(){
+    public static StyleableToast.Builder setStyle(){
         if (toast != null &&  toast.get()!=null) {
             return toast.get();
         }
