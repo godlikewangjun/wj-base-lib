@@ -21,6 +21,7 @@ import com.abase.util.AbFileUtil;
 import com.abase.util.AbLogUtil;
 import com.abase.util.GsonUtil;
 import com.abase.util.Tools;
+import com.wj.eventbus.WjEventBus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +77,10 @@ import okio.Buffer;
  * @date 2016年2月1日
  */
 public class OhHttpClient {
+    /**
+     * 超时报错
+     */
+    public static final String OKHTTP_TIMEOUT = "OKHTTP_TIMEOUT";
     /**
      * 成功.
      */
@@ -148,6 +153,7 @@ public class OhHttpClient {
     private PersistentCookieStore cookieStore;//cookies
     private Handler handler = new Handler(Looper.getMainLooper());
     private HttpLoggingInterceptor logging;//打印日志
+
 
     public HttpLoggingInterceptor getLogging() {
         return logging;
@@ -368,7 +374,7 @@ public class OhHttpClient {
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
         //默认就设置日志打印
-        if(logging==null)logging = new HttpLoggingInterceptor();
+        if (logging == null) logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addNetworkInterceptor(logging);
         client = builder.build();
@@ -599,12 +605,13 @@ public class OhHttpClient {
 
     /**
      * 编码文件名，防止okHttp3在header中出现中文报错
+     *
      * @param fileName
      * @return
      */
-    private String getFileEndCode(String fileName){
+    private String getFileEndCode(String fileName) {
         try {
-            return URLEncoder.encode(fileName,"UTF-8");
+            return URLEncoder.encode(fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -762,29 +769,30 @@ public class OhHttpClient {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + ", 请检查网络,连接超时");
 
                 //网络不好重试
-                if (e.getMessage() != null && e.getMessage().contains("connect to") || e.getMessage() == null) {
-                    AbLogUtil.d(OhHttpClient.class, "连接不到:" + request.url().toString() + ",重试" + failNum + "次");
-                    if (failNum > 2) {//失败消息为0
-                        callbackListener.sendFailureMessage(0,
-                                "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
-                        callbackListener.sendFinshMessage();
-                    } else {
-                        if (Looper.myLooper() == null) Looper.prepare();
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                client.newCall(request).enqueue(OKHttpCallBack.this);
-                            }
-                        });
-                        failNum++;
-                    }
+                AbLogUtil.d(OhHttpClient.class, "连接不到:" + request.url().toString() + ",重试" + failNum + "次");
+                if (failNum > 2) {//失败消息为0
+                    callbackListener.sendFailureMessage(0,
+                            "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
+                    callbackListener.sendFinshMessage();
+
+                    //打印错误和发送通知方便全局处理
+                    e.printStackTrace();
+                    WjEventBus.getInit().post(OKHTTP_TIMEOUT, 0);
                 } else {
-                    callbackListener.sendFailureMessage(-1, e.getMessage(), e);
+                    if (Looper.myLooper() == null) Looper.prepare();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            client.newCall(request).enqueue(OKHttpCallBack.this);
+                        }
+                    });
+                    failNum++;
                 }
 
-            } else {
+            } else {//code==-1 不是超时错误
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + "," + e.getMessage());
                 e.printStackTrace();
+                callbackListener.sendFailureMessage(-1, e.getMessage(), e);
             }
         }
 
