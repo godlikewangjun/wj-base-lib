@@ -109,7 +109,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
             val builder = getNotificationCompat(notifyId,title, content, icon,smallIcon)
             build = builder.build()
         }
-        if (flags != null && flags!!.size > 0) {
+        if (flags != null && flags!!.isNotEmpty()) {
             for (a in flags!!.indices) {
                 build.flags = build.flags or flags!![a]
             }
@@ -135,7 +135,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
             val builder = getNotificationCompat(notifyId,title, content, icon,smallIcon)
             build = builder.build()
         }
-        if (flags != null && flags!!.size > 0) {
+        if (flags != null && flags!!.isNotEmpty()) {
             for (a in flags!!.indices) {
                 build.flags = build.flags or flags!![a]
             }
@@ -152,7 +152,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
     fun sendNotificationCompat(notifyId: Int, title: String, content: String, icon: Int,smallIcon:Int) {
         val builder = getNotificationCompat(notifyId,title, content, icon,smallIcon)
         val build = builder.build()
-        if (flags != null && flags!!.size > 0) {
+        if (flags != null && flags!!.isNotEmpty()) {
             for (a in flags!!.indices) {
                 build.flags = build.flags or flags!![a]
             }
@@ -183,7 +183,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
         if (intent != null) {
             builder.setContentIntent(intent)
         }
-        if (ticker != null && ticker!!.length > 0) {
+        if (ticker != null && ticker!!.isNotEmpty()) {
             builder.setTicker(ticker)
         }
         if (`when` != 0L) {
@@ -209,6 +209,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
                 .setContentTitle(title)
                 //消息内容
                 .setContentText(content)
+                .setLargeIcon((BitmapFactory.decodeResource(resources,icon)))
                 //设置通知的图标
                 .setSmallIcon(smallIcon)
                 //让通知左右滑的时候是否可以取消通知
@@ -225,7 +226,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
         if (intent != null) {
             notificationBuilder.setContentIntent(intent)
         }
-        if (ticker != null && ticker!!.length > 0) {
+        if (ticker != null && ticker!!.isNotEmpty()) {
             //设置状态栏的标题
             notificationBuilder.setTicker(ticker)
         }
