@@ -48,7 +48,7 @@ public class SlidBar extends RelativeLayout {
     private Context context;
 
     /** 内部的ViewPager. */
-    private AbInnerViewPager mViewPager;
+    private ViewPager mViewPager;
 
 
     /** 计数. */
@@ -173,7 +173,7 @@ public class SlidBar extends RelativeLayout {
 //        this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
 
-        mViewPager = new AbInnerViewPager(context);
+        mViewPager = new ViewPager(context);
         //手动创建的ViewPager,如果用fragment必须调用setId()方法设置一个id
 //        mViewPager.setId(1985);
         //导航的点
@@ -229,24 +229,6 @@ public class SlidBar extends RelativeLayout {
                     isgFirst=true;
                 }
                 onPageScrolledCallBack(position);
-            }
-        });
-        /*触摸事件处理*/
-        mViewPager.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        isTouch=true;
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        isTouch=false;
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                        isTouch=false;
-                        break;
-                }
-                return false;
             }
         });
     }
@@ -479,28 +461,12 @@ public class SlidBar extends RelativeLayout {
     }
 
     /**
-     * 如果外层有ScrollView需要设置.
-     *
-     * @param parentScrollView the new parent scroll view
-     */
-    public void setParentScrollView(ScrollView parentScrollView) {
-        this.mViewPager.setParentScrollView(parentScrollView);
-    }
-    /**
      * 设置图片轮播的时间
      */
     public void setTime(int changtime){
         time=changtime;
     }
 
-    /**
-     * 如果外层有ListView需要设置.
-     *
-     * @param parentListView the new parent list view
-     */
-    public void setParentListView(ListView parentListView) {
-        this.mViewPager.setParentListView(parentListView);
-    }
 
     /**
      * 监听器.
