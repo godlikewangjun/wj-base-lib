@@ -1,5 +1,6 @@
 package com.abase.view.weight.web;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -54,7 +55,7 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (state != null)
+        if (state != null && ss!=null)
             super.onRestoreInstanceState(ss.getSuperState());
         else super.onRestoreInstanceState(state);
     }
@@ -111,6 +112,7 @@ public class ObservableX5WebView extends X5WebView implements Scrollable {
         return super.onInterceptTouchEvent(ev);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (hasNoCallbacks()) {
