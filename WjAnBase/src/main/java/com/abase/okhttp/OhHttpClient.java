@@ -765,7 +765,7 @@ public class OhHttpClient {
 
         @Override
         public void onFailure(Call call, IOException e) {
-            if (e.getCause().equals(SocketTimeoutException.class)) {
+            if (SocketTimeoutException.class.equals(e.getCause())) {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + ", 请检查网络,连接超时");
 
                 //网络不好重试
