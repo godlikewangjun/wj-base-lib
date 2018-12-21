@@ -813,7 +813,7 @@ public class OhHttpClient {
 //            WjEventBus.getInit().post(response.headers());
             if (code == 200 || code == 206) {// 服务器响应成功 206是断点
                 if (callbackListener instanceof OhObjectListener) {// 请求sring的监听
-                    String body = response.body().string();
+                    String body = inputStream2String(response.body().byteStream());
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
                         try {
                             callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener) callbackListener).classname));
@@ -887,6 +887,21 @@ public class OhHttpClient {
                 AbLogUtil.i(getClass(), url + ",错误");
             }
         }
+    }
+
+    /**
+     * 流转化string
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    private String inputStream2String(InputStream in) throws IOException {
+        StringBuffer out = new StringBuffer();
+        byte[] b = new byte[4096];
+        for (int n; (n = in.read(b)) != -1;) {
+            out.append(new String(b, 0, n));
+        }
+        return out.toString();
     }
 
 
