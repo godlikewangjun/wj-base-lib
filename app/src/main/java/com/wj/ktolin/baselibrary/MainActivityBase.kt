@@ -9,6 +9,7 @@ import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.OhHttpParams
 import com.abase.okhttp.util.DownLoad
+import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
@@ -79,7 +80,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         when (view.id) {
             R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/D21910E083EA4C497C5BD59A76C5577B.apk?fsname=com.tencent.mm_6.7.3_1360.apk&csr=1bbd", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
-//                    AbAppUtil.installApk(this@MainActivityBase, File(content))
+                    AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }
 
                 override fun onFailure(code: String, content: String) {
