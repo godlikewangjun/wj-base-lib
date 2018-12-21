@@ -109,15 +109,15 @@ public class OhHttpClient {
     /**
      * 连接超时的时间
      */
-    public static int CONNECTTIMEOUT = 30;
+    public static int CONNECTTIMEOUT = 60;
     /**
      * 写入的超的时间
      */
-    public static int WRITETIMEOUT = 60;
+    public static int WRITETIMEOUT = 5*60;
     /**
      * 读取的超的时间
      */
-    public static int READTIMEOUT = 60;
+    public static int READTIMEOUT = 5*60;
     /**
      * 缓存的路径
      */

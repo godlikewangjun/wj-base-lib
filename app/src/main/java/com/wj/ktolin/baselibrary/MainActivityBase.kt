@@ -55,7 +55,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 
         println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
         QqWebHelper.X5Init(this)
-        web.loadUrl("https://app-h5.zysc.dchost.cn/smalltour/yanhuachi.html")
+        web.loadUrl("https://baidu.com")
         web.webMethodsListener=object : WebMethodsListener(){
             override fun onX5GeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissionsCallback?): Boolean {
                 callback!!.invoke(origin, true, false)

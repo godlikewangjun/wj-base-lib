@@ -167,7 +167,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
     private final Logger logger;
 
-    private volatile Set<String> headersToRedact = Collections.emptySet();
+    private Set<String> headersToRedact = Collections.emptySet();
 
     public void redactHeader(String name) {
         Set<String> newHeadersToRedact = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
@@ -176,7 +176,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         headersToRedact = newHeadersToRedact;
     }
 
-    private volatile Level level = Level.NONE;
+    private Level level = Level.NONE;
 
     /**
      * Change the level at which this interceptor logs.
