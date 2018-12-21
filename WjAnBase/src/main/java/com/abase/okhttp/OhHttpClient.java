@@ -777,7 +777,13 @@ public class OhHttpClient {
 
                     //打印错误和发送通知方便全局处理
                     e.printStackTrace();
-                    WjEventBus.getInit().post(OKHTTP_TIMEOUT, 0);
+                    if (Looper.myLooper() == null) Looper.prepare();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            WjEventBus.getInit().post(OKHTTP_TIMEOUT, 0);
+                        }
+                    });
                 } else {
                     if (Looper.myLooper() == null) Looper.prepare();
                     handler.post(new Runnable() {
