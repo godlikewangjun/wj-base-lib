@@ -1,6 +1,8 @@
 package com.abase.okhttp.util;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.abase.okhttp.OhCallBackListener;
 import com.abase.okhttp.OhHttpClient;
@@ -29,7 +31,7 @@ import okio.Okio;
 
 public class DownLoad {
     //下载速度
-    private static int bufferSize = 20*1024;
+    public static int bufferSize = 200*1024;
     //下载延迟时间
     public static int time = 5;
     private boolean isPause = false;
@@ -45,7 +47,7 @@ public class DownLoad {
     /**
      * 保存文件
      */
-    public void saveFile(Response response, OhCallBackListener callbackListener, String destFileDir,
+    public void saveFile(Response response, final OhCallBackListener callbackListener, String destFileDir,
                          String destFileName) {
         BufferedSink bufferedSink = null;
         BufferedSource source = null;
@@ -112,12 +114,13 @@ public class DownLoad {
                 Thread.sleep(time);
                 callbackListener.sendProgressMessage(sum, total, false);
                 if (file.length() >= total) {
-                    File newFile=new File(dir, destFileName.replace(".temp", "."+AbFileUtil.getFileType(file)));
+                    bufferedSink.flush();
+                    final File newFile=new File(dir, destFileName.replace(".temp", "."+AbFileUtil.getFileType(file)));
                     file.renameTo(newFile);//重新命名
                     callbackListener.sendProgressMessage(sum, total, true);
-                    callbackListener.sendSucessMessage(newFile.getAbsolutePath());
                     SQLTools.init(context).delDownLoad(id);
                     SQLTools.init(context).onDestory();
+                    callbackListener.sendSucessMessage(newFile.getAbsolutePath());
                     break;
                 }
             }
@@ -138,6 +141,7 @@ public class DownLoad {
                     callbackListener.sendFinshMessage();
                     System.gc();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
