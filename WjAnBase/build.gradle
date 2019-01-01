@@ -75,7 +75,7 @@ dependencies {
     api 'com.wj.libs:wjEventBus:1.0.2'
     //provided
     api 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     api 'com.squareup.okhttp3:okhttp:3.12.0'
     compileOnly 'com.tencent.sonic:sdk:3.0.0'
 }
