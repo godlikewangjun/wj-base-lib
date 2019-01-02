@@ -951,7 +951,7 @@ public class OhHttpClient {
                                 (String) response[1], null);
                     } else if (responseListener instanceof OhFileCallBakListener) {// 文件
                         ((OhFileCallBakListener) responseListener).onFailure(response[0] + "",
-                                (String) response[1]);
+                                response[1]+"");
                     }
                     break;
                 case ERROE_MESSAGE:// 报错
