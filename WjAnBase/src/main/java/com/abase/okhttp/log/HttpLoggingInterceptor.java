@@ -347,7 +347,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     return response;
                 }
 
-                if (contentLength != 0) {
+                if (contentLength != 0 && contentType.type()!=null && contentType.type()!="application") {
                     String bodyStr = buffer.clone().readString(charset);
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
