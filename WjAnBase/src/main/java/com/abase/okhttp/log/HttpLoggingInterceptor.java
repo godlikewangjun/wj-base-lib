@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
      * 是否打印json格式化之前的数据
      * 默认是false
      */
-    private boolean isPrintResult=false;
+    private boolean isPrintResult = false;
 
     /**
      * 处理body解析,防止卡顿放在线程处理
@@ -253,7 +254,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 Buffer buffer = new Buffer();
                 if (!contentType.subtype().equals("form-data")) {
                     requestBody.writeTo(buffer);
-                }else{
+                } else {
                     logger.log("form-data is not print RequestParams");
                 }
                 logger.log("");
@@ -341,17 +342,19 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
                 }
-                if (!isPlaintext(buffer)) {
-                    logger.log("");
-                    logger.log("<-- END HTTP (binary " + buffer.size() + "-byte body omitted)");
-                    return response;
-                }
-
-                if (contentLength != 0 && contentType.type()!=null && contentType.type()!="application") {
-                    String bodyStr = buffer.clone().readString(charset);
+                if (contentType != null && contentType.type() != null)
+                    System.out.println(contentType.type() + " ---------------- ");
+                if (contentLength != 0 && contentType != null && contentType.type() != null && contentType.type() != "application") {
+                    if (!isPlaintext(buffer)) {
+                        logger.log("");
+                        logger.log("<-- END HTTP (binary " + buffer.size() + "-byte body omitted)");
+                        return response;
+                    }
+                    Buffer buffer1 = buffer.clone();
+                    String bodyStr = buffer1.readString(charset);
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
-                        if(isPrintResult){
+                        if (isPrintResult) {
                             logger.log("FormatJsonIng-->");
                             logger.log(bodyStr);
                             logger.log("<--FormatJsonIng");
@@ -367,6 +370,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                         logger.log("");
                         logger.log(bodyStr);
                     }
+                    buffer1.close();
                 }
                 if (gzippedLength != null) {
                     logger.log("<-- END HTTP (" + buffer.size() + "-byte, "

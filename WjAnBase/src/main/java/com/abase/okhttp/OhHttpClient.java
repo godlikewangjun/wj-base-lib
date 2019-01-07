@@ -109,15 +109,15 @@ public class OhHttpClient {
     /**
      * 连接超时的时间
      */
-    public static int CONNECTTIMEOUT = 60;
+    public static int CONNECTTIMEOUT = 30;
     /**
      * 写入的超的时间
      */
-    public static int WRITETIMEOUT = 5*60;
+    public static int WRITETIMEOUT = 60;
     /**
      * 读取的超的时间
      */
-    public static int READTIMEOUT = 5*60;
+    public static int READTIMEOUT = 60;
     /**
      * 缓存的路径
      */
@@ -461,7 +461,7 @@ public class OhHttpClient {
         if (headers != null) {
             builder.headers(headers);
         }
-        Request request = builder.cacheControl(new CacheControl.Builder().maxStale(cacheTimeOut, TimeUnit.SECONDS).build()).build();
+        Request request = builder.build();
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
     }
 
