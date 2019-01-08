@@ -342,7 +342,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
                 }
-                if (contentLength != 0 && contentType != null && contentType.type() != null && contentType.type() != "application") {
+                if (contentLength != 0 && contentType != null && contentType.subtype() != null &&
+                        contentType.subtype() != "vnd.android.package-archive") {
                     if (!isPlaintext(buffer)) {
                         logger.log("");
                         logger.log("<-- END HTTP (binary " + buffer.size() + "-byte body omitted)");
@@ -350,6 +351,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     }
                     Buffer buffer1 = buffer.clone();
                     String bodyStr = buffer1.readString(charset);
+
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
                         if (isPrintResult) {

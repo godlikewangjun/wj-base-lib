@@ -8,9 +8,11 @@ import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.OhHttpParams
+import com.abase.okhttp.OhObjectListener
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
+import com.abase.util.AbLogUtil
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
 import com.abase.view.parent.BaseActivity
@@ -76,6 +78,19 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 
         })
         OhHttpClient.getInit().setCookies(this)
+        OhHttpClient.getInit().get("https://app-api-ali.zysc.dchost.cn/v1/scenic/detail.api?authCode=5AFC725FAA7B4220AA3B6A4DD5A142C0&access_key=edb085007534432ea582b71084d38ad9&token=f678c6623d0843d09edab9fff5ff07c6&longitude=104.072474&latitude=30.663288&objectId=15c090be6cad4d018809842b0ac2d87f&distance=",
+                object :OhObjectListener<String>(){
+                    override fun onFailure(code: Int, content: String?, error: Throwable?) {
+                    }
+
+                    override fun onSuccess(content: String?) {
+                            AbLogUtil.i("asdas",content)
+                    }
+
+                    override fun onFinish() {
+                    }
+
+                })
     }
     override fun onClick(view: View) {
         when (view.id) {

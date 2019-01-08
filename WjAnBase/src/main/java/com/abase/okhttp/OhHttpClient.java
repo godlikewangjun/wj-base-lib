@@ -37,6 +37,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -67,6 +68,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.Route;
 import okio.Buffer;
 
@@ -154,6 +156,7 @@ public class OhHttpClient {
     private PersistentCookieStore cookieStore;//cookies
     public Handler handler = new Handler(Looper.getMainLooper());
     private HttpLoggingInterceptor logging;//打印日志
+    private  Charset UTF8 = Charset.forName("UTF-8");
 
 
     public HttpLoggingInterceptor getLogging() {
@@ -821,7 +824,13 @@ public class OhHttpClient {
 //            WjEventBus.getInit().post(response.headers());
             if (code == 200 || code == 206) {// 服务器响应成功 206是断点
                 if (callbackListener instanceof OhObjectListener) {// 请求sring的监听
-                    String body = inputStream2String(response.body().byteStream());
+                    ResponseBody responseBody = response.body();
+                    Charset charset = UTF8;
+                    MediaType contentType = responseBody.contentType();
+                    if (contentType != null) {
+                        charset = contentType.charset(UTF8);
+                    }
+                    String body = responseBody.source().readUtf8();
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
                         try {
                             callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener) callbackListener).classname));
@@ -895,21 +904,6 @@ public class OhHttpClient {
                 AbLogUtil.i(getClass(), url + ",错误");
             }
         }
-    }
-
-    /**
-     * 流转化string
-     * @param in
-     * @return
-     * @throws IOException
-     */
-    private String inputStream2String(InputStream in) throws IOException {
-        StringBuffer out = new StringBuffer();
-        byte[] b = new byte[4096];
-        for (int n; (n = in.read(b)) != -1;) {
-            out.append(new String(b, 0, n));
-        }
-        return out.toString();
     }
 
 
