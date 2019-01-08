@@ -830,7 +830,7 @@ public class OhHttpClient {
                     if (contentType != null) {
                         charset = contentType.charset(UTF8);
                     }
-                    String body = responseBody.source().readUtf8();
+                    String body = responseBody.source().readString(charset);
                     if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
                         try {
                             callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener) callbackListener).classname));
