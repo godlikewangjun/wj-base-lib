@@ -32,8 +32,6 @@ import okio.Okio;
 public class DownLoad {
     //下载速度
     public static int bufferSize = 200*1024;
-    //下载延迟时间
-    public static int time = 5;
     private boolean isPause = false;
     private long len = 0;
     private int sum = 0;
@@ -111,13 +109,10 @@ public class DownLoad {
                 }
                 bufferedSink.emit();
                 sum += len;
-                Thread.sleep(time);
-                callbackListener.sendProgressMessage(sum, total, false);
                 if (file.length() >= total) {
                     bufferedSink.flush();
                     final File newFile=new File(dir, destFileName.replace(".temp", "."+AbFileUtil.getFileType(file)));
                     file.renameTo(newFile);//重新命名
-                    callbackListener.sendProgressMessage(sum, total, true);
                     SQLTools.init(context).delDownLoad(id);
                     SQLTools.init(context).onDestory();
                     callbackListener.sendSucessMessage(newFile.getAbsolutePath());

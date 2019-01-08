@@ -75,10 +75,11 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             }
 
         })
+        OhHttpClient.getInit().setCookies(this)
     }
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/D21910E083EA4C497C5BD59A76C5577B.apk?fsname=com.tencent.mm_6.7.3_1360.apk&csr=1bbd", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/371C7C353C7B87011FB3DE8B12BCBCA5.apk?fsname=com.tencent.mm_7.0.0_1380.apk&csr=1bbd", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
                     AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }

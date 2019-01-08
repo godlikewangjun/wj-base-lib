@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 
 import com.abase.global.AbAppConfig;
+import com.abase.okhttp.Interceptor.DownInterceptor;
 import com.abase.okhttp.Interceptor.GzipRequestInterceptor;
 import com.abase.okhttp.body.FileRequestBody;
 import com.abase.okhttp.body.MultipartBodyRbody;
@@ -51,7 +52,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.Authenticator;
 import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Cookie;
@@ -60,6 +60,7 @@ import okhttp3.Credentials;
 import okhttp3.FormBody.Builder;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -151,7 +152,7 @@ public class OhHttpClient {
     private OkHttpClient client;
     private static Headers headers = null;
     private PersistentCookieStore cookieStore;//cookies
-    private Handler handler = new Handler(Looper.getMainLooper());
+    public Handler handler = new Handler(Looper.getMainLooper());
     private HttpLoggingInterceptor logging;//打印日志
 
 
@@ -449,7 +450,7 @@ public class OhHttpClient {
      * 不携带参数的返回string的统一方法 0 是get 1是delete
      */
     private void haveNoBody(String url, OhCallBackListener callbackListener, int type) {
-        okhttp3.Request.Builder builder = new Request.Builder().url(url).get().tag(url);// 设置tag;
+        okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag;
         switch (type) {
             case 0:// get
                 builder.get();
@@ -702,11 +703,18 @@ public class OhHttpClient {
                 }
             }
             builder.header("range", "bytes=" + file.length() + "-" + total);//断点续传要用到的，指示下载的区间
-            System.out.println("bytes=" + file.length() + "-" + total + "  本地存的文件长度：" + jsonObject.toString());
+           AbLogUtil.d(OhHttpClient.class,"bytes=" + file.length() + "-" + total + "  本地存的文件长度：" + jsonObject.toString());
         }
 
         Request request = builder.build();
-//        client=client.newBuilder().addNetworkInterceptor(new DownInterceptor(callbackListener)).build();
+        List<Interceptor> interceptors=client.networkInterceptors();
+        for (int i=0;i<interceptors.size();i++){
+            if(interceptors.get(i) instanceof DownInterceptor){
+                break;
+            }else if(i==interceptors.size()-1){
+                client=client.newBuilder().addNetworkInterceptor(new DownInterceptor(callbackListener)).build();
+            }
+        }
         //清理请求的
         destoryUrls.clear();
         DownLoad downLoad = new DownLoad(context);

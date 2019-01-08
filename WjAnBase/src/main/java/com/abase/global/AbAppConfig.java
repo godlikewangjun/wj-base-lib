@@ -20,13 +20,8 @@ package com.abase.global;
 
 // TODO: Auto-generated Javadoc
 /**
- * © 2012 amsoft.cn
- * 名称：AbAppConfig.java 
+ * 名称：AbAppConfig.java
  * 描述：初始设置类.
- *
- * @author 还如一梦中
- * @version v1.0
- * @date：2014-07-03 下午1:33:39
  */
 public class AbAppConfig {
 

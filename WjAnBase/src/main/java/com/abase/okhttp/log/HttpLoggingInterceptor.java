@@ -342,8 +342,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
                 }
-                if (contentType != null && contentType.type() != null)
-                    System.out.println(contentType.type() + " ---------------- ");
                 if (contentLength != 0 && contentType != null && contentType.type() != null && contentType.type() != "application") {
                     if (!isPlaintext(buffer)) {
                         logger.log("");
