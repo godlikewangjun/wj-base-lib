@@ -1,5 +1,7 @@
 package com.wj.ktolin.baselibrary
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.PixelFormat
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
@@ -23,6 +25,7 @@ import com.abase.view.weight.web.ScrollState
 import com.abase.view.weight.web.WebMethodsListener
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.ktutils.comm.NotificationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -91,6 +94,10 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
                     }
 
                 })
+        val intent = Intent("adasa")
+        intent.putExtra("data","asdas")
+        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
+                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
     }
     override fun onClick(view: View) {
         when (view.id) {

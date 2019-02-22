@@ -14,8 +14,6 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT
-import android.support.v4.app.NotificationCompat.VISIBILITY_SECRET
 import android.widget.RemoteViews
 
 /**
@@ -73,7 +71,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
                 NotificationManager.IMPORTANCE_DEFAULT)
         channel.canBypassDnd()//是否绕过请勿打扰模式
         channel.enableLights(true)//闪光灯
-        channel.lockscreenVisibility = VISIBILITY_SECRET//锁屏显示通知
+        channel.lockscreenVisibility = Notification.VISIBILITY_SECRET//锁屏显示通知
         channel.lightColor = Color.RED//闪关灯的灯光颜色
         channel.canShowBadge()//桌面launcher的消息角标
         channel.enableVibration(true)//是否允许震动
@@ -168,7 +166,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
         } else {
             //注意用下面这个方法，在8.0以上无法出现通知栏。8.0之前是正常的。这里需要增强判断逻辑
             builder = NotificationCompat.Builder(applicationContext,notifyId.toString())
-            builder.priority = PRIORITY_DEFAULT
+            builder.priority = NotificationCompat.PRIORITY_DEFAULT
         }
         builder.setContentTitle(title)
         builder.setContentText(content)
