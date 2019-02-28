@@ -285,7 +285,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     logger.log("--> END " + request.method() + " (binary "
                             + requestBody.contentLength() + "-byte body omitted)");
                 }
-                buffer.close();//关闭流
+//                buffer.close();//关闭流
             }
         }
 
