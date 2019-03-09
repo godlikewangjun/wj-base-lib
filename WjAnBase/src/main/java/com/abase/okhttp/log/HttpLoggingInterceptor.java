@@ -329,11 +329,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     try {
                         gzippedResponseBody = new GzipSource(buffer.clone());
                         buffer = new Buffer();
-                        buffer.writeAll(gzippedResponseBody);
-                    } finally {
-                        if (gzippedResponseBody != null) {
-                            gzippedResponseBody.close();
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
