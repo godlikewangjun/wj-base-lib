@@ -285,7 +285,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     logger.log("--> END " + request.method() + " (binary "
                             + requestBody.contentLength() + "-byte body omitted)");
                 }
-//                buffer.close();//关闭流
+                buffer.close();//关闭流
             }
         }
 
@@ -347,8 +347,10 @@ public final class HttpLoggingInterceptor implements Interceptor {
                         logger.log("<-- END HTTP (binary " + buffer.size() + "-byte body omitted)");
                         return response;
                     }
+
                     Buffer buffer1 = buffer.clone();
                     String bodyStr = buffer1.readString(charset);
+                    buffer.close();
 
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {

@@ -1,6 +1,5 @@
 package com.wj.ktolin.baselibrary
 
-import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.support.v7.widget.GridLayoutManager
@@ -10,22 +9,16 @@ import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
 import com.abase.okhttp.OhHttpParams
-import com.abase.okhttp.OhObjectListener
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
-import com.abase.util.AbLogUtil
 import com.abase.util.ToastUtil
 import com.abase.util.sql.SqlTool
 import com.abase.view.parent.BaseActivity
-import com.abase.view.weight.QqWebHelper
 import com.abase.view.weight.RecyclerSpace
 import com.abase.view.weight.web.ObservableScrollViewCallbacks
 import com.abase.view.weight.web.ScrollState
-import com.abase.view.weight.web.WebMethodsListener
-import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
 import com.wj.ktolin.baselibrary.weight.TestAdapter
-import com.wj.ktutils.comm.NotificationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -60,14 +53,14 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         recycler_list.layoutManager = GridLayoutManager(this, 6)
 
         println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
-        QqWebHelper.X5Init(this)
-        web.loadUrl("https://baidu.com")
-        web.webMethodsListener=object : WebMethodsListener(){
-            override fun onX5GeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissionsCallback?): Boolean {
-                callback!!.invoke(origin, true, false)
-                return true
-            }
-        }
+//        QqWebHelper.X5Init(this)
+//        web.loadUrl("https://baidu.com")
+//        web.webMethodsListener=object : WebMethodsListener(){
+//            override fun onX5GeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissionsCallback?): Boolean {
+//                callback!!.invoke(origin, true, false)
+//                return true
+//            }
+//        }
         web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
             override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
                 println(" ===========$scrollY")
@@ -80,24 +73,13 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             }
 
         })
-        OhHttpClient.getInit().setCookies(this)
-        OhHttpClient.getInit().get("https://app-api-ali.zysc.dchost.cn/v1/scenic/detail.api?authCode=5AFC725FAA7B4220AA3B6A4DD5A142C0&access_key=edb085007534432ea582b71084d38ad9&token=f678c6623d0843d09edab9fff5ff07c6&longitude=104.072474&latitude=30.663288&objectId=15c090be6cad4d018809842b0ac2d87f&distance=",
-                object :OhObjectListener<String>(){
-                    override fun onFailure(code: Int, content: String?, error: Throwable?) {
-                    }
-
-                    override fun onSuccess(content: String?) {
-                            AbLogUtil.i("asdas",content)
-                    }
-
-                    override fun onFinish() {
-                    }
-
-                })
+        for (i in 0..100){
+            OhHttpClient.getInit().get("http://baidu.com",null)
+        }
         val intent = Intent("adasa")
         intent.putExtra("data","asdas")
-        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
-                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
+//        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
+//                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
     }
     override fun onClick(view: View) {
         when (view.id) {
