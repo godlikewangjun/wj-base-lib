@@ -309,10 +309,12 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 + " (" + tookMs + "ms" + (!logHeaders ? ", " + bodySize + " body" : "") + ')');
 
         if (logHeaders) {
+            logger.log("--> Headers");
             Headers headers = response.headers();
             for (int i = 0, count = headers.size(); i < count; i++) {
                 logHeader(headers, i);
             }
+            logger.log("<-- Headers");
             if (!logBody || !HttpHeaders.hasBody(response)) {
                 logger.log("<-- END HTTP");
             } else if (bodyHasUnknownEncoding(response.headers())) {
