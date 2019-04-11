@@ -163,8 +163,9 @@ public class OhHttpClient {
         return logging;
     }
 
-    public void setLogging(HttpLoggingInterceptor logging) {
+    public OhHttpClient setLogging(HttpLoggingInterceptor logging) {
         this.logging = logging;
+        return this;
     }
 
     /**
@@ -378,9 +379,11 @@ public class OhHttpClient {
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
         //默认就设置日志打印
-        if (logging == null) logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addNetworkInterceptor(logging);
+        if (logging != null) {
+            logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addNetworkInterceptor(logging);
+        }
         client = builder.build();
     }
 

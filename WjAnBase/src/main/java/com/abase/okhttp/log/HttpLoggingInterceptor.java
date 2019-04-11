@@ -337,7 +337,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     }
                 }
 
-                Charset charset = UTF8;
+                    Charset charset = UTF8;
                 MediaType contentType = responseBody.contentType();
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
@@ -352,7 +352,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
                     Buffer buffer1 = buffer.clone();
                     String bodyStr = buffer1.readString(charset);
-                    buffer.close();
+//                    buffer.close();
 
                     if (mBodyParsing != null) bodyStr = mBodyParsing.bodyResult(bodyStr);
                     if (OhHttpClient.getInit().isJsonFromMat() && (bodyStr.startsWith("{") || bodyStr.startsWith("["))) {
@@ -383,7 +383,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
             }
         }
 
-        return response;
+            return response;
     }
 
     private void logHeader(Headers headers, int i) {

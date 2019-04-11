@@ -73,9 +73,6 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             }
 
         })
-        for (i in 0..100){
-            OhHttpClient.getInit().get("http://baidu.com",null)
-        }
         val intent = Intent("adasa")
         intent.putExtra("data","asdas")
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
