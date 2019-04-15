@@ -362,8 +362,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                         }
 
                         try {
-                            if(OhHttpClient.getInit().isJsonFromMat())logger.log("\n" + AbStrUtil.formatJson(bodyStr));
-                            else  logger.log(bodyStr);
+                            logger.log("\n" + AbStrUtil.formatJson(bodyStr));
                         } catch (Exception e) {
                             e.printStackTrace();
                             logger.log(bodyStr);
