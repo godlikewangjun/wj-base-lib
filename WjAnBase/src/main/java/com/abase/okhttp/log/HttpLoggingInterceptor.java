@@ -244,7 +244,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
             } else if (bodyHasUnknownEncoding(request.headers())) {
                 logger.log("--> END " + request.method() + " (encoded body omitted)");
             } else {
-
                 Charset charset = UTF8;
                 MediaType contentType = requestBody.contentType();
                 if (contentType != null) {
@@ -337,7 +336,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                     }
                 }
 
-                    Charset charset = UTF8;
+                Charset charset = UTF8;
                 MediaType contentType = responseBody.contentType();
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
@@ -363,7 +362,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
                         }
 
                         try {
-                            logger.log("\n" + AbStrUtil.formatJson(bodyStr));
+                            if(OhHttpClient.getInit().isJsonFromMat())logger.log("\n" + AbStrUtil.formatJson(bodyStr));
+                            else  logger.log(bodyStr);
                         } catch (Exception e) {
                             e.printStackTrace();
                             logger.log(bodyStr);
