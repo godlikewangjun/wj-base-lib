@@ -52,7 +52,7 @@ public class BaseWebActivity extends BaseActivity{
     }
 
     @Override
-    public void afertOp() {
+    public void init() {
 
     }
 
