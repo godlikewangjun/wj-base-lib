@@ -76,7 +76,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
         }
         activity = this;
-        afertOp();//子类的操作类
+        init();//子类的操作类
     }
 
     @Override
@@ -181,7 +181,7 @@ public abstract class BaseActivity extends FragmentActivity {
     /**
      * 设置标题之后的操作
      */
-    public abstract void afertOp();
+    public abstract void init();
 
     /**
      * 事件
