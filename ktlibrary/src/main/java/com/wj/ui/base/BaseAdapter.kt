@@ -18,7 +18,7 @@ import com.wj.ui.base.viewhoder.CustomVhoder
 open class BaseAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
-        this.setHasStableIds(true)// 图片山所
+        this.setHasStableIds(true)// 图片闪烁
     }
     var inflater: LayoutInflater? = null
     var context: Context? = null
