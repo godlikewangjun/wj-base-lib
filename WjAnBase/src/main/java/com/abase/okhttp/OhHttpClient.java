@@ -155,7 +155,7 @@ public class OhHttpClient {
     private static Headers headers = null;
     private PersistentCookieStore cookieStore;//cookies
     public Handler handler = new Handler(Looper.getMainLooper());
-    private HttpLoggingInterceptor logging;//打印日志
+    private HttpLoggingInterceptor logging=new HttpLoggingInterceptor();//打印日志
     private  Charset UTF8 = Charset.forName("UTF-8");
 
 
@@ -781,7 +781,6 @@ public class OhHttpClient {
         public void onFailure(Call call, IOException e) {
             if (SocketTimeoutException.class.equals(e.getCause())) {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + ", 请检查网络,连接超时");
-
                 //网络不好重试
                 AbLogUtil.d(OhHttpClient.class, "连接不到:" + request.url().toString() + ",重试" + failNum + "次");
                 if (failNum > 2) {//失败消息为0
