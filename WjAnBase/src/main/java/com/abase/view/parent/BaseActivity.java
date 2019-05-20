@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ import com.wjabase.R;
  * @date 2017/4/13
  */
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     public LinearLayout titlebar, other_down, lin_back;//标题栏
     private LayoutInflater inflater;//view实例接口
     public TextView title_content, backto, other;//标题 返回 新增
