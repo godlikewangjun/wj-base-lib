@@ -138,7 +138,7 @@ public class AbStrUtil {
  		Boolean isMobileNo = false;
  		try {
             Pattern p = Pattern
-                    .compile("^((\\+86)|(86))?1(3[0-9]|7[0-9]|8[0-9]|47|5[0-3]|5[5-9])\\d{8}$");
+                    .compile("^((\\+86)|(86))?1([3-9][0-9])\\d{8}$");
             Matcher m = p.matcher(str);
 			isMobileNo = m.matches();
 		} catch (Exception e) {
