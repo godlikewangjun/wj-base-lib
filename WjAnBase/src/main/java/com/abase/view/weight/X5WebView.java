@@ -96,6 +96,7 @@ public class X5WebView extends WebView {
 		webSetting.setJavaScriptEnabled(true);
 		webSetting.setGeolocationEnabled(true);
 		setWebChromeClient(chromeClient);
+		webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
 		webSetting.setGeolocationEnabled(true);//允许地理位置可用
 		webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
 		webSetting.setAppCachePath(AbFileUtil.getCacheDownloadDir(getContext()));

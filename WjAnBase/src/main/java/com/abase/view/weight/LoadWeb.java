@@ -138,6 +138,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         setting.setAppCacheMaxSize(1024 * 1024 * 8);
         String appCachePath = getContext().getCacheDir().getAbsolutePath();
         setting.setAppCachePath(appCachePath);
+        setting.setCacheMode(WebSettings.LOAD_DEFAULT);
         setting.setAllowFileAccess(true);
         setting.setGeolocationEnabled(true);//允许地理位置可用
 
