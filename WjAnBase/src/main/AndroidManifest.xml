@@ -31,13 +31,13 @@
 
         <!--支持7.0的文件读取-->
         <!--<provider-->
-        <!--android:name="android.support.v4.content.FileProvider"-->
-        <!--android:authorities="com.wjabase.fileProvider"-->
-        <!--android:exported="false"-->
-        <!--android:grantUriPermissions="true">-->
-        <!--<meta-data-->
-        <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-        <!--android:resource="@xml/file_provider" />-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="com.wjabase.fileProvider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_provider" />-->
         <!--</provider>-->
 
         <!--x5浏览器的视频播放处理-->

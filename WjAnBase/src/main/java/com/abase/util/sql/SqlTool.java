@@ -106,7 +106,14 @@ public class SqlTool {
             e.printStackTrace();
         }
         cursor.close();
-        return (V) object;
+        try {
+            return object.newInstance();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -152,11 +159,13 @@ public class SqlTool {
                             f.set(object, cursor.getDouble(columnIdx));
                         }
                     }
-                    list.add((V) object);
                 }
+                list.add(object.newInstance());
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
                 e.printStackTrace();
             }
         }
