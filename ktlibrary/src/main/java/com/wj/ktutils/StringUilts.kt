@@ -30,5 +30,5 @@ inline fun Context?.showTip(string: String) =
 inline fun Fragment?.showTip(string: String) =
         ToastUtil.showTip(this!!.activity,string)
 
-inline fun android.support.v4.app.Fragment?.showTip(string: String) =
+inline fun androidx.fragment.app.Fragment?.showTip(string: String) =
         ToastUtil.showTip(this!!.activity,string)

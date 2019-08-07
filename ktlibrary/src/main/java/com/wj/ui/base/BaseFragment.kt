@@ -1,7 +1,7 @@
 package com.wj.ui.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import android.view.ViewGroup
  * @date 2017/12/30
  */
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : androidx.fragment.app.Fragment() {
     lateinit var content_view: View
     var isInit = false
 

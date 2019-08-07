@@ -2,7 +2,6 @@ package com.wj.ktolin.baselibrary
 
 import android.content.Intent
 import android.graphics.PixelFormat
-import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -32,11 +31,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
     private var downLoad: DownLoad? = null
     private var textView: TextView? = null
 
-//    override fun before() {
-//        sonicFast(this, 1, "http://baidu.com")
-//    }
-
-    override fun afertOp() {
+    override fun init() {
         window.setFormat(PixelFormat.TRANSLUCENT)
 //        AndroidKeyboardHeight.assistActivity(this)
         val start = findViewById<Button>(R.id.start)
@@ -50,7 +45,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 
         recycler_list.addItemDecoration(RecyclerSpace(2, resources.getColor(R.color.colorPrimary)))
         recycler_list.adapter = TestAdapter()
-        recycler_list.layoutManager = GridLayoutManager(this, 6)
+        recycler_list.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 6)
 
         println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
 //        QqWebHelper.X5Init(this)
@@ -78,6 +73,10 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
     }
+
+//    override fun before() {
+//        sonicFast(this, 1, "http://baidu.com")
+//    }
     override fun onClick(view: View) {
         when (view.id) {
             R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/371C7C353C7B87011FB3DE8B12BCBCA5.apk?fsname=com.tencent.mm_7.0.0_1380.apk&csr=1bbd", object : OhFileCallBakListener() {
