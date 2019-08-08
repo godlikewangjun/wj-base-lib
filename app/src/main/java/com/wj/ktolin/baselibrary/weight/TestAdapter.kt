@@ -1,8 +1,8 @@
 package com.wj.ktolin.baselibrary.weight
 
 import android.media.MediaPlayer
-import android.support.annotation.RequiresPermission
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.RequiresPermission
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import com.wj.ktolin.baselibrary.R
 import com.wj.ui.base.BaseAdapter
@@ -18,13 +18,13 @@ import kotlinx.android.synthetic.main.share_listitem_layout.view.*
 class TestAdapter : BaseAdapter() {
     private var choose=-1
     val hashMap=HashMap<Int,MediaPlayer>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         super.onCreateViewHolder(parent, viewType)
         return CustomVhoder(inflater!!.inflate(R.layout.share_listitem_layout, parent, false))
     }
 
     @RequiresPermission("android.permission.RECORD_AUDIO")
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val mediaPlayer = MediaPlayer()

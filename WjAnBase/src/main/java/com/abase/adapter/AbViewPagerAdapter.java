@@ -17,8 +17,8 @@ package com.abase.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -54,7 +54,7 @@ public class AbViewPagerAdapter extends PagerAdapter{
 	 * 描述：获取数量.
 	 *
 	 * @return the count
-	 * @see android.support.v4.view.PagerAdapter#getCount()
+	 * @see PagerAdapter#getCount()
 	 */
 	@Override
 	public int getCount() {
@@ -67,7 +67,7 @@ public class AbViewPagerAdapter extends PagerAdapter{
 	 * @param arg0 the arg0
 	 * @param arg1 the arg1
 	 * @return true, if is view from object
-	 * @see android.support.v4.view.PagerAdapter#isViewFromObject(android.view.View, java.lang.Object)
+	 * @see PagerAdapter#isViewFromObject(android.view.View, java.lang.Object)
 	 */
 	@Override
 	public boolean isViewFromObject(View arg0, Object arg1) {
@@ -80,7 +80,7 @@ public class AbViewPagerAdapter extends PagerAdapter{
 	 * @param container the container
 	 * @param position the position
 	 * @return the object
-	 * @see android.support.v4.view.PagerAdapter#instantiateItem(android.view.View, int)
+	 * @see PagerAdapter#instantiateItem(android.view.View, int)
 	 */
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
@@ -98,7 +98,7 @@ public class AbViewPagerAdapter extends PagerAdapter{
 	 * @param container the container
 	 * @param position the position
 	 * @param object the object
-	 * @see android.support.v4.view.PagerAdapter#destroyItem(android.view.View, int, java.lang.Object)
+	 * @see PagerAdapter#destroyItem(android.view.View, int, java.lang.Object)
 	 */
 	@Override
 	public void destroyItem(View container, int position, Object object) {
@@ -110,7 +110,7 @@ public class AbViewPagerAdapter extends PagerAdapter{
 	 *
 	 * @param object the object
 	 * @return the item position
-	 * @see android.support.v4.view.PagerAdapter#getItemPosition(java.lang.Object)
+	 * @see PagerAdapter#getItemPosition(java.lang.Object)
 	 */
 	@Override
 	public int getItemPosition(Object object) {

@@ -20,16 +20,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.abase.adapter.AbViewPagerAdapter;
 import com.abase.util.AbViewUtil;

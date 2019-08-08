@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.abase.global.AbAppConfig;
 import com.abase.okhttp.Interceptor.DownInterceptor;

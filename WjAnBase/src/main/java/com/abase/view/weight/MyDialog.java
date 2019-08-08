@@ -1,7 +1,7 @@
 package com.abase.view.weight;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 public class MyDialog extends AlertDialog{
 	public MyDialog(Context context, int theme) {

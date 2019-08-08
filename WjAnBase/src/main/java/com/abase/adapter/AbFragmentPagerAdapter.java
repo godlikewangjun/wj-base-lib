@@ -15,10 +15,12 @@
  */
 package com.abase.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class AbFragmentPagerAdapter extends FragmentStatePagerAdapter {
 	 * 描述：获取数量.
 	 *
 	 * @return the count
-	 * @see android.support.v4.view.PagerAdapter#getCount()
+	 * @see PagerAdapter#getCount()
 	 */
 	@Override
 	public int getCount() {
@@ -60,7 +62,7 @@ public class AbFragmentPagerAdapter extends FragmentStatePagerAdapter {
 	 *
 	 * @param position the position
 	 * @return the item
-	 * @see android.support.v4.app.FragmentPagerAdapter#getItem(int)
+	 * @see FragmentPagerAdapter#getItem(int)
 	 */
 	@Override
 	public Fragment getItem(int position) {

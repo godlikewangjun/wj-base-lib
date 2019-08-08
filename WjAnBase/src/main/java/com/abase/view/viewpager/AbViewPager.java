@@ -16,7 +16,7 @@
 package com.abase.view.viewpager;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -51,7 +51,7 @@ public class AbViewPager extends ViewPager {
 	 *
 	 * @param event the event
 	 * @return true, if successful
-	 * @see android.support.v4.view.ViewPager#onTouchEvent(android.view.MotionEvent)
+	 * @see ViewPager#onTouchEvent(android.view.MotionEvent)
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -66,7 +66,7 @@ public class AbViewPager extends ViewPager {
 	 * @version v1.0
 	 * @param event the event
 	 * @return true, if successful
-	 * @see android.support.v4.view.ViewPager#onInterceptTouchEvent(android.view.MotionEvent)
+	 * @see ViewPager#onInterceptTouchEvent(android.view.MotionEvent)
 	 * @author: amsoft.cn
 	 * @date：2013-6-17 上午9:04:50
 	 */

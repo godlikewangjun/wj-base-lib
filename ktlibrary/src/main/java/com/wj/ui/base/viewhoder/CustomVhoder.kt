@@ -1,6 +1,6 @@
 package com.wj.ui.base.viewhoder
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 /**
@@ -9,5 +9,5 @@ import android.view.View
  * @version 1.0
  * @date 2018/1/19
  */
-class CustomVhoder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
+class CustomVhoder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView)  {
 }

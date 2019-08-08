@@ -1,7 +1,7 @@
 package com.wj.ui.base
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.wj.ui.interfaces.RecyerViewItemListener
@@ -15,7 +15,7 @@ import com.wj.ui.base.viewhoder.CustomVhoder
  * @date 2018/1/2
  */
 
-open class BaseAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+open class BaseAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
     init {
         this.setHasStableIds(true)// 图片闪烁
@@ -24,7 +24,7 @@ open class BaseAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var context: Context? = null
     var glide: RequestManager? = null
     var onItemClickListener: RecyerViewItemListener?=null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         if (context == null) {
             context = parent.context
         }
@@ -37,7 +37,7 @@ open class BaseAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return CustomVhoder(parent)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
 
     }
 
