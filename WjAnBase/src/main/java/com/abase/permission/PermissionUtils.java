@@ -76,7 +76,7 @@ public final class PermissionUtils {
             if (per != null) {
                 return Arrays.asList(per);
             } else {
-                return Arrays.asList(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                return new ArrayList<>();
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

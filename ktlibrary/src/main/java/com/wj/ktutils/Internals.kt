@@ -33,7 +33,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
 import java.io.Serializable
-import java.util.*
+import java.util.Locale
 
 object AnkoInternals {
     const val NO_GETTER: String = "Property does not have a getter"
@@ -41,7 +41,7 @@ object AnkoInternals {
     fun noGetter(): Nothing = throw AnkoException("Property does not have a getter")
 
     private class AnkoContextThemeWrapper(base: Context?, val theme: Int) : ContextThemeWrapper(base, theme)
-    
+
     fun <T : View> addView(manager: ViewManager, view: T) = when (manager) {
         is ViewGroup -> manager.addView(view)
         is AnkoContext<*> -> manager.addView(view, null)
@@ -179,16 +179,20 @@ object AnkoInternals {
         }
     }
 
-    // Cursor is not closeable in older versions of Android
     @JvmStatic
-    inline fun <T> useCursor(cursor: Cursor, f: (Cursor) -> T) : T {
-        try {
-            return f(cursor)
-        } finally {
+    inline fun <T> useCursor(cursor: Cursor, f: (Cursor) -> T): T {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            // Closeable only added in API 16
+            cursor.use(f)
+        } else {
             try {
-                cursor.close()
-            } catch (e: Exception) {
-                // Do nothing
+                f(cursor)
+            } finally {
+                try {
+                    cursor.close()
+                } catch (e: Exception) {
+                    // Do nothing
+                }
             }
         }
     }
@@ -282,8 +286,8 @@ object AnkoInternals {
                 Configuration.UI_MODE_TYPE_DESK -> if (uiMode != UiMode.DESK) return false
                 Configuration.UI_MODE_TYPE_CAR -> if (uiMode != UiMode.CAR) return false
                 Configuration.UI_MODE_TYPE_TELEVISION -> if (uiMode != UiMode.TELEVISION) return false
-                InternalConfiguration.UI_MODE_TYPE_APPLIANCE -> if (uiMode != UiMode.APPLIANCE) return false
-                InternalConfiguration.UI_MODE_TYPE_WATCH -> if (uiMode != UiMode.WATCH) return false
+                AnkoInternals.InternalConfiguration.UI_MODE_TYPE_APPLIANCE -> if (uiMode != UiMode.APPLIANCE) return false
+                AnkoInternals.InternalConfiguration.UI_MODE_TYPE_WATCH -> if (uiMode != UiMode.WATCH) return false
             }
         }
 
@@ -298,7 +302,7 @@ object AnkoInternals {
         if (rightToLeft != null) {
             if (config == null) return false
             val rtlMode = (config.screenLayout and
-                    InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_MASK) == InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_RTL
+                    AnkoInternals.InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_MASK) == AnkoInternals.InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_RTL
             if (rtlMode != rightToLeft) return false
         }
 

@@ -12,9 +12,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import android.widget.RemoteViews
 
 /**
  * <pre>
@@ -33,7 +33,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
      * 获取创建一个NotificationManager的对象
      * @return                          NotificationManager对象
      */
-    val manager: NotificationManager
+    private val manager: NotificationManager
         get() {
             if (mManager == null) {
                 mManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

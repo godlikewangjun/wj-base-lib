@@ -26,11 +26,11 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 
 @Deprecated("Use forEachReversedByIndex(f) instead.",
-        ReplaceWith("forEachReversedByIndex(f)", "com.sre.almighty.tools.KtUtils.collections.forEachReversedByIndex"))
+        ReplaceWith("forEachReversedByIndex(f)", "com.wj.ktutils.collections.forEachReversedByIndex"))
 inline fun <T> Array<T>.forEachReversed(f: (T) -> Unit) = forEachReversedByIndex(f)
 
 @Deprecated("Use forEachReversedByIndex(f) instead.",
-        ReplaceWith("forEachReversedByIndex(f)", "com.sre.almighty.tools.KtUtils.collections.forEachReversedByIndex"))
+        ReplaceWith("forEachReversedByIndex(f)", "com.wj.ktutils.collections.forEachReversedByIndex"))
 inline fun <T> List<T>.forEachReversed(f: (T) -> Unit) = forEachReversedByIndex(f)
 
 @Deprecated("Use runOnUiThread(f) instead.", ReplaceWith("runOnUiThread(f)"))
