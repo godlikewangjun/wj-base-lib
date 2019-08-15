@@ -1,6 +1,5 @@
 package com.wj.ktolin.baselibrary
 
-import android.content.Intent
 import android.graphics.PixelFormat
 import android.view.View
 import android.widget.Button
@@ -12,12 +11,11 @@ import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
-import com.abase.util.sql.SqlTool
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
-import com.abase.view.weight.web.ObservableScrollViewCallbacks
-import com.abase.view.weight.web.ScrollState
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.ktutils.HttpRequests
+import com.wj.ktutils.http
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -47,7 +45,6 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         recycler_list.adapter = TestAdapter()
         recycler_list.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 6)
 
-        println(SqlTool.createTable(TestMode::class.java) + " ==================== ")
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){
@@ -56,22 +53,17 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //                return true
 //            }
 //        }
-        web.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
-            override fun onScrollChanged(scrollY: Int, firstScroll: Boolean, dragging: Boolean) {
-                println(" ===========$scrollY")
-            }
-
-            override fun onDownMotionEvent() {
-            }
-
-            override fun onUpOrCancelMotionEvent(scrollState: ScrollState?) {
-            }
-
-        })
-        val intent = Intent("adasa")
-        intent.putExtra("data","asdas")
+//        val intent = Intent("adasa")
+//        intent.putExtra("data","asdas")
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
+        http {
+            url="https://www.toutiao.com/api/pc/feed/?category=news_hot&utm_source=toutiao&widen=1&max_behot_time=1565846955&max_behot_time_tmp=1565846955&tadrequire=true"
+            requestType= HttpRequests.GET
+            success={
+                println( it as String)
+            }
+        }
     }
 
 //    override fun before() {
