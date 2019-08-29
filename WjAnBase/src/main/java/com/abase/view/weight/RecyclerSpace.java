@@ -28,10 +28,10 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
     private int headerCount = 0;// 头的数量
     private int footerCount = 0;// 尾的数量
 
-    public RecyclerSpace(int lineWidth, int color) {
+    public RecyclerSpace(int lineHeight, int color) {
         init();
         this.dividerDrawable = new ColorDrawable(color);
-        this.lineWidth = lineWidth;
+        this.lineHeight = lineHeight;
     }
 
     public RecyclerSpace(int lineWidth) {

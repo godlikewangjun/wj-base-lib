@@ -13,9 +13,8 @@ import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
+import com.bumptech.glide.Glide
 import com.wj.ktolin.baselibrary.weight.TestAdapter
-import com.wj.ktutils.HttpRequests
-import com.wj.ktutils.http
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -57,13 +56,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        intent.putExtra("data","asdas")
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
-        http {
-            url="https://www.toutiao.com/api/pc/feed/?category=news_hot&utm_source=toutiao&widen=1&max_behot_time=1565846955&max_behot_time_tmp=1565846955&tadrequire=true"
-            requestType= HttpRequests.GET
-            success={
-                println( it as String)
-            }
-        }
+        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
     }
 
 //    override fun before() {
