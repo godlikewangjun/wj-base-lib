@@ -25,7 +25,7 @@ import com.wj.eventbus.WjEventBus;
 public class X5WebView extends WebView {
 	public String url;//加载的地址
 	public WebMethodsListener webMethodsListener;
-	private WebViewClient client = new WebViewClient() {
+	public WebViewClient client = new WebViewClient() {
 		/**
 		 * 防止加载网页时调起系统浏览器
 		 */
