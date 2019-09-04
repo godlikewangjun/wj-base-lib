@@ -1,5 +1,6 @@
 package com.wj.ktolin.baselibrary
 
+import android.Manifest
 import android.graphics.PixelFormat
 import android.view.View
 import android.widget.Button
@@ -13,10 +14,11 @@ import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
-import com.bumptech.glide.Glide
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.permission.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.util.*
 
 class MainActivityBase : BaseActivity(), View.OnClickListener {
 
@@ -56,7 +58,22 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        intent.putExtra("data","asdas")
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
-        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
+//        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
+
+        PermissionUtils.permission(activity, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+                .rationale(object : PermissionUtils.OnRationaleListener {
+                    override fun rationale(shouldRequest: PermissionUtils.OnRationaleListener.ShouldRequest) {
+                        shouldRequest.again(true)
+                    }
+                })
+                .callback(object : PermissionUtils.FullCallback {
+                    override fun onGranted(permissionsGranted: ArrayList<String>) {
+                    }
+
+                    override fun onDenied(permissionsDeniedForever: ArrayList<String>?, permissionsDenied: ArrayList<String>) {
+                    }
+
+                }).request()
     }
 
 //    override fun before() {
