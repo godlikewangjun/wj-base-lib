@@ -85,6 +85,10 @@ public class OhHttpClient {
      */
     public static final String OKHTTP_TIMEOUT = "OKHTTP_TIMEOUT";
     /**
+     * 超时报错
+     */
+    public static final String OKHTTP_FAILURE = "OKHTTP_FAILURE";
+    /**
      * 成功.
      */
     protected static final int SUCCESS_MESSAGE = 0;
@@ -812,6 +816,7 @@ public class OhHttpClient {
                 AbLogUtil.e(OhHttpClient.class, request.url().toString() + "," + e.getMessage());
                 e.printStackTrace();
                 callbackListener.sendFailureMessage(-1, e.getMessage(), e);
+                WjEventBus.getInit().post(OKHTTP_FAILURE,e);//错误了就通知全局进行处理
             }
         }
 

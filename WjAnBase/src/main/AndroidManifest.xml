@@ -54,10 +54,5 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--权限activity -->
-        <activity
-            android:name="com.abase.permission.PermissionUtils$PermissionActivity"
-            android:theme="@style/ActivityTranslucent"
-            />
     </application>
 </manifest>
