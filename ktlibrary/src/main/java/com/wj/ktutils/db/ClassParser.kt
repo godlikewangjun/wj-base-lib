@@ -59,7 +59,7 @@ internal fun <T> classParser(clazz: Class<T>): RowParser<T> {
                         "failed to parse the row: $columnsRendered (constructor parameter types: $parameterTypesRendered)")
             }
 
-            for (index in 0..(parameterTypes.size - 1)) {
+            for (index in parameterTypes.indices) {
                 val type = parameterTypes[index]
                 val columnValue = columns[index]
                 if (!type.isInstance(columnValue)) {
