@@ -756,26 +756,6 @@ public class Tools {
 
 
 
-    /**
-     * 获取屏幕大小
-     * 1是宽 2是高
-     */
-    public static int[] getScreenWH(Activity activity) {
-        if (wh != null && wh[0] != 0 && wh[1] != 0) {
-            return wh;
-        }
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay()
-                .getMetrics(displayMetrics);
-        int width = 0;
-        int height = 0;
-        width = displayMetrics.widthPixels;
-
-        height = displayMetrics.heightPixels - getStatusBarHeight(activity);// 去掉通知栏的高度
-        int[] is = {width, height};
-        wh = is;
-        return is;
-    }
 
     /**
      * 获取屏幕大小
