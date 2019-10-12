@@ -1,10 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wj.ktutils" >
-    <application>
+    <application android:supportsRtl="true">
         <!--权限activity -->
         <activity
             android:name="com.wj.permission.PermissionUtils$PermissionActivity"
-            android:theme="@style/ActivityTranslucent"
-            />
+            android:theme="@style/ActivityTranslucent"/>
     </application>
 </manifest>
