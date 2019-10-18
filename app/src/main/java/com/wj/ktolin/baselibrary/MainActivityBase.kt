@@ -11,6 +11,7 @@ import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
+import com.abase.util.WjSharedPreferences
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
@@ -58,6 +59,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
 //        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
+        val result=WjSharedPreferences.init(activity).getValues("",0)
 
     }
 

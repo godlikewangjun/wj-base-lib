@@ -113,7 +113,7 @@ public class WjSharedPreferences {
      * @param defaultObject
      * @return
      */
-    public <V> V getValues(String key, Object defaultObject) {
+    public <V> V getValues(String key, V defaultObject) {
         return (V)get(key,defaultObject);
     }
     /**

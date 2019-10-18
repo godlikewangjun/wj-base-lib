@@ -130,18 +130,17 @@ public class X5WebView extends WebView {
                     return;
                 }
             }
-            final boolean remember = true;
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("位置信息");
             builder.setMessage(origin + "允许获取您的地理位置信息吗？").setCancelable(true).setPositiveButton("允许", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    callback.invoke(origin, true, remember);
+                    callback.invoke(origin, true, true);
                 }
             }).setNegativeButton("不允许", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    callback.invoke(origin, false, remember);
+                    callback.invoke(origin, false, false);
                 }
             });
             AlertDialog alert = builder.create();
