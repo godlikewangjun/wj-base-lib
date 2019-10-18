@@ -1141,7 +1141,7 @@ public class AbAppUtil {
      * @param packageName
      * @return
      */
-    public boolean isInstallApk(Context context, String packageName) {
+    public static boolean isInstallApk(Context context, String packageName) {
         if (packageName == null || "".equals(packageName))
             return false;
         try {
