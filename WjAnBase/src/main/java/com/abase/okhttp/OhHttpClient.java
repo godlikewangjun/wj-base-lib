@@ -229,7 +229,7 @@ public class OhHttpClient {
     /**
      * 销毁
      */
-    public static synchronized OhHttpClient destory() {
+    public static synchronized OhHttpClient destroy() {
         if (ohHttpClient != null && ohHttpClient.client != null) {
             ohHttpClient.client.dispatcher().cancelAll();
             ohHttpClient.client = null;
@@ -292,11 +292,11 @@ public class OhHttpClient {
     /**
      * 设置读取缓存的头
      */
-    public OhHttpClient setCanchHeader(Context context) {
+    public OhHttpClient setCacheHeader(Context context) {
         if (headers != null) {
-            headers.newBuilder().add("Cache-Control", "max-stale=3600");
+            headers.newBuilder().add("Cache-Control", "max-stale=10");
         } else {
-            headers = new Headers.Builder().add("Cache-Control", "max-stale=3600").build();
+            headers = new Headers.Builder().add("Cache-Control", "max-stale=10").build();
         }
         File file;
         if (CACHEPATH == null) {
@@ -313,7 +313,7 @@ public class OhHttpClient {
     /**
      * 销毁请求的url
      */
-    public void destoryUrl(final String url) {
+    public void destroyUrl(final String url) {
         if (destoryUrls.size() > 10) {
             destoryUrls.remove(0);
         }
