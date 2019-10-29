@@ -14,6 +14,7 @@ import androidx.annotation.RequiresPermission;
 import com.abase.okhttp.OhFileCallBakListener;
 import com.abase.okhttp.OhHttpClient;
 import com.abase.util.AbAppUtil;
+import com.abase.util.AbDoubleTool;
 import com.abase.util.AbFileUtil;
 import com.abase.view.weight.web.WebMethodsListener;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -252,7 +253,7 @@ public class X5WebView extends WebView implements DownloadListener {
 
                 @Override
                 public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
-                    alertDialog.setMessage("正在下载" + (int) (bytesWritten / contentLength)*100 + "%");
+                    alertDialog.setMessage("正在下载" + AbDoubleTool.mul(AbDoubleTool.div(bytesWritten,contentLength),100) + "%");
                 }
             });
         }
