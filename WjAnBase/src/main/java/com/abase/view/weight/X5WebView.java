@@ -2,13 +2,17 @@ package com.abase.view.weight;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
 
 import androidx.annotation.RequiresPermission;
 
+import com.abase.okhttp.OhFileCallBakListener;
+import com.abase.okhttp.OhHttpClient;
 import com.abase.util.AbFileUtil;
 import com.abase.view.weight.web.WebMethodsListener;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -18,15 +22,17 @@ import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.DownloadListener;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.wj.eventbus.WjEventBus;
 
-public class X5WebView extends WebView {
+public class X5WebView extends WebView implements DownloadListener {
     public String url;//加载的地址
     public WebMethodsListener webMethodsListener;
+    private ProgressDialog alertDialog = null;
     public WebViewClient client = new WebViewClient() {
         /**
          * 防止加载网页时调起系统浏览器
@@ -110,6 +116,8 @@ public class X5WebView extends WebView {
 
         CookieSyncManager.createInstance(getContext());
         CookieSyncManager.getInstance().sync();
+
+        setDownloadListener(this);
     }
 
     //**Chrome*//*
@@ -186,5 +194,42 @@ public class X5WebView extends WebView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         destroy();
+    }
+
+    @Override
+    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+        Activity activity = (Activity) getContext();
+        if (alertDialog == null) {
+            alertDialog = new ProgressDialog(getContext());
+            alertDialog.setMessage("正在下载" + contentDisposition);
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+            OhHttpClient.getInit().downFile(getContext(), url, new OhFileCallBakListener() {
+                @Override
+                public void onSuccess(String content) {
+
+                }
+
+                @Override
+                public void onFailure(String code, String content) {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onFinish() {
+                    alertDialog.cancel();
+                }
+
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    alertDialog.setMessage("正在下载" + (int) (bytesWritten / contentLength) + "%");
+                }
+            });
+        }
     }
 }
