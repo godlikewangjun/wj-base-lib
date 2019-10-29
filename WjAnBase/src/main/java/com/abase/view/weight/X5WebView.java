@@ -13,6 +13,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.abase.okhttp.OhFileCallBakListener;
 import com.abase.okhttp.OhHttpClient;
+import com.abase.util.AbAppUtil;
 import com.abase.util.AbFileUtil;
 import com.abase.view.weight.web.WebMethodsListener;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -29,10 +30,12 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.wj.eventbus.WjEventBus;
 
+import java.io.File;
+
 public class X5WebView extends WebView implements DownloadListener {
     public String url;//加载的地址
     public WebMethodsListener webMethodsListener;
-    private ProgressDialog alertDialog = null;
+    private androidx.appcompat.app.AlertDialog alertDialog = null;
     public WebViewClient client = new WebViewClient() {
         /**
          * 防止加载网页时调起系统浏览器
@@ -199,15 +202,36 @@ public class X5WebView extends WebView implements DownloadListener {
     @Override
     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         Activity activity = (Activity) getContext();
-        if (alertDialog == null) {
-            alertDialog = new ProgressDialog(getContext());
-            alertDialog.setMessage("正在下载" + contentDisposition);
+        if (alertDialog == null || !alertDialog.isShowing()) {
+            alertDialog = new androidx.appcompat.app.AlertDialog.Builder(getContext())
+            .setMessage("正在下载" + contentDisposition)
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    OhHttpClient.getInit().destroyUrl(url);
+                }
+            }).show();
             alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
+
             OhHttpClient.getInit().downFile(getContext(), url, new OhFileCallBakListener() {
                 @Override
                 public void onSuccess(String content) {
+                    if(AbFileUtil.getFileType(content).equals("apk")){
+                        AbAppUtil.installApk(activity,new File(content));
+                    }else{
+                        alertDialog = new androidx.appcompat.app.AlertDialog.Builder(getContext())
+                        .setMessage("是否查看文件").setPositiveButton("查看", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        AbFileUtil.openLocalDir(activity,new File(content));
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
+                                    }
+                                }).show();
+                    }
                 }
 
                 @Override
@@ -223,11 +247,12 @@ public class X5WebView extends WebView implements DownloadListener {
                 @Override
                 public void onFinish() {
                     alertDialog.cancel();
+
                 }
 
                 @Override
                 public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
-                    alertDialog.setMessage("正在下载" + (int) (bytesWritten / contentLength) + "%");
+                    alertDialog.setMessage("正在下载" + (int) (bytesWritten / contentLength)*100 + "%");
                 }
             });
         }

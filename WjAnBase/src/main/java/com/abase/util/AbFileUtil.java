@@ -16,13 +16,17 @@
 package com.abase.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
+
+import androidx.core.content.FileProvider;
 
 import com.abase.global.AbAppConfig;
 
@@ -694,6 +698,21 @@ public class AbFileUtil {
             }
         }
         return mFileTypes.get(value);
+    }
+
+    /**
+     * 利用系统文件管理器打开
+     * @param context
+     */
+    public static void openLocalDir(Context context,File file){
+        //调用系统文件管理器打开指定路径目录
+        //获取到指定文件夹，这里为：/storage/emulated/0/Android/data/你的包	名/files/Download
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = FileProvider.getUriForFile(context,context.getPackageName() + ".fileProvider",file);
+        intent.setData(uri);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
     /**
      * @author guoxk
