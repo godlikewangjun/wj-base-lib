@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.abase.okhttp.OhFileCallBakListener
 import com.abase.okhttp.OhHttpClient
+import com.abase.okhttp.OhObjectListener
 import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
@@ -60,7 +61,17 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
 //        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
         val result=WjSharedPreferences.init(activity).getValues("",0)
+        OhHttpClient.getInit().get("http://api01.idataapi.cn:8000/news/toutiao?catid=news_sports&contentType=3&apikey=FWXDL9iM4oJuTd59n5PWjtkzUyGzz9fFfLTusN7LTjdhCuOm037j0puDDwtFjagW",object : OhObjectListener<String>(){
+            override fun onFailure(code: Int, content: String?, error: Throwable?) {
+            }
 
+            override fun onSuccess(content: String?) {
+            }
+
+            override fun onFinish() {
+            }
+
+        })
     }
 
     //    override fun before() {

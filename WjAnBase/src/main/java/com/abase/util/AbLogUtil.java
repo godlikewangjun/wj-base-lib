@@ -45,37 +45,13 @@ public class AbLogUtil {
 
 		if(D){
 			int strLength = message.length();
-			int start = 0;
-			int end = LOG_MAXLENGTH;
-			int count=1;
-			if(strLength%LOG_MAXLENGTH>0){
-				count=strLength/LOG_MAXLENGTH+1;
-			}else if(strLength%LOG_MAXLENGTH==0){
-				count=strLength/LOG_MAXLENGTH;
-			}
 			if(strLength<=LOG_MAXLENGTH){
 				Log.d(tag, message);
 				return;
 			}
-			for (int i = 0; i < count; i++) {
-				//剩下的文本还是大于规定长度则继续重复截取并输出
-				if (strLength > end) {
-//					if(i==0){
-//						Log.d(tag, message.substring(start, end));
-//					}else{
-//						Log.d(tag, message.substring(start, end));
-//					}
-					Log.d(tag, message.substring(start, end));
-					start = end;
-					if(strLength>end+LOG_MAXLENGTH){
-						end += LOG_MAXLENGTH;
-					}else{
-						end=strLength;
-					}
-				} else {
-					Log.d(tag, message.substring(start, strLength));
-					break;
-				}
+			while (message.length() > LOG_MAXLENGTH) {
+				Log.d(tag, message.substring(0, LOG_MAXLENGTH));
+				message = message.substring(LOG_MAXLENGTH);
 			}
 		}
 	}
@@ -120,26 +96,9 @@ public class AbLogUtil {
 				Log.i(tag, message);
 				return;
 			}
-			for (int i = 0; i < count; i++) {
-				//剩下的文本还是大于规定长度则继续重复截取并输出
-				if (strLength > end) {
-//					if(i==0){
-//						Log.i(tag, message.substring(start, end));
-//					}else{
-//						Log.i(tag, message.substring(start, end));
-//					}
-					Log.i(tag, message.substring(start, end));
-
-					start = end;
-					if(strLength>end+LOG_MAXLENGTH){
-						end += LOG_MAXLENGTH;
-					}else{
-						end=strLength;
-					}
-				} else {
-					Log.i(tag, message.substring(start, strLength));
-					break;
-				}
+			while (message.length() > LOG_MAXLENGTH) {
+				Log.i(tag, message.substring(0, LOG_MAXLENGTH));
+				message = message.substring(LOG_MAXLENGTH);
 			}
 		}
 	}
