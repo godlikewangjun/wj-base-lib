@@ -32,7 +32,7 @@ class HttpRequests {
 
     var success: (Any) -> Unit = { }
     var fail: (Int, String?, Throwable?) -> Unit = { _: Int, _: String?, _: Throwable? -> }
-    var finsh: () -> Unit = {}
+    var finish: () -> Unit = {}
     var start: () -> Unit = {}
     var listener: OhObjectListener<*>? = null
 
@@ -169,7 +169,7 @@ private fun executeForResult(wrap: HttpRequests) {
             }
 
             override fun onFinish() {
-                wrap.finsh()
+                wrap.finish()
             }
 
             override fun onStart() {
