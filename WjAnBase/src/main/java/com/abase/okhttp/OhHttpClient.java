@@ -443,30 +443,65 @@ public class OhHttpClient {
     }
 
     /**
+     * 自定义tag
+     * get请求
+     */
+    public void get(String url,String tag, OhObjectListener callbackListener) {
+        haveNoBody(url, callbackListener, 0,tag);
+    }
+
+    /**
+     * 自定义tag
+     * post请求
+     */
+    public void post(String url,String tag, OhObjectListener callbackListener) {
+        haveNoBody(url, callbackListener, 2,tag);
+    }
+
+    /**
+     * 自定义tag
+     * delete请求
+     */
+    public void delete(String url,String tag, OhCallBackListener callbackListener) {
+        haveNoBody(url, callbackListener, 1,tag);
+    }
+
+    /**
      * get请求
      */
     public void get(String url, OhObjectListener callbackListener) {
-        haveNoBody(url, callbackListener, 0);
+        haveNoBody(url, callbackListener, 0,null);
+    }
+
+    /**
+     * post请求
+     */
+    public void post(String url, OhObjectListener callbackListener) {
+        haveNoBody(url, callbackListener, 2,null);
     }
 
     /**
      * delete请求
      */
     public void delete(String url, OhCallBackListener callbackListener) {
-        haveNoBody(url, callbackListener, 1);
+        haveNoBody(url, callbackListener, 1,null);
     }
 
     /**
      * 不携带参数的返回string的统一方法 0 是get 1是delete
      */
-    private void haveNoBody(String url, OhCallBackListener callbackListener, int type) {
-        okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag;
+    private void haveNoBody(String url, OhCallBackListener callbackListener, int type,String tag) {
+        okhttp3.Request.Builder builder = new Request.Builder().url(url);
+        if(tag==null) builder.tag(url); else builder.tag(url);// 设置tag
         switch (type) {
             case 0:// get
                 builder.get();
                 break;
             case 1:// delete
                 builder.delete();
+                break;
+            case 2:// post
+                builder.post(new Builder().build());
                 break;
         }
         if (headers != null) {
@@ -477,11 +512,47 @@ public class OhHttpClient {
     }
 
     /**
+     * 自定义tag
+     * post请求
+     */
+    public void post(String url, OhHttpParams requestParams,String tag,
+                     OhObjectListener callbackListener) {
+        haveBody(url, requestParams, callbackListener, 0,tag);
+    }
+
+    /**
+     *  自定义tag
+     * put请求
+     */
+    public void put(String url, OhHttpParams requestParams,String tag,
+                    OhObjectListener callbackListener) {
+        haveBody(url, requestParams, callbackListener, 1,tag);
+    }
+
+    /**
+     *  自定义tag
+     * patch请求
+     */
+    public void patch(String url, OhHttpParams requestParams,String tag,
+                      OhObjectListener callbackListener) {
+        haveBody(url, requestParams, callbackListener, 2,tag);
+    }
+
+    /**
+     *  自定义tag
+     * dedelete请求
+     */
+    public void delete(String url, OhHttpParams requestParams,String tag,
+                       OhCallBackListener callbackListener) {
+        haveBody(url, requestParams, callbackListener, 3,tag);
+    }
+
+    /**
      * post请求
      */
     public void post(String url, OhHttpParams requestParams,
                      OhObjectListener callbackListener) {
-        haveBody(url, requestParams, callbackListener, 0);
+        haveBody(url, requestParams, callbackListener, 0,null);
     }
 
     /**
@@ -489,7 +560,7 @@ public class OhHttpClient {
      */
     public void put(String url, OhHttpParams requestParams,
                     OhObjectListener callbackListener) {
-        haveBody(url, requestParams, callbackListener, 1);
+        haveBody(url, requestParams, callbackListener, 1,null);
     }
 
     /**
@@ -497,7 +568,7 @@ public class OhHttpClient {
      */
     public void patch(String url, OhHttpParams requestParams,
                       OhObjectListener callbackListener) {
-        haveBody(url, requestParams, callbackListener, 2);
+        haveBody(url, requestParams, callbackListener, 2,null);
     }
 
     /**
@@ -505,14 +576,14 @@ public class OhHttpClient {
      */
     public void delete(String url, OhHttpParams requestParams,
                        OhCallBackListener callbackListener) {
-        haveBody(url, requestParams, callbackListener, 3);
+        haveBody(url, requestParams, callbackListener, 3,null);
     }
 
     /**
      * 携带参数的返回string的统一方法 0 是post 1是put 2是patch 3是delete
      */
     private void haveBody(String url, OhHttpParams requestParams,
-                          OhCallBackListener callbackListener, int type) {
+                          OhCallBackListener callbackListener, int type,String tag) {
         RequestBody body;
         if (requestParams != null && requestParams.getKeys().contains(JSONTYE)) {
             body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (String) requestParams.get(JSONTYE));
@@ -527,7 +598,8 @@ public class OhHttpClient {
             body = requestBody.build();
         }
 
-        okhttp3.Request.Builder builder = new Request.Builder().url(url).tag(url);// 设置tag
+        okhttp3.Request.Builder builder = new Request.Builder().url(url);
+        if(tag==null) builder.tag(url); else builder.tag(url);// 设置tag
         switch (type) {
             case 0:// post
                 builder.post(body);

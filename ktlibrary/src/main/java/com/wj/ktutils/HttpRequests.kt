@@ -29,6 +29,7 @@ class HttpRequests {
     var requestType: String? = null
     var ohhttpparams: OhHttpParams? = null
     var classType: Class<*>? = null
+    var tag: String? = null
 
     var success: (Any) -> Unit = { }
     var fail: (Int, String?, Throwable?) -> Unit = { _: Int, _: String?, _: Throwable? -> }
@@ -180,9 +181,9 @@ private fun executeForResult(wrap: HttpRequests) {
         httplistener = wrap.listener!!
     }
     when (wrap.requestType) {
-        HttpRequests.GET -> http.get(wrap.url, httplistener)
-        HttpRequests.POST -> http.post(wrap.url, wrap.ohhttpparams, httplistener)
-        HttpRequests.PUT -> http.put(wrap.url, wrap.ohhttpparams, httplistener)
-        HttpRequests.DELETE -> http.delete(wrap.url, wrap.ohhttpparams, httplistener)
+        HttpRequests.GET -> http.get(wrap.url,wrap.tag, httplistener)
+        HttpRequests.POST -> http.post(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
+        HttpRequests.PUT -> http.put(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
+        HttpRequests.DELETE -> http.delete(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
     }
 }
