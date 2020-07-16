@@ -49,6 +49,7 @@ import okio.ByteString;
 import okio.GzipSource;
 
 import static okhttp3.internal.platform.Platform.INFO;
+import static okhttp3.internal.platform.Platform.WARN;
 
 /**
  * An OkHttp interceptor which logs request and response information. Can be applied as an
@@ -151,9 +152,9 @@ public final class HttpLoggingInterceptor implements Interceptor {
             @Override
             public void log(String message) {
                 if (style_log == 0)
-                    AbLogUtil.i(HttpLoggingInterceptor.class, message);
+                    AbLogUtil.e(HttpLoggingInterceptor.class, message);
                 else
-                    Platform.get().log(INFO, message, null);
+                    Platform.get().log(WARN, message, null);
             }
         };
     }
