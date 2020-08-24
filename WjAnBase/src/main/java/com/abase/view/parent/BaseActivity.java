@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public View contentView, title_line,base_view;
     public Activity activity;
     public View title_systembar;
-    public RequestManager requestManager;
+    public RequestManager glide;
 
 
     public View getContentView() {
@@ -86,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        requestManager.onStop();
+        glide.onStop();
     }
     /**
      * 设置关闭返回
@@ -122,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化titlebar
      */
     private void initTitle() {
-        requestManager = Glide.with(this);
+        glide = Glide.with(this);
         inflater = LayoutInflater.from(this);
         lin_back =  findViewById(R.id.lin_back);
         other_down = findViewById(R.id.other_down);
@@ -218,8 +218,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(requestManager!=null){
-            requestManager.pauseRequests();
+        if(glide!=null){
+            glide.pauseRequests();
         }
     }
 
@@ -229,8 +229,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Looper.myLooper()==null) {
             Looper.prepare();
         }
-        if(requestManager!=null){
-            requestManager.resumeRequests();
+        if(glide!=null){
+            glide.resumeRequests();
         }
     }
 
