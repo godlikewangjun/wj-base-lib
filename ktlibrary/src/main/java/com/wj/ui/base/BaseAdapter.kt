@@ -38,6 +38,7 @@ open class BaseAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<andro
     }
 
     override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+        holder.itemView.setOnClickListener { onItemClickListener?.click(holder.itemView,position) }
 
     }
 
