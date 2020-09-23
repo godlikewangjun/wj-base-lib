@@ -18,12 +18,13 @@
 package com.wj.ktutils
 
 import android.app.Activity
-import android.app.Fragment
 import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.wj.ktutils.AnkoInternals.createAnkoContext
 
 @DslMarker
@@ -124,9 +125,8 @@ inline fun Context.UI(setContentView: Boolean, init: AnkoContext<Context>.() -> 
 inline fun Context.UI(init: AnkoContext<Context>.() -> Unit): AnkoContext<Context> =
         createAnkoContext(this, init)
 
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
 inline fun Fragment.UI(init: AnkoContext<Fragment>.() -> Unit): AnkoContext<Fragment> =
-        createAnkoContext(activity, init)
+        createAnkoContext(activity as FragmentActivity, init)
 
 interface AnkoComponent<in T> {
     fun createView(ui: AnkoContext<T>): View

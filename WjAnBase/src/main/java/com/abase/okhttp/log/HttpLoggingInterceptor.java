@@ -154,7 +154,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
                 if (style_log == 0)
                     AbLogUtil.e(HttpLoggingInterceptor.class, message);
                 else
-                    Platform.get().log(WARN, message, null);
+                    Platform.get().log(message,WARN, null);
             }
         };
     }

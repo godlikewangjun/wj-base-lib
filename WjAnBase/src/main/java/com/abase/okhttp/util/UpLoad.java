@@ -182,7 +182,7 @@ public class UpLoad {
 
                 AbLogUtil.d(UpLoad.class, "正在上传：" + url + "; 地址：" + file.getAbsolutePath());
                 fileInputStream.read(canch);
-                OhHttpClient.getInit().upFile(url, requestParams, file, new OhFileCallBakListener() {
+                OhHttpClient.getInit().upFile(url,"files", requestParams, file, new OhFileCallBakListener() {
 
                     @Override
                     public void onSuccess(String content) {

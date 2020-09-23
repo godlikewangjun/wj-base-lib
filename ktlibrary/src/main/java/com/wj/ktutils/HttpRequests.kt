@@ -54,14 +54,16 @@ class HttpFile {
     /**
      * 方便操作下载的逻辑
      */
-    var dowmLoad:DownLoad?=null
+    var downLoad:DownLoad?=null
+
+    var param:String="files"
 
     var requestType: String? = null
     var ohhttpparams: OhHttpParams? = null
     var upFile: List<File>? = null
     var success: (Any) -> Unit = { }
     var fail: (s: String, s1: String) -> Unit = { _: String, _: String? -> }
-    var finsh: () -> Unit = {}
+    var finish: () -> Unit = {}
     var start: () -> Unit = {}
     var error: (e: Exception) -> Unit = {}
     var progress: (l: Long, l1: Long, b: Boolean) -> Unit = { _: Long, _: Long, _: Boolean? -> }
@@ -124,7 +126,7 @@ private fun httpDU(wrap: HttpFile) {
             }
 
             override fun onFinish() {
-                wrap.finsh()
+                wrap.finish()
             }
 
             override fun onRequestProgress(l: Long, l1: Long, b: Boolean) {
@@ -136,8 +138,8 @@ private fun httpDU(wrap: HttpFile) {
     }
 
     when (wrap.requestType) {
-        HttpFile.DOWN -> wrap.dowmLoad=http.downFile(wrap.context, wrap.url, httplistener)
-        HttpFile.UPLOAD -> http.upFiles(wrap.url, wrap.ohhttpparams, wrap.upFile, httplistener)
+        HttpFile.DOWN -> wrap.downLoad=http.downFile(wrap.context, wrap.url, httplistener)
+        HttpFile.UPLOAD -> http.upFiles(wrap.url,wrap.param, wrap.ohhttpparams, wrap.upFile, httplistener)
     }
 }
 

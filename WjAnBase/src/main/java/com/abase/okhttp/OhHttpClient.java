@@ -599,7 +599,7 @@ public class OhHttpClient {
         }
 
         okhttp3.Request.Builder builder = new Request.Builder().url(url);
-        if(tag==null) builder.tag(url); else builder.tag(url);// 设置tag
+        if(tag==null) builder.tag(tag); else builder.tag(url);// 设置tag
         switch (type) {
             case 0:// post
                 builder.post(body);
@@ -625,7 +625,7 @@ public class OhHttpClient {
      * 上传文件
      * 模拟表单提交，因为头不能有中文,所有文件名要进行编码
      */
-    public void upFile(String url, OhHttpParams requestParams, File file,
+    public void upFile(String url,String param, OhHttpParams requestParams, File file,
                        OhFileCallBakListener callbackListener) {
         // 写入文件流 用于单个文件上传
         // text/x-markdown; charset=utf-8
@@ -633,7 +633,7 @@ public class OhHttpClient {
 
         // 调用多个文件上传的body 封装进入
         okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("files", getFileEndCode(file.getName()), requestBody);
+                .addFormDataPart(param, getFileEndCode(file.getName()), requestBody);
         // 添加post参数
         if (requestParams != null) {
             String key;
@@ -658,13 +658,13 @@ public class OhHttpClient {
      * 上传文件
      * 模拟表单提交，因为头不能有中文,所有文件名要进行编码
      */
-    public void upFiles(String url, OhHttpParams requestParams, List<File> files,
+    public void upFiles(String url, String param, OhHttpParams requestParams, List<File> files,
                         OhFileCallBakListener callbackListener) {
         // 调用多个文件上传的body 封装进入
         okhttp3.MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         // 添加多个文件
         for (int i = 0; i < files.size(); i++) {
-            multipartBody.addFormDataPart("file", getFileEndCode(files.get(i).getName()), RequestBody.create(MediaType.parse("application/octet-stream"), files.get(i)));
+            multipartBody.addFormDataPart(param, getFileEndCode(files.get(i).getName()), RequestBody.create(MediaType.parse("application/octet-stream"), files.get(i)));
         }
         // 添加post参数
         if (requestParams != null) {

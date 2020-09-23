@@ -18,10 +18,10 @@
 package com.wj.ktutils
 
 import android.app.Activity
-import android.app.Fragment
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import androidx.fragment.app.Fragment
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -37,7 +37,6 @@ fun Context.runOnUiThread(f: Context.() -> Unit) {
 /**
  * Execute [f] on the application UI thread.
  */
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
 inline fun Fragment.runOnUiThread(crossinline f: () -> Unit) {
     activity?.runOnUiThread { f() }
 }

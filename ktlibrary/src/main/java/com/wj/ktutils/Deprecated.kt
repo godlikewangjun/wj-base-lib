@@ -34,7 +34,7 @@ inline fun <T> Array<T>.forEachReversed(f: (T) -> Unit) = forEachReversedByIndex
 inline fun <T> List<T>.forEachReversed(f: (T) -> Unit) = forEachReversedByIndex(f)
 
 @Deprecated("Use runOnUiThread(f) instead.", ReplaceWith("runOnUiThread(f)"))
-inline fun Fragment.onUiThread(crossinline f: () -> Unit) = runOnUiThread(f)
+inline fun androidx.fragment.app.Fragment.onUiThread(crossinline f: () -> Unit) = runOnUiThread(f)
 
 @Deprecated("Use runOnUiThread(f) instead.", ReplaceWith("runOnUiThread(f)"))
 fun Context.onUiThread(f: Context.() -> Unit) = runOnUiThread(f)
