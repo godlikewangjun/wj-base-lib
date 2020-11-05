@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.RequiresPermission;
 
@@ -16,6 +17,7 @@ import com.abase.okhttp.OhHttpClient;
 import com.abase.util.AbAppUtil;
 import com.abase.util.AbDoubleTool;
 import com.abase.util.AbFileUtil;
+import com.abase.util.ToastUtil;
 import com.abase.view.weight.web.WebMethodsListener;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import com.tencent.smtt.export.external.interfaces.SslError;
@@ -32,11 +34,13 @@ import com.tencent.smtt.sdk.WebViewClient;
 import com.wj.eventbus.WjEventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class X5WebView extends WebView implements DownloadListener {
     public String url;//加载的地址
     public WebMethodsListener webMethodsListener;
     private androidx.appcompat.app.AlertDialog alertDialog = null;
+    private final ArrayList<String> downUrls = new ArrayList<>();
     public WebViewClient client = new WebViewClient() {
         /**
          * 防止加载网页时调起系统浏览器
@@ -203,28 +207,18 @@ public class X5WebView extends WebView implements DownloadListener {
     @Override
     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         Activity activity = (Activity) getContext();
-        if (alertDialog == null || !alertDialog.isShowing()) {
-            alertDialog = new androidx.appcompat.app.AlertDialog.Builder(getContext())
-            .setMessage("正在下载" + contentDisposition)
-            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    OhHttpClient.getInit().destroyUrl(url);
-                }
-            }).show();
-            alertDialog.setCanceledOnTouchOutside(false);
-
+        if (!OhHttpClient.getInit().isHaveUrl(url)) {
             OhHttpClient.getInit().downFile(getContext(), url, new OhFileCallBakListener() {
                 @Override
                 public void onSuccess(String content) {
-                    if(AbFileUtil.getFileType(content).equals("apk")){
-                        AbAppUtil.installApk(activity,new File(content));
-                    }else{
+                    if (AbFileUtil.getFileType(content).equals("apk")) {
+                        AbAppUtil.installApk(activity, new File(content));
+                    } else {
                         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(getContext())
-                        .setMessage("是否查看文件").setPositiveButton("查看", new DialogInterface.OnClickListener() {
+                                .setMessage("是否查看文件").setPositiveButton("查看", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        AbFileUtil.openLocalDir(activity,new File(content));
+                                        AbFileUtil.openLocalDir(activity, new File(content));
                                     }
                                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                     @Override
@@ -246,16 +240,28 @@ public class X5WebView extends WebView implements DownloadListener {
                 }
 
                 @Override
-                public void onFinish() {
-                    alertDialog.cancel();
+                public void onStart() {
+                    super.onStart();
+                    downUrls.add(url);
+                }
 
+                @Override
+                public void onFinish() {
+                    ToastUtil.showTip(getContext(), "下载完成");
                 }
 
                 @Override
                 public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
-                    alertDialog.setMessage("正在下载" + AbDoubleTool.mul(AbDoubleTool.div(bytesWritten,contentLength),100) + "%");
+                    ToastUtil.showTip(getContext(), "正在下载" + AbDoubleTool.mul(AbDoubleTool.div(bytesWritten, contentLength), 100) + "%");
                 }
             });
-        }
+        } else ToastUtil.showTip(getContext(), "已经在下载了");
+    }
+
+    @Override
+    public void onViewRemoved(View child) {
+        super.onViewRemoved(child);
+        for (String url : downUrls)
+            OhHttpClient.getInit().destroyUrl(url);
     }
 }
