@@ -13,7 +13,7 @@ import android.view.ViewGroup
  */
 
 abstract class BaseFragment : androidx.fragment.app.Fragment() {
-    lateinit var content_view: View
+    var content_view: View?=null
     var isInit = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
