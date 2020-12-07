@@ -44,6 +44,7 @@ import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -419,6 +420,7 @@ public class OhHttpClient {
                     if (certificate != null)
                         certificate.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -446,7 +448,7 @@ public class OhHttpClient {
      * 自定义tag
      * get请求
      */
-    public void get(String url,String tag, OhObjectListener callbackListener) {
+    public void get(String url,String tag, OhObjectListener<?> callbackListener) {
         haveNoBody(url, callbackListener, 0,tag);
     }
 
@@ -454,7 +456,7 @@ public class OhHttpClient {
      * 自定义tag
      * post请求
      */
-    public void post(String url,String tag, OhObjectListener callbackListener) {
+    public void post(String url,String tag, OhObjectListener<?> callbackListener) {
         haveNoBody(url, callbackListener, 2,tag);
     }
 
@@ -462,37 +464,38 @@ public class OhHttpClient {
      * 自定义tag
      * delete请求
      */
-    public void delete(String url,String tag, OhCallBackListener callbackListener) {
+    public void delete(String url,String tag, OhCallBackListener<Object> callbackListener) {
         haveNoBody(url, callbackListener, 1,tag);
     }
 
     /**
      * get请求
      */
-    public void get(String url, OhObjectListener callbackListener) {
+    public void get(String url, OhObjectListener<?> callbackListener) {
         haveNoBody(url, callbackListener, 0,null);
     }
 
     /**
      * post请求
      */
-    public void post(String url, OhObjectListener callbackListener) {
+    public void post(String url, OhObjectListener<?> callbackListener) {
         haveNoBody(url, callbackListener, 2,null);
     }
 
     /**
      * delete请求
      */
-    public void delete(String url, OhCallBackListener callbackListener) {
+    public void delete(String url, OhCallBackListener<Object> callbackListener) {
         haveNoBody(url, callbackListener, 1,null);
     }
 
     /**
      * 不携带参数的返回string的统一方法 0 是get 1是delete
      */
-    private void haveNoBody(String url, OhCallBackListener callbackListener, int type,String tag) {
+    private void haveNoBody(String url, OhCallBackListener<Object> callbackListener, int type,String tag) {
         okhttp3.Request.Builder builder = new Request.Builder().url(url);
-        if(tag==null) builder.tag(url); else builder.tag(url);// 设置tag
+        // 设置tag
+        builder.tag(url);
         switch (type) {
             case 0:// get
                 builder.get();
@@ -516,7 +519,7 @@ public class OhHttpClient {
      * post请求
      */
     public void post(String url, OhHttpParams requestParams,String tag,
-                     OhObjectListener callbackListener) {
+                     OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 0,tag);
     }
 
@@ -525,7 +528,7 @@ public class OhHttpClient {
      * put请求
      */
     public void put(String url, OhHttpParams requestParams,String tag,
-                    OhObjectListener callbackListener) {
+                    OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 1,tag);
     }
 
@@ -534,7 +537,7 @@ public class OhHttpClient {
      * patch请求
      */
     public void patch(String url, OhHttpParams requestParams,String tag,
-                      OhObjectListener callbackListener) {
+                      OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 2,tag);
     }
 
@@ -543,7 +546,7 @@ public class OhHttpClient {
      * dedelete请求
      */
     public void delete(String url, OhHttpParams requestParams,String tag,
-                       OhCallBackListener callbackListener) {
+                       OhCallBackListener<Object> callbackListener) {
         haveBody(url, requestParams, callbackListener, 3,tag);
     }
 
@@ -551,7 +554,7 @@ public class OhHttpClient {
      * post请求
      */
     public void post(String url, OhHttpParams requestParams,
-                     OhObjectListener callbackListener) {
+                     OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 0,null);
     }
 
@@ -559,7 +562,7 @@ public class OhHttpClient {
      * put请求
      */
     public void put(String url, OhHttpParams requestParams,
-                    OhObjectListener callbackListener) {
+                    OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 1,null);
     }
 
@@ -567,7 +570,7 @@ public class OhHttpClient {
      * patch请求
      */
     public void patch(String url, OhHttpParams requestParams,
-                      OhObjectListener callbackListener) {
+                      OhObjectListener<?> callbackListener) {
         haveBody(url, requestParams, callbackListener, 2,null);
     }
 
@@ -575,7 +578,7 @@ public class OhHttpClient {
      * dedelete请求
      */
     public void delete(String url, OhHttpParams requestParams,
-                       OhCallBackListener callbackListener) {
+                       OhCallBackListener<Object> callbackListener) {
         haveBody(url, requestParams, callbackListener, 3,null);
     }
 
@@ -583,7 +586,7 @@ public class OhHttpClient {
      * 携带参数的返回string的统一方法 0 是post 1是put 2是patch 3是delete
      */
     private void haveBody(String url, OhHttpParams requestParams,
-                          OhCallBackListener callbackListener, int type,String tag) {
+                          OhCallBackListener<Object> callbackListener, int type,String tag) {
         RequestBody body;
         if (requestParams != null && requestParams.getKeys().contains(JSONTYE)) {
             body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), (String) requestParams.get(JSONTYE));
@@ -618,7 +621,7 @@ public class OhHttpClient {
             builder.headers(headers);
         }
         Request request = builder.build();
-        client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
+            client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
     }
 
     /**
@@ -809,24 +812,24 @@ public class OhHttpClient {
      * 统一的处理okhttp的返回结果的格式
      */
     public class OKHttpCallBack implements Callback {
-        private OhCallBackListener callbackListener;
+        private OhCallBackListener<Object> callbackListener;
         private Request request;
         private int failNum = 0;// 失败次数
         public long time;//起始时间
         private DownLoad downLoad;
 
-        public OKHttpCallBack(Request request, OhCallBackListener callbackListener) {
+        public OKHttpCallBack(Request request, OhCallBackListener<Object> callbackListener) {
             this.request = request;
             init(callbackListener);
         }
 
-        public OKHttpCallBack(Request request, DownLoad downLoad, OhCallBackListener callbackListener) {
+        public OKHttpCallBack(Request request, DownLoad downLoad, OhCallBackListener<Object> callbackListener) {
             this.request = request;
             this.downLoad = downLoad;
             init(callbackListener);
         }
 
-        private void init(OhCallBackListener callbackListener) {
+        private void init(OhCallBackListener<Object> callbackListener) {
             if (callbackListener == null) {
                 callbackListener = new OhObjectListener<String>() {
 
@@ -905,19 +908,21 @@ public class OhHttpClient {
                 if (callbackListener instanceof OhObjectListener) {// 请求sring的监听
                     ResponseBody responseBody = response.body();
                     Charset charset = UTF8;
+                    assert responseBody != null;
                     MediaType contentType = responseBody.contentType();
                     if (contentType != null) {
                         charset = contentType.charset(UTF8);
                     }
+                    assert charset != null;
                     String body = responseBody.source().readString(charset);
-                    if (!String.class.equals(((OhObjectListener) callbackListener).classname)) {
+                    if (!String.class.equals(((OhObjectListener<Object>) callbackListener).classname)) {
                         try {
-                            callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener) callbackListener).classname));
+                            callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener<Object>) callbackListener).classname));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            AbLogUtil.e(OhHttpClient.class, ((OhObjectListener) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);
+                            AbLogUtil.e(OhHttpClient.class, ((OhObjectListener<Object>) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);
                             if (failNum == 3) {
-                                ((OhObjectListener) callbackListener).onFailure(400, "类格式化错误", e);
+                                ((OhObjectListener<Object>) callbackListener).onFailure(400, "类格式化错误", e);
                             }
                             return;
                         }
@@ -926,7 +931,7 @@ public class OhHttpClient {
 
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
                     if (callbackListener.ohtype == 0) {// 上传
-                        String body = response.body().string();
+                        String body = Objects.requireNonNull(response.body()).string();
                         AbLogUtil.i(OhHttpClient.class, url + "," + body);
                         callbackListener.sendSucessMessage(body);
                     } else if (callbackListener.ohtype == 1) {// 下载
@@ -964,12 +969,12 @@ public class OhHttpClient {
                     }
                 });
                 callbackListener.sendFailureMessage(code, url + "," + AbAppConfig.NOT_FOUND_USER, null);
-                AbLogUtil.e(OhHttpClient.class, url + "," + response.body().string());
+                AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
             } else if (code == 404) {// 没有找到接口或页面
                 callbackListener.sendFailureMessage(code, url + "," + AbAppConfig.NOT_FOUND_EXCEPTION, null);
-                AbLogUtil.e(OhHttpClient.class, url + "," + response.body().string());
+                AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
             } else {
-                String body = response.body().string();
+                String body = Objects.requireNonNull(response.body()).string();
                 callbackListener.sendFailureMessage(code, url + "," + body, null);
                 AbLogUtil.e(OhHttpClient.class, url + "," + body);
             }
@@ -1000,12 +1005,12 @@ public class OhHttpClient {
         /**
          * 响应消息监听.
          */
-        private OhCallBackListener responseListener;
+        private OhCallBackListener<Object> responseListener;
 
         /**
          * 响应消息处理.
          */
-        public ResponderHandler(OhCallBackListener responseListener) {
+        public ResponderHandler(OhCallBackListener<Object> responseListener) {
             this.responseListener = responseListener;
         }
 
@@ -1019,7 +1024,7 @@ public class OhHttpClient {
             switch (what) {
                 case SUCCESS_MESSAGE:// 成功
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
-                        ((OhObjectListener) responseListener).onSuccess(
+                        ((OhObjectListener<Object>) responseListener).onSuccess(
                                 response[0]);
                     } else if (responseListener instanceof OhFileCallBakListener) {// 文件
                         ((OhFileCallBakListener) responseListener).onSuccess(
@@ -1028,7 +1033,7 @@ public class OhHttpClient {
                     break;
                 case FAILURE_MESSAGE:// 失败
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
-                        ((OhObjectListener) responseListener).onFailure((Integer) response[0],
+                        ((OhObjectListener<Object>) responseListener).onFailure((Integer) response[0],
                                 (String) response[1], null);
                     } else if (responseListener instanceof OhFileCallBakListener) {// 文件
                         ((OhFileCallBakListener) responseListener).onFailure(response[0] + "",
@@ -1037,7 +1042,7 @@ public class OhHttpClient {
                     break;
                 case ERROE_MESSAGE:// 报错
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
-                        ((OhObjectListener) responseListener).onFailure(-1, "报错", (Exception) response[0]);
+                        ((OhObjectListener<Object>) responseListener).onFailure(-1, "报错", (Exception) response[0]);
                     } else if (responseListener instanceof OhFileCallBakListener) {// 文件
                         ((OhFileCallBakListener) responseListener).onError((Exception) response[0]);
                     }
@@ -1052,14 +1057,14 @@ public class OhHttpClient {
                     break;
                 case FINSH_MESSAGE:// 完成
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
-                        ((OhObjectListener) responseListener).onFinish();
+                        ((OhObjectListener<Object>) responseListener).onFinish();
                     } else if (responseListener instanceof OhFileCallBakListener) {// 文件
                         ((OhFileCallBakListener) responseListener).onFinish();
                     }
                     break;
                 case START_MESSAGE://开始
                     if (responseListener instanceof OhObjectListener) {// 字符串的请求
-                        ((OhObjectListener) responseListener).onStart();
+                        ((OhObjectListener<Object>) responseListener).onStart();
                     }
                     break;
             }
@@ -1139,18 +1144,21 @@ public class OhHttpClient {
                 try {
                     ginzip.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             if (out != null) {
                 try {
                     out.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }

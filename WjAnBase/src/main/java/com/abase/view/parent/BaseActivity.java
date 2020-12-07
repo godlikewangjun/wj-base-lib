@@ -91,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 设置关闭返回
      */
-    public void setBacktoFinsh(@DrawableRes int rif) {
+    public void setBackFinish(@DrawableRes int rif) {
         if (rif != 0) {
             int wh = AbViewUtil.dp2px(activity, 15);
             backto_img.setImageResource(rif);
@@ -103,7 +103,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 设置关闭返回
      */
-    public void setBacktoFinsh(@DrawableRes int rif, int width, int height) {
+    public void setBackFinish(@DrawableRes int rif, int width, int height) {
         if (rif != 0) {
             backto_img.setImageResource(rif);
             backto_img.getLayoutParams().height = width;
@@ -192,10 +192,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.backto) {
-                finshTo();
+                finishTo();
 
             } else if (i == R.id.lin_back) {
-                finshTo();
+                finishTo();
             }
         }
     };
@@ -237,32 +237,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 关闭
      */
-    public void finshTo() {
+    public void finishTo() {
         AbAppUtil.closeSoftInput(activity);
         this.finish();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.fontScale != 1)//非默认值
-            getResources();
-        super.onConfigurationChanged(newConfig);
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        if (newConfig.fontScale != 1)//非默认值
+//            getResources();
+//        super.onConfigurationChanged(newConfig);
+//    }
 
-    /**
-     * 让app的字体不随系统的字体改变
-     */
-    @Override
-    public Resources getResources() {
-        try {
-            Resources res = super.getResources();
-            Configuration config = new Configuration();
-            config.setToDefaults();
-            res.updateConfiguration(config, res.getDisplayMetrics());
-            return res;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return super.getResources();
-        }
-    }
+//    /**
+//     * 让app的字体不随系统的字体改变
+//     */
+//    @Override
+//    public Resources getResources() {
+//        try {
+//            Resources res = super.getResources();
+//            Configuration config = new Configuration();
+//            config.setToDefaults();
+//            res.updateConfiguration(config, res.getDisplayMetrics());
+//            return res;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return super.getResources();
+//        }
+//    }
 }

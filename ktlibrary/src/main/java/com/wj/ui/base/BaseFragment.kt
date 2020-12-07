@@ -13,15 +13,16 @@ import android.view.ViewGroup
  */
 
 abstract class BaseFragment : androidx.fragment.app.Fragment() {
-    var content_view: View?=null
+    var contentView: View?=null
     var isInit = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        content_view = inflater.inflate(setContentView(), container, false)
-        return content_view
+        contentView = inflater.inflate(setContentView(), container, false)
+        return contentView
     }
-    override fun onStart() {
-        super.onStart()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (!isInit) {
             isInit = true
             init()
