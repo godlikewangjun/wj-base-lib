@@ -930,10 +930,10 @@ public class OhHttpClient {
                         callbackListener.sendSucessMessage(body);
 
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
+                    String bodyError = Objects.requireNonNull(response.body()).string();
                     if (callbackListener.ohtype == 0) {// 上传
-                        String body = Objects.requireNonNull(response.body()).string();
-                        AbLogUtil.i(OhHttpClient.class, url + "," + body);
-                        callbackListener.sendSucessMessage(body);
+                        AbLogUtil.i(OhHttpClient.class, url + "," + bodyError);
+                        callbackListener.sendSucessMessage(bodyError);
                     } else if (callbackListener.ohtype == 1) {// 下载
                         final String name = Tools.setMD5(url);
                         downLoad.saveFile(response, callbackListener, DOWNDIR, name + ".temp");
@@ -968,15 +968,17 @@ public class OhHttpClient {
                         return response.request().newBuilder().header("Authorization", credential).build();
                     }
                 });
-                callbackListener.sendFailureMessage(code, url + "," + AbAppConfig.NOT_FOUND_USER, null);
+                String bodyError = Objects.requireNonNull(response.body()).string();
+                callbackListener.sendFailureMessage(code, bodyError, null);
                 AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
             } else if (code == 404) {// 没有找到接口或页面
-                callbackListener.sendFailureMessage(code, url + "," + AbAppConfig.NOT_FOUND_EXCEPTION, null);
+                String bodyError = Objects.requireNonNull(response.body()).string();
+                callbackListener.sendFailureMessage(code, bodyError, null);
                 AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
             } else {
-                String body = Objects.requireNonNull(response.body()).string();
-                callbackListener.sendFailureMessage(code, body, null);
-                AbLogUtil.e(OhHttpClient.class, url + "," + body);
+                String bodyError = Objects.requireNonNull(response.body()).string();
+                callbackListener.sendFailureMessage(code, bodyError, null);
+                AbLogUtil.e(OhHttpClient.class, url + "," + bodyError);
             }
 
 
