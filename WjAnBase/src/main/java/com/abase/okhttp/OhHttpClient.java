@@ -970,11 +970,11 @@ public class OhHttpClient {
                 });
                 String bodyError = Objects.requireNonNull(response.body()).string();
                 callbackListener.sendFailureMessage(code, bodyError, null);
-                AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
+                AbLogUtil.e(OhHttpClient.class, url + "," + bodyError);
             } else if (code == 404) {// 没有找到接口或页面
                 String bodyError = Objects.requireNonNull(response.body()).string();
                 callbackListener.sendFailureMessage(code, bodyError, null);
-                AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
+                AbLogUtil.e(OhHttpClient.class, url + "," + bodyError);
             } else {
                 String bodyError = Objects.requireNonNull(response.body()).string();
                 callbackListener.sendFailureMessage(code, bodyError, null);
