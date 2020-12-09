@@ -975,7 +975,7 @@ public class OhHttpClient {
                 AbLogUtil.e(OhHttpClient.class, url + "," + Objects.requireNonNull(response.body()).string());
             } else {
                 String body = Objects.requireNonNull(response.body()).string();
-                callbackListener.sendFailureMessage(code, url + "," + body, null);
+                callbackListener.sendFailureMessage(code, body, null);
                 AbLogUtil.e(OhHttpClient.class, url + "," + body);
             }
 
