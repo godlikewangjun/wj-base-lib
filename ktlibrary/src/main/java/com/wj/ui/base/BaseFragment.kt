@@ -13,7 +13,7 @@ import android.view.ViewGroup
  */
 
 abstract class BaseFragment : androidx.fragment.app.Fragment() {
-    var contentView: View?=null
+    var contentView: View? = null
     var isInit = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,10 +23,8 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!isInit) {
-            isInit = true
-            init()
-        }
+        isInit = true
+        init()
     }
 
     /**

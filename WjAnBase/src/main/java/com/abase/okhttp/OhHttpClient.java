@@ -904,7 +904,7 @@ public class OhHttpClient {
 //				body = gunzip(body);
 //			}
 //            WjEventBus.getInit().post(response.headers());
-            if (code == 200 || code == 206) {// 服务器响应成功 206是断点
+            if (code >=200 && code<300) {// 服务器响应成功 206是断点
                 if (callbackListener instanceof OhObjectListener) {// 请求sring的监听
                     ResponseBody responseBody = response.body();
                     Charset charset = UTF8;
