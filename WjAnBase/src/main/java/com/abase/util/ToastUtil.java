@@ -19,7 +19,6 @@ import java.lang.ref.WeakReference;
 public class ToastUtil {
     public static SoftReference<StyleableToast.Builder> toast;// 提示
     private static boolean isShowDeBug = true;// 提示
-    private static final int SHOWTOAST = 3000;
     public static ToastBuilderListener toastBuilderListener;
 
     public interface ToastBuilderListener{

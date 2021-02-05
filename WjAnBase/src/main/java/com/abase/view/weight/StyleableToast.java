@@ -288,11 +288,10 @@ public class StyleableToast extends LinearLayout {
         private int gravity = Gravity.BOTTOM;
         private StyleableToast toast;
         private final Context context;
-        private Handler mHandler;
+        private long showTime=0L;
 
         public Builder(@NonNull Context context) {
             this.context = context;
-            mHandler=new Handler();
         }
 
         public Builder text(String text) {
@@ -377,18 +376,13 @@ public class StyleableToast extends LinearLayout {
         }
 
         public void show() {
-            if(toast!=null) {
+            if(toast!=null && System.currentTimeMillis()-showTime<3*1000) {
                 toast.textView.setText(text);
                 return;
             }
             toast = new StyleableToast(this);
             toast.show();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    toast=null;
-                }
-            },3000);
+            showTime=System.currentTimeMillis();
         }
         public StyleableToast build() {
             toast = new StyleableToast(this);

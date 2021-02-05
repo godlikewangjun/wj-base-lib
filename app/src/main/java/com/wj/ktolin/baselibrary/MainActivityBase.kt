@@ -16,6 +16,7 @@ import com.abase.util.WjSharedPreferences
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.ktutils.showTip
 import com.wj.permission.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -47,6 +48,10 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         recycler_list.adapter = TestAdapter()
         recycler_list.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 6)
 
+        showTip("11111")
+        showTip("11111")
+        showTip("11111")
+        showTip("11111")
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){

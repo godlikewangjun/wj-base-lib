@@ -21,11 +21,11 @@ import java.lang.reflect.Field;
  */
 
 public class AndroidKeyboardHeight {
-    public static void assistActivity(Activity activity) {
-        new AndroidKeyboardHeight(activity);
+    public static AndroidKeyboardHeight assistActivity(Activity activity) {
+        return new AndroidKeyboardHeight(activity);
     }
-    public static void assistActivity(Activity activity, View view) {
-        new AndroidKeyboardHeight(activity,view);
+    public static AndroidKeyboardHeight assistActivity(Activity activity, View view) {
+        return new AndroidKeyboardHeight(activity,view);
     }
     private View mChildOfContent;
     private int usableHeightPrevious;
@@ -108,6 +108,12 @@ public class AndroidKeyboardHeight {
             mChildOfContent.requestLayout();
             usableHeightPrevious = usableHeightNow;
         }
+    }
+
+    public void resetHeight(){
+        frameLayoutParams.height = contentHeight;
+        mChildOfContent.requestLayout();
+        usableHeightPrevious = computeUsableHeight();
     }
 
     /**     * 计算mChildOfContent可见高度     ** @return     */
