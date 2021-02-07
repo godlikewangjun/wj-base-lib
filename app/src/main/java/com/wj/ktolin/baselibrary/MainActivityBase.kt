@@ -48,10 +48,6 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         recycler_list.adapter = TestAdapter()
         recycler_list.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 6)
 
-        showTip("11111")
-        showTip("11111")
-        showTip("11111")
-        showTip("11111")
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){
@@ -66,7 +62,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
 //        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
         val result=WjSharedPreferences.init(activity).getValues("",0)
-        OhHttpClient.getInit().get("http://api01.idataapi.cn:8000/news/toutiao?catid=news_sports&contentType=3&apikey=FWXDL9iM4oJuTd59n5PWjtkzUyGzz9fFfLTusN7LTjdhCuOm037j0puDDwtFjagW",object : OhObjectListener<String>(){
+        OhHttpClient.getInit().get("http://imtt.dd.qq.com/16891/apk/5BF428A44C92DDE2AEB3EE34E1785EB6.apk?fsname=com.wj.makebai_v1.5.1_38.apk&hsr=4d5s",object : OhObjectListener<String>(){
             override fun onFailure(code: Int, content: String?, error: Throwable?) {
             }
 
@@ -84,7 +80,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //    }
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "https://imtt.dd.qq.com/16891/371C7C353C7B87011FB3DE8B12BCBCA5.apk?fsname=com.tencent.mm_7.0.0_1380.apk&csr=1bbd", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "http://imtt.dd.qq.com/16891/apk/5BF428A44C92DDE2AEB3EE34E1785EB6.apk?fsname=com.wj.makebai_v1.5.1_38.apk&hsr=4d5s", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
                     AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }

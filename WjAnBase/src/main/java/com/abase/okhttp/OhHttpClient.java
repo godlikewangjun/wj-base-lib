@@ -930,8 +930,8 @@ public class OhHttpClient {
                         callbackListener.sendSucessMessage(body);
 
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
-                    String bodyError = Objects.requireNonNull(response.body()).string();
                     if (callbackListener.ohtype == 0) {// 上传
+                        String bodyError = Objects.requireNonNull(response.body()).string();
                         AbLogUtil.i(OhHttpClient.class, url + "," + bodyError);
                         callbackListener.sendSucessMessage(bodyError);
                     } else if (callbackListener.ohtype == 1) {// 下载
