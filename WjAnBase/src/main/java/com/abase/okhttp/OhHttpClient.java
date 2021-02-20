@@ -653,7 +653,7 @@ public class OhHttpClient {
         }
         builder.post(multipartBody.build());
         Request request = builder.build();
-        callbackListener.ohtype = 0;// 设置类型是上传
+        callbackListener.ohType = 0;// 设置类型是上传
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
     }
 
@@ -685,7 +685,7 @@ public class OhHttpClient {
         }
         builder.post(new MultipartBodyRbody(multipartBody.build(), callbackListener));
         Request request = builder.build();
-        callbackListener.ohtype = 0;// 设置类型是上传
+        callbackListener.ohType = 0;// 设置类型是上传
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
     }
 
@@ -742,7 +742,7 @@ public class OhHttpClient {
         }
         builder.post(multipartBody.build());
         Request request = builder.build();
-        callbackListener.ohtype = 0;// 设置类型是上传
+        callbackListener.ohType = 0;// 设置类型是上传
         client.newCall(request).enqueue(new OKHttpCallBack(request, callbackListener));
         return requestBody;
     }
@@ -803,7 +803,7 @@ public class OhHttpClient {
         //清理请求的
         destoryUrls.clear();
         DownLoad downLoad = new DownLoad(context);
-        callbackListener.ohtype = 1;// 设置类型是下载
+        callbackListener.ohType = 1;// 设置类型是下载
         client.newCall(request).enqueue(new OKHttpCallBack(request, downLoad, callbackListener));
         return downLoad;
     }
@@ -865,7 +865,7 @@ public class OhHttpClient {
                 if (failNum > 2) {//失败消息为0
                     callbackListener.sendFailureMessage(0,
                             "连接不到:" + request.url().toString() + ",重试超过最大的次数" + failNum, null);
-                    callbackListener.sendFinshMessage();
+                    callbackListener.sendFinishMessage();
 
                     //打印错误和发送通知方便全局处理
                     e.printStackTrace();
@@ -917,7 +917,7 @@ public class OhHttpClient {
                     String body = responseBody.source().readString(charset);
                     if (!String.class.equals(((OhObjectListener<Object>) callbackListener).classname)) {
                         try {
-                            callbackListener.sendSucessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener<Object>) callbackListener).classname));
+                            callbackListener.sendSuccessMessage(GsonUtil.getGson().fromJson(body, ((OhObjectListener<Object>) callbackListener).classname));
                         } catch (Exception e) {
                             e.printStackTrace();
                             AbLogUtil.e(OhHttpClient.class, ((OhObjectListener<Object>) callbackListener).classname + ";" + url + ",返回json格式化错误" + body);
@@ -927,14 +927,14 @@ public class OhHttpClient {
                             return;
                         }
                     } else
-                        callbackListener.sendSucessMessage(body);
+                        callbackListener.sendSuccessMessage(body);
 
                 } else if (callbackListener instanceof OhFileCallBakListener) {// 请求文件的监听
-                    if (callbackListener.ohtype == 0) {// 上传
+                    if (callbackListener.ohType == 0) {// 上传
                         String bodyError = Objects.requireNonNull(response.body()).string();
                         AbLogUtil.i(OhHttpClient.class, url + "," + bodyError);
-                        callbackListener.sendSucessMessage(bodyError);
-                    } else if (callbackListener.ohtype == 1) {// 下载
+                        callbackListener.sendSuccessMessage(bodyError);
+                    } else if (callbackListener.ohType == 1) {// 下载
                         final String name = Tools.setMD5(url);
                         downLoad.saveFile(response, callbackListener, DOWNDIR, name + ".temp");
                         downLoad = null;
@@ -946,7 +946,7 @@ public class OhHttpClient {
                 if (failNum > 2) {
                     callbackListener.sendFailureMessage(response.code(),
                             request.url().toString() + ",重试超过最大的次数" + failNum, null);
-                    callbackListener.sendFinshMessage();
+                    callbackListener.sendFinishMessage();
                 } else {
                     if (Looper.myLooper() == null) Looper.prepare();
                     handler.post(new Runnable() {
@@ -983,7 +983,7 @@ public class OhHttpClient {
 
 
             try {
-                callbackListener.sendFinshMessage();
+                callbackListener.sendFinishMessage();
 //                AbFileUtil.writeAppend("jk", "\n接口:" + request.url().toString() + ",时间:" + (System.currentTimeMillis() - time));
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,8 +1,6 @@
 package com.abase.okhttp.util;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.abase.okhttp.OhCallBackListener;
 import com.abase.okhttp.OhHttpClient;
@@ -115,7 +113,7 @@ public class DownLoad {
                     file.renameTo(newFile);//重新命名
                     SQLTools.init(context).delDownLoad(id);
                     SQLTools.init(context).onDestory();
-                    callbackListener.sendSucessMessage(newFile.getAbsolutePath());
+                    callbackListener.sendSuccessMessage(newFile.getAbsolutePath());
                     break;
                 }
             }
@@ -133,7 +131,7 @@ public class DownLoad {
                     buffer.close();
                     source.close();
                     bufferedSink.close();
-                    callbackListener.sendFinshMessage();
+                    callbackListener.sendFinishMessage();
                     System.gc();
                 } catch (Exception e) {
                     e.printStackTrace();

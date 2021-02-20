@@ -17,9 +17,9 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 package com.wj.ktutils.dialogs
 
-import android.app.Fragment
 import android.content.Context
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.wj.ktutils.AnkoContext
 
 /**
@@ -34,8 +34,8 @@ inline fun AnkoContext<*>.toast(message: Int) = ctx.toast(message)
  *
  * @param message the message text resource.
  */
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
-inline fun Fragment.toast(message: Int) = activity.toast(message)
+@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.", replaceWith = ReplaceWith("activity!!.toast(message)"))
+inline fun Fragment.toast(message: Int) = activity!!.toast(message)
 
 /**
  * Display the simple Toast message with the [Toast.LENGTH_SHORT] duration.
@@ -60,8 +60,8 @@ inline fun AnkoContext<*>.toast(message: CharSequence) = ctx.toast(message)
  *
  * @param message the message text.
  */
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
-inline fun Fragment.toast(message: CharSequence) = activity.toast(message)
+@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.", replaceWith = ReplaceWith("activity!!.toast(message)"))
+inline fun Fragment.toast(message: CharSequence) = activity!!.toast(message)
 
 /**
  * Display the simple Toast message with the [Toast.LENGTH_SHORT] duration.
@@ -86,8 +86,8 @@ inline fun AnkoContext<*>.longToast(message: Int) = ctx.longToast(message)
  *
  * @param message the message text resource.
  */
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
-inline fun Fragment.longToast(message: Int) = activity.longToast(message)
+@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.", replaceWith = ReplaceWith("activity!!.longToast(message)"))
+inline fun Fragment.longToast(message: Int) = activity!!.longToast(message)
 
 /**
  * Display the simple Toast message with the [Toast.LENGTH_LONG] duration.
@@ -112,8 +112,8 @@ inline fun AnkoContext<*>.longToast(message: CharSequence) = ctx.longToast(messa
  *
  * @param message the message text.
  */
-@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.")
-inline fun Fragment.longToast(message: CharSequence) = activity.longToast(message)
+@Deprecated(message = "Use support library fragments instead. Framework fragments were deprecated in API 28.", replaceWith = ReplaceWith("activity.longToast(message)"))
+inline fun Fragment.longToast(message: CharSequence) = activity!!.longToast(message)
 
 /**
  * Display the simple Toast message with the [Toast.LENGTH_LONG] duration.

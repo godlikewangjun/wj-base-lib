@@ -14,7 +14,7 @@ public abstract class OhCallBackListener<T> {
     /**
      * 0 是上传 1是下载
      */
-    public int ohtype = -1;
+    public int ohType = -1;
     private OhCallBackMessageInterface callBackMessageInterface;
 
     public OhCallBackListener() {
@@ -30,7 +30,7 @@ public abstract class OhCallBackListener<T> {
     /**
      * 成功.
      */
-    public void sendSucessMessage(final T content) {
+    public void sendSuccessMessage(final T content) {
         sendMessage(obtainMessage(OhHttpClient.SUCCESS_MESSAGE, new Object[]{content}));
     }
 
@@ -47,7 +47,7 @@ public abstract class OhCallBackListener<T> {
     /**
      * 完成消息
      */
-    public void sendFinshMessage() {
+    public void sendFinishMessage() {
         sendMessage(obtainMessage(OhHttpClient.FINSH_MESSAGE, new Object[]{}));
     }
 

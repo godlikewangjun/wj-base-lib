@@ -12,11 +12,10 @@ import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
-import com.abase.util.WjSharedPreferences
+import com.wj.ktutils.WjSP
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
-import com.wj.ktutils.showTip
 import com.wj.permission.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -61,18 +60,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
 //        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
-        val result=WjSharedPreferences.init(activity).getValues("",0)
-        OhHttpClient.getInit().get("http://imtt.dd.qq.com/16891/apk/5BF428A44C92DDE2AEB3EE34E1785EB6.apk?fsname=com.wj.makebai_v1.5.1_38.apk&hsr=4d5s",object : OhObjectListener<String>(){
-            override fun onFailure(code: Int, content: String?, error: Throwable?) {
-            }
-
-            override fun onSuccess(content: String?) {
-            }
-
-            override fun onFinish() {
-            }
-
-        })
+        val result= WjSP.init(activity).getValues("",0)
     }
 
     //    override fun before() {
