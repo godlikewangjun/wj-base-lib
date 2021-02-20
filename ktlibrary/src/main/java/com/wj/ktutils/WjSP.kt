@@ -68,8 +68,8 @@ class WjSP(context: Context?) {
      * @param defaultObject
      * @return
      */
-    fun <V> getValues(key: String, defaultObject: V): V? {
-        return get(key, defaultObject) as V?
+    fun <V> getValues(key: String, defaultObject: V?): V {
+        return get(key, defaultObject) as V
     }
 
     /**
@@ -113,7 +113,7 @@ class WjSP(context: Context?) {
      */
     fun clear(): WjSP? {
         if (wjcontext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,befor init")
+            AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
         default_SP!!.edit().clear().apply()
@@ -127,7 +127,7 @@ class WjSP(context: Context?) {
      */
     fun remove(context: Context?, key: String?): WjSP? {
         if (wjcontext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,befor init")
+            AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
         val editor = default_SP!!.edit()
@@ -149,7 +149,7 @@ class WjSP(context: Context?) {
         /**
          * 保存在手机里面的文件名
          */
-        private const val FILE_NAME = "save_canch"
+        private const val FILE_NAME = "save_cache"
 
         /**
          * 获取当前的SharedPreferences
