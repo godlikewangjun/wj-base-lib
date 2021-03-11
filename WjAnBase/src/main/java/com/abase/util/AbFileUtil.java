@@ -763,26 +763,26 @@ public class AbFileUtil {
 
 
         // 默认下载文件根目录.
-        String canchDir = File.separator
+        String cacheDir = File.separator
                 + info.packageName + File.separator;
         // 默认下载图片文件目录.
-        String imageDownloadPath = canchDir
+        String imageDownloadPath = cacheDir
                 + AbAppConfig.DOWNLOAD_IMAGE_DIR + File.separator;
 
         // 默认下载文件目录.
-        String fileDownloadPath = canchDir
+        String fileDownloadPath = cacheDir
                 + AbAppConfig.DOWNLOAD_FILE_DIR + File.separator;
 
         // 默认缓存目录.
-        String cacheDownloadPath = canchDir + AbAppConfig.CACHE_DIR
+        String cacheDownloadPath = cacheDir + AbAppConfig.CACHE_DIR
                 + File.separator;
 
         // 默认DB目录.
-        String dbDownloadPath = canchDir + AbAppConfig.DB_DIR
+        String dbDownloadPath = cacheDir + AbAppConfig.DB_DIR
                 + File.separator;
 
         // 默认Log目录.
-        String logDownloadPath = canchDir + AbAppConfig.Log_DIR
+        String logDownloadPath = cacheDir + AbAppConfig.Log_DIR
                 + File.separator;
 
         try {
@@ -791,7 +791,7 @@ public class AbFileUtil {
             } else {
                 File root = Environment.getExternalStorageDirectory();//获取外置sdcasrd的路径
                 File downloadDir = new File(root.getAbsolutePath()
-                        + canchDir);
+                        + cacheDir);
                 if (!downloadDir.exists()) {
                     downloadDir.mkdirs();
                 }

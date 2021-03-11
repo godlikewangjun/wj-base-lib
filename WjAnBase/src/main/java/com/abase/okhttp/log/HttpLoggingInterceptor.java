@@ -178,7 +178,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         headersToRedact = newHeadersToRedact;
     }
 
-    private Level level = Level.NONE;
+    private Level level = Level.BODY;
 
     /**
      * Change the level at which this interceptor logs.

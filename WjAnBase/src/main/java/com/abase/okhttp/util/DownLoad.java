@@ -88,7 +88,7 @@ public class DownLoad {
 
             buffer = bufferedSink.buffer();
 
-            ArrayList<String> list = OhHttpClient.getInit().getDestoryUrls();
+            ArrayList<String> list = OhHttpClient.getInit().getDestroyUrls();
 
             while (!isPause) {
                 if (isPause) {

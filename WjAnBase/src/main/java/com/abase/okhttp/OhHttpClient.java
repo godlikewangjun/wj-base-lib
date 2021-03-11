@@ -153,7 +153,7 @@ public class OhHttpClient {
     /**
      * 销毁的请求url集合 最大缓存10条
      */
-    private ArrayList<String> destoryUrls = new ArrayList<>();
+    private final ArrayList<String> destroyUrls = new ArrayList<>();
 
     private static OhHttpClient ohHttpClient;
     private OkHttpClient client;
@@ -161,7 +161,7 @@ public class OhHttpClient {
     private PersistentCookieStore cookieStore;//cookies
     public Handler handler = new Handler(Looper.getMainLooper());
     private HttpLoggingInterceptor logging=new HttpLoggingInterceptor();//打印日志
-    private  Charset UTF8 = Charset.forName("UTF-8");
+    private final Charset UTF8 = Charset.forName("UTF-8");
 
 
     public HttpLoggingInterceptor getLogging() {
@@ -178,8 +178,8 @@ public class OhHttpClient {
      *
      * @return 销毁的请求url集合
      */
-    public ArrayList<String> getDestoryUrls() {
-        return destoryUrls;
+    public ArrayList<String> getDestroyUrls() {
+        return destroyUrls;
     }
 
 
@@ -315,16 +315,16 @@ public class OhHttpClient {
      * 销毁请求的url
      */
     public void destroyUrl(final String url) {
-        if (destoryUrls.size() > 10) {
-            destoryUrls.remove(0);
+        if (destroyUrls.size() > 10) {
+            destroyUrls.remove(0);
         }
-        for (int i = 0; i < destoryUrls.size(); i++) {
-            if (destoryUrls.get(i).equals(url)) {
-                destoryUrls.remove(i);
+        for (int i = 0; i < destroyUrls.size(); i++) {
+            if (destroyUrls.get(i).equals(url)) {
+                destroyUrls.remove(i);
                 break;
             }
         }
-        destoryUrls.add(url);
+        destroyUrls.add(url);
         if (client != null && url != null) {
 //            if(queue==null){
 //                queue=new LinkedList<String>();
@@ -367,7 +367,7 @@ public class OhHttpClient {
     /**
      * 销毁所有url
      */
-    public void destoryAll() {
+    public void destroyAll() {
         if (client != null) {
             client.dispatcher().cancelAll();
             ohHttpClient = null;
@@ -383,12 +383,20 @@ public class OhHttpClient {
         builder.writeTimeout(WRITETIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
+        client = builder.build();
+    }
+
+    /**
+     * 需要手动开起打印日志防止，其他公共头有问题
+     */
+    public void setLogcat(){
+        okhttp3.OkHttpClient.Builder builder = client.newBuilder();
         //默认就设置日志打印
-        if (logging != null) {
+        if (logging == null) {
             logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addNetworkInterceptor(logging);
         }
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addNetworkInterceptor(logging);
         client = builder.build();
     }
 
@@ -801,7 +809,7 @@ public class OhHttpClient {
             }
         }
         //清理请求的
-        destoryUrls.clear();
+        destroyUrls.clear();
         DownLoad downLoad = new DownLoad(context);
         callbackListener.ohType = 1;// 设置类型是下载
         client.newCall(request).enqueue(new OKHttpCallBack(request, downLoad, callbackListener));
