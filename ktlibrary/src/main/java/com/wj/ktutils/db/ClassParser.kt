@@ -17,7 +17,6 @@
 @file:Suppress("unused")
 package com.wj.ktutils.db
 
-import com.wj.ktutils.AnkoException
 import com.wj.ktutils.db.JavaSqliteUtils.PRIMITIVES_TO_WRAPPERS
 import java.lang.reflect.Modifier
 
@@ -36,14 +35,14 @@ internal fun <T> classParser(clazz: Class<T>): RowParser<T> {
     }
 
     if (applicableConstructors.isEmpty()) {
-        throw AnkoException("Can't initialize object parser for ${clazz.canonicalName}, no acceptable constructors found")
+        throw Exception("Can't initialize object parser for ${clazz.canonicalName}, no acceptable constructors found")
     }
 
     val preferredConstructor = if (applicableConstructors.size > 1) {
         applicableConstructors
                 .filter { it.isAnnotationPresent(ClassParserConstructor::class.java) }
                 .singleOrNull()
-                ?: throw AnkoException("Several constructors are annotated with ClassParserConstructor")
+                ?: throw Exception("Several constructors are annotated with ClassParserConstructor")
     } else {
         applicableConstructors[0]
     }
@@ -55,7 +54,7 @@ internal fun <T> classParser(clazz: Class<T>): RowParser<T> {
             if (parameterTypes.size != columns.size) {
                 val columnsRendered = columns.joinToString(prefix = "[", postfix = "]")
                 val parameterTypesRendered = parameterTypes.joinToString(prefix = "[", postfix = "]") { it.canonicalName }
-                throw AnkoException("Class parser for ${preferredConstructor.name} " +
+                throw Exception("Class parser for ${preferredConstructor.name} " +
                         "failed to parse the row: $columnsRendered (constructor parameter types: $parameterTypesRendered)")
             }
 
@@ -91,7 +90,7 @@ private fun hasApplicableType(type: Class<*>): Boolean {
 
 private fun castValue(value: Any?, type: Class<*>): Any? {
     if (value == null && type.isPrimitive) {
-        throw AnkoException("null can't be converted to the value of primitive type ${type.canonicalName}")
+        throw Exception("null can't be converted to the value of primitive type ${type.canonicalName}")
     }
 
     if (value == null || type == Any::class.java) {
@@ -147,5 +146,5 @@ private fun castValue(value: Any?, type: Class<*>): Any? {
         return value[0]
     }
 
-    throw AnkoException("Value $value of type ${value::class.java} can't be cast to ${type.canonicalName}")
+    throw Exception("Value $value of type ${value::class.java} can't be cast to ${type.canonicalName}")
 }

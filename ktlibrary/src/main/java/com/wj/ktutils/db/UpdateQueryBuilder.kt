@@ -19,7 +19,6 @@ package com.wj.ktutils.db
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import com.wj.ktutils.AnkoException
 
 abstract class UpdateQueryBuilder(
         val tableName: String,
@@ -36,7 +35,7 @@ abstract class UpdateQueryBuilder(
 
     fun whereArgs(select: String, vararg args: Pair<String, Any>): UpdateQueryBuilder {
         if (selectionApplied) {
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
         }
 
         selectionApplied = true
@@ -54,7 +53,7 @@ abstract class UpdateQueryBuilder(
 
     fun whereArgs(select: String): UpdateQueryBuilder {
         if (selectionApplied)
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
 
         selectionApplied = true
         useNativeSelection = false
@@ -64,7 +63,7 @@ abstract class UpdateQueryBuilder(
 
     fun whereSimple(select: String, vararg args: String): UpdateQueryBuilder {
         if (selectionApplied)
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
 
         selectionApplied = true
         useNativeSelection = true

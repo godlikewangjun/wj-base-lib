@@ -38,33 +38,9 @@ import java.util.Locale
 object AnkoInternals {
     const val NO_GETTER: String = "Property does not have a getter"
 
-    fun noGetter(): Nothing = throw AnkoException("Property does not have a getter")
 
     private class AnkoContextThemeWrapper(base: Context?, val theme: Int) : ContextThemeWrapper(base, theme)
 
-    fun <T : View> addView(manager: ViewManager, view: T) = when (manager) {
-        is ViewGroup -> manager.addView(view)
-        is AnkoContext<*> -> manager.addView(view, null)
-        else -> throw AnkoException("$manager is the wrong parent")
-    }
-
-    fun <T : View> addView(ctx: Context, view: T) {
-        ctx.UI { addView(this, view) }
-    }
-
-    fun <T : View> addView(activity: Activity, view: T) {
-        createAnkoContext(activity, { addView(this, view) }, true)
-    }
-
-    fun wrapContextIfNeeded(ctx: Context, theme: Int): Context {
-        return if (theme != 0 && (ctx !is AnkoContextThemeWrapper || ctx.theme != theme)) {
-            // If the context isn't a ContextThemeWrapper, or it is but does not have
-            // the same theme as we need, wrap it in a new wrapper
-            AnkoContextThemeWrapper(ctx, theme)
-        } else {
-            ctx
-        }
-    }
 
     fun applyRecursively(v: View, style: (View) -> Unit) {
         style(v)
@@ -79,7 +55,7 @@ object AnkoInternals {
     fun getContext(manager: ViewManager): Context = when (manager) {
         is ViewGroup -> manager.context
         is AnkoContext<*> -> manager.ctx
-        else -> throw AnkoException("$manager is the wrong parent")
+        else -> throw Exception("$manager is the wrong parent")
     }
 
     inline fun <T> T.createAnkoContext(
@@ -164,7 +140,7 @@ object AnkoInternals {
                     value.isArrayOf<CharSequence>() -> intent.putExtra(it.first, value)
                     value.isArrayOf<String>() -> intent.putExtra(it.first, value)
                     value.isArrayOf<Parcelable>() -> intent.putExtra(it.first, value)
-                    else -> throw AnkoException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
+                    else -> throw Exception("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
                 }
                 is IntArray -> intent.putExtra(it.first, value)
                 is LongArray -> intent.putExtra(it.first, value)
@@ -173,7 +149,7 @@ object AnkoInternals {
                 is CharArray -> intent.putExtra(it.first, value)
                 is ShortArray -> intent.putExtra(it.first, value)
                 is BooleanArray -> intent.putExtra(it.first, value)
-                else -> throw AnkoException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
+                else -> throw Exception("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
             }
             return@forEach
         }
@@ -195,127 +171,6 @@ object AnkoInternals {
                 }
             }
         }
-    }
-
-    @JvmStatic
-    fun <T : View> initiateView(ctx: Context, viewClass: Class<T>): T {
-        fun getConstructor1() = viewClass.getConstructor(Context::class.java)
-        fun getConstructor2() = viewClass.getConstructor(Context::class.java, AttributeSet::class.java)
-
-        try {
-            return getConstructor1().newInstance(ctx)
-        } catch (e: NoSuchMethodException) {
-            try {
-                return getConstructor2().newInstance(ctx, null)
-            }
-            catch (e: NoSuchMethodException) {
-                throw AnkoException("Can't initiate View of class ${viewClass.name}: can't find proper constructor")
-            }
-        }
-
-    }
-
-    @JvmStatic
-    fun testConfiguration(
-            ctx: Context,
-            screenSize: ScreenSize?,
-            density: ClosedRange<Int>?,
-            language: String?,
-            orientation: Orientation?,
-            long: Boolean?,
-            fromSdk: Int?,
-            sdk: Int?,
-            uiMode: UiMode?,
-            nightMode: Boolean?,
-            rightToLeft: Boolean?,
-            smallestWidth: Int?
-    ): Boolean {
-        val config = ctx.resources?.configuration
-
-        if (screenSize != null) {
-            if (config == null) return false
-            val currentScreenSize = config.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
-            when (currentScreenSize) {
-                Configuration.SCREENLAYOUT_SIZE_UNDEFINED -> {}
-                Configuration.SCREENLAYOUT_SIZE_SMALL -> if (screenSize != ScreenSize.SMALL) return false
-                Configuration.SCREENLAYOUT_SIZE_NORMAL -> if (screenSize != ScreenSize.NORMAL) return false
-                Configuration.SCREENLAYOUT_SIZE_LARGE -> if (screenSize != ScreenSize.LARGE) return false
-                Configuration.SCREENLAYOUT_SIZE_XLARGE -> if (screenSize != ScreenSize.XLARGE) return false
-            }
-        }
-
-        if (density != null) {
-            val currentDensityDpi = ctx.resources?.displayMetrics?.densityDpi ?: return false
-            if (currentDensityDpi !in density || currentDensityDpi == density.endInclusive) return false
-        }
-
-        if (language != null) {
-            val locale = Locale.getDefault()
-            val currentLanguage = if (language.indexOf('_') >= 0) locale.toString() else locale.language
-            if (currentLanguage != language) return false
-        }
-
-        if (orientation != null) {
-            if (config == null) return false
-            when (config.orientation) {
-                Configuration.ORIENTATION_LANDSCAPE -> if (orientation != Orientation.LANDSCAPE) return false
-                Configuration.ORIENTATION_PORTRAIT -> if (orientation != Orientation.PORTRAIT) return false
-                Configuration.ORIENTATION_SQUARE -> if (orientation != Orientation.SQUARE) return false
-            }
-        }
-
-        if (long != null) {
-            if (config == null) return false
-            val currentLong = config.screenLayout and Configuration.SCREENLAYOUT_LONG_MASK
-            if (currentLong == Configuration.SCREENLAYOUT_LONG_YES && !long) return false
-            if (currentLong == Configuration.SCREENLAYOUT_LONG_NO && long) return false
-        }
-
-        if (fromSdk != null) {
-            if (Build.VERSION.SDK_INT < fromSdk) return false
-        }
-
-        if (sdk != null) {
-            if (Build.VERSION.SDK_INT != sdk) return false
-        }
-
-        if (uiMode != null) {
-            if (config == null) return false
-            when (config.uiMode and Configuration.UI_MODE_TYPE_MASK) {
-                Configuration.UI_MODE_TYPE_NORMAL -> if (uiMode != UiMode.NORMAL) return false
-                Configuration.UI_MODE_TYPE_DESK -> if (uiMode != UiMode.DESK) return false
-                Configuration.UI_MODE_TYPE_CAR -> if (uiMode != UiMode.CAR) return false
-                Configuration.UI_MODE_TYPE_TELEVISION -> if (uiMode != UiMode.TELEVISION) return false
-                AnkoInternals.InternalConfiguration.UI_MODE_TYPE_APPLIANCE -> if (uiMode != UiMode.APPLIANCE) return false
-                AnkoInternals.InternalConfiguration.UI_MODE_TYPE_WATCH -> if (uiMode != UiMode.WATCH) return false
-            }
-        }
-
-        if (nightMode != null) {
-            val uiModeManager = ctx.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager ?: return false
-
-            val currentMode = uiModeManager.nightMode
-            if (currentMode == UiModeManager.MODE_NIGHT_YES && !nightMode) return false
-            if (currentMode == UiModeManager.MODE_NIGHT_NO && nightMode) return false
-        }
-
-        if (rightToLeft != null) {
-            if (config == null) return false
-            val rtlMode = (config.screenLayout and
-                    AnkoInternals.InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_MASK) == AnkoInternals.InternalConfiguration.SCREENLAYOUT_LAYOUTDIR_RTL
-            if (rtlMode != rightToLeft) return false
-        }
-
-        if (smallestWidth != null) {
-            if (config == null) return false
-
-            if (config.smallestScreenWidthDp == Configuration.SMALLEST_SCREEN_WIDTH_DP_UNDEFINED) {
-                if (smallestWidth != Configuration.SMALLEST_SCREEN_WIDTH_DP_UNDEFINED) return false
-            }
-            else if (config.smallestScreenWidthDp < smallestWidth) return false
-        }
-
-        return true
     }
 
 }

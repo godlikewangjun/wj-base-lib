@@ -19,7 +19,6 @@ package com.wj.ktutils.db
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.wj.ktutils.AnkoException
 import com.wj.ktutils.AnkoInternals
 
 abstract class SelectQueryBuilder(val tableName: String) {
@@ -131,7 +130,7 @@ abstract class SelectQueryBuilder(val tableName: String) {
 
     fun having(having: String): SelectQueryBuilder {
         if (havingApplied) {
-            throw AnkoException("Query having was already applied.")
+            throw Exception("Query having was already applied.")
         }
 
         havingApplied = true
@@ -141,7 +140,7 @@ abstract class SelectQueryBuilder(val tableName: String) {
 
     fun having(having: String, vararg args: Pair<String, Any>): SelectQueryBuilder {
         if (selectionApplied) {
-            throw AnkoException("Query having was already applied.")
+            throw Exception("Query having was already applied.")
         }
 
         havingApplied = true
@@ -156,7 +155,7 @@ abstract class SelectQueryBuilder(val tableName: String) {
 
     fun whereArgs(select: String, vararg args: Pair<String, Any>): SelectQueryBuilder {
         if (selectionApplied) {
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
         }
 
         selectionApplied = true
@@ -172,7 +171,7 @@ abstract class SelectQueryBuilder(val tableName: String) {
 
     fun whereArgs(select: String): SelectQueryBuilder {
         if (selectionApplied) {
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
         }
 
         selectionApplied = true
@@ -183,7 +182,7 @@ abstract class SelectQueryBuilder(val tableName: String) {
 
     fun whereSimple(select: String, vararg args: String): SelectQueryBuilder {
         if (selectionApplied) {
-            throw AnkoException("Query selection was already applied.")
+            throw Exception("Query selection was already applied.")
         }
 
         selectionApplied = true
