@@ -24,8 +24,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.abase.util.AbAppUtil
 
 inline fun <reified T: Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
         AnkoInternals.internalStartActivity(this, T::class.java, params)
@@ -235,4 +237,20 @@ fun Context.sendSMS(number: String, text: String = ""): Boolean {
         e.printStackTrace()
         return false
     }
+}
+
+fun Activity.showSoftInput(){
+    AbAppUtil.showSoftInput(this)
+}
+
+fun Fragment.showSoftInput(){
+    AbAppUtil.showSoftInput(this.activity)
+}
+
+fun Activity.showSoftInput(view:View){
+    AbAppUtil.showSoftInput(this,view)
+}
+
+fun Fragment.showSoftInput(view:View){
+    AbAppUtil.showSoftInput(this.activity,view)
 }
