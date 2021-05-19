@@ -3,8 +3,8 @@
 buildscript {
     ext.kotlin_version = '1.4.21'
     repositories {
-        jcenter()
         google()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
@@ -16,8 +16,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        maven { url 'https://jitpack.io' }
         maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        mavenCentral()
         google()
     }
 }

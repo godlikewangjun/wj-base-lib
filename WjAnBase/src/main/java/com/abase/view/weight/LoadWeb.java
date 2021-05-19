@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
+
 import android.util.AttributeSet;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -29,9 +31,7 @@ import android.widget.RelativeLayout;
 import com.abase.okhttp.OhFileCallBakListener;
 import com.abase.okhttp.OhHttpClient;
 import com.abase.view.weight.web.ObservableWebView;
-import com.abase.view.weight.web.SonicSessionClientImpl;
 import com.abase.view.weight.web.WebMethodsListener;
-import com.tencent.sonic.sdk.SonicSession;
 import com.wj.eventbus.WjEventBus;
 
 
@@ -49,18 +49,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     private ProgressDialog alertDialog = null;
     public static String LOADERROE = "webLoadError";
     public static String LOADFINSH = "webLoadFinsh";
-    private SonicSession sonicSession;
-    private SonicSessionClientImpl sonicSessionClient = null;
     public WebMethodsListener webMethodsListener;
-
-    public void setSonicSession(SonicSession sonicSession) {
-        this.sonicSession = sonicSession;
-    }
-
-    public void setSonicSessionClient(SonicSessionClientImpl sonicSessionClient) {
-        this.sonicSessionClient = sonicSessionClient;
-    }
-
 
 
     public LoadWeb(Context context) {
@@ -92,13 +81,9 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     /**
      * 重新加载
      */
-    public void reload(){
-        if (sonicSession != null) {
-            sonicSession.refresh();
-        }
+    public void reload() {
         mWebView.reload();
     }
-
 
 
     /**
@@ -168,16 +153,17 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     WebChromeClient chromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int progress) {
-            if(webMethodsListener!=null){
-                webMethodsListener.onProgressChanged(view,progress);
+            if (webMethodsListener != null) {
+                webMethodsListener.onProgressChanged(view, progress);
             }
 
         }
+
         //处理定位权限
         @Override
         public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
-            if(webMethodsListener!=null){
-                if(webMethodsListener.onGeolocationPermissionsShowPrompt(origin,callback)){
+            if (webMethodsListener != null) {
+                if (webMethodsListener.onGeolocationPermissionsShowPrompt(origin, callback)) {
                     return;
                 }
             }
@@ -208,11 +194,9 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (sonicSession != null) {
-                sonicSession.getSessionClient().pageFinish(url);
-            }
             WjEventBus.getInit().post(LoadWeb.LOADFINSH, 0);
         }
+
         @TargetApi(21)
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
@@ -221,12 +205,9 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            if (sonicSession != null) {
-                return (WebResourceResponse) sonicSession.getSessionClient().requestResource(url);
-            }
             return null;
         }
-        
+
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 //            mWebView.loadUrl("file:///android_asset/load_fail.html");
@@ -273,22 +254,18 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         this.url = url;
         if (url.indexOf("http") < 0) {
             url = "file:///android_asset/" + url;
-        } else if(url.indexOf("http")==0 || url.indexOf("https")==0) {
+        } else if (url.indexOf("http") == 0 || url.indexOf("https") == 0) {
             // webview is ready now, just tell session client to bind
-            if (sonicSessionClient != null) {
-                sonicSessionClient.bindWebView(mWebView);
-                sonicSessionClient.clientReady();
-            } else { // default mode
-                mWebView.loadUrl(url);
-            }
+            mWebView.loadUrl(url);
         }
     }
 
     /**
      * 加载html
+     *
      * @param html
      */
-    public void loadHtml(String html){
+    public void loadHtml(String html) {
         mWebView.loadData(html, "text/html; charset=UTF-8", null);//这种写法可以正确解码
     }
 
