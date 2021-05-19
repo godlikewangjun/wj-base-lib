@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 
 
 version '1.2.67'//版本号 gradlew install gradlew bintrayUpload
-group 'com.wj.libs'// com.wj.libs
+group='com.github.godlikewangjun'
 
 //上传maven
 
