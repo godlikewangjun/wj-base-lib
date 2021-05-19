@@ -60,7 +60,9 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        NotificationUtils(activity).setContentIntent(PendingIntent.getBroadcast(activity, (System.currentTimeMillis() / 1000).toInt(), intent, PendingIntent.FLAG_CANCEL_CURRENT))
 //                .sendNotification((System.currentTimeMillis()/1000).toInt(),"","11111", R.mipmap.ic_launcher,  R.mipmap.ic_launcher)
 //        Glide.with(this).load("https://n.sinaimg.cn/fashion/crawl/162/w550h412/20190814/594a-icapxpi5137199.jpg").preload()
-        val result= WjSP.init(activity).getValues("",0)
+//        WjSP.init(activity).setValues("123","1231")
+        val result= WjSP.init(activity).getValues("123","")
+        println(result+" ---------------------- ")
     }
 
     //    override fun before() {

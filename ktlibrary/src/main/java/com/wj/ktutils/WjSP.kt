@@ -11,20 +11,34 @@ import com.abase.util.AbLogUtil
  * @version 1.0
  * @date 2018/1/4
  */
-class WjSP(context: Context?) {
+class WjSP() {
+    constructor(context: Context?) : this() {
+        if (wjContext.get() == null) {
+            wjContext = SaveContext(context)
+        }
+        if (default_SP == null) {
+            default_SP = context!!.getSharedPreferences(
+                FILE_NAME,
+                Context.MODE_PRIVATE
+            )
+        }
+    }
+
     /**
      * 切换操作的SharedPreferences的库
      *
      * @param spName 名称
      */
     fun changSpData(spName: String?): WjSP? {
-        if (wjcontext.get() == null) {
+        if (wjContext.get() == null) {
             AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
-        default_SP = wjcontext.get()!!.getSharedPreferences(spName,
-                Context.MODE_PRIVATE)
-        return init(wjcontext.get())
+        default_SP = wjContext.get()!!.getSharedPreferences(
+            spName,
+            Context.MODE_PRIVATE
+        )
+        return init(wjContext.get())
     }
 
     /**
@@ -34,7 +48,7 @@ class WjSP(context: Context?) {
      * @param object
      */
     fun setValues(key: String?, `object`: Any): WjSP? {
-        if (wjcontext.get() == null) {
+        if (wjContext.get() == null) {
             AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
@@ -58,7 +72,7 @@ class WjSP(context: Context?) {
             }
         }
         editor.apply()
-        return init(wjcontext.get())
+        return init(wjContext.get())
     }
 
     /**
@@ -83,10 +97,7 @@ class WjSP(context: Context?) {
         if (defaultObject == null) {
             return default_SP!!.getString(key, null)
         }
-        var type = "String"
-        if (defaultObject != null) {
-            type = defaultObject.javaClass.simpleName
-        }
+        val type = defaultObject.javaClass.simpleName
         when (type) {
             "String" -> {
                 return default_SP!!.getString(key, defaultObject as String?)
@@ -112,12 +123,12 @@ class WjSP(context: Context?) {
      *
      */
     fun clear(): WjSP? {
-        if (wjcontext.get() == null) {
+        if (wjContext.get() == null) {
             AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
         default_SP!!.edit().clear().apply()
-        return init(wjcontext.get())
+        return init(wjContext.get())
     }
 
     /**
@@ -126,13 +137,13 @@ class WjSP(context: Context?) {
      * @param key
      */
     fun remove(context: Context?, key: String?): WjSP? {
-        if (wjcontext.get() == null) {
+        if (wjContext.get() == null) {
             AbLogUtil.e(WjSP::class.java, "context is null,before init")
             return null
         }
         val editor = default_SP!!.edit()
         editor.remove(key).apply()
-        return init(wjcontext.get())
+        return init(wjContext.get())
     }
 
     /**
@@ -156,14 +167,13 @@ class WjSP(context: Context?) {
          * @return
          */
         var default_SP: SharedPreferences? = null
-            private set
         private var wjSharedPreferences: WjSP? = null
 
         /**
          * 缓存context
          */
         @Volatile
-        private var wjcontext = SaveContext<Context?>(null)
+        private var wjContext = SaveContext<Context?>(null)
 
         /**
          * 初始化
@@ -185,16 +195,6 @@ class WjSP(context: Context?) {
         @Synchronized
         fun getInstance(): WjSP {
             return wjSharedPreferences!!
-        }
-    }
-
-    init {
-        if (wjcontext.get() == null) {
-            wjcontext = SaveContext(context!!.applicationContext)
-        }
-        if (default_SP == null) {
-            default_SP = context!!.getSharedPreferences(FILE_NAME,
-                    Context.MODE_PRIVATE)
         }
     }
 }
