@@ -50,13 +50,6 @@ android {
         exclude 'LICENSE.txt'
     }
 
-    //忽略编译资源检查
-    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-    }
     //指定jdk版本
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
