@@ -64,7 +64,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
      * 是否打印json格式化之前的数据
      * 默认是false
      */
-    private boolean isPrintResult = false;
+    private final boolean isPrintResult = false;
 
     /**
      * 处理body解析,防止卡顿放在线程处理
@@ -144,17 +144,20 @@ public final class HttpLoggingInterceptor implements Interceptor {
     public interface Logger {
         void log(String message);
 
-        int style_log = 0;//默认是0 自定义i的打印 1是okhttp的打印
         /**
          * A {@link Logger} defaults output appropriate for the current platform.
          */
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-                if (style_log == 0)
-                    AbLogUtil.e(HttpLoggingInterceptor.class, message);
-                else
-                    Platform.get().log(message,WARN, null);
+                Platform.get().log(message, WARN, null);
+            }
+        };
+
+        Logger JSON = new Logger() {
+            @Override
+            public void log(String message) {
+                AbLogUtil.e(HttpLoggingInterceptor.class, message);
             }
         };
     }
@@ -168,6 +171,10 @@ public final class HttpLoggingInterceptor implements Interceptor {
     }
 
     private final Logger logger;
+
+    public Logger getLogger() {
+        return logger;
+    }
 
     private Set<String> headersToRedact = Collections.emptySet();
 
@@ -302,7 +309,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();
         String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
-            logger.log("<-- "
+        logger.log("<-- "
                 + response.code()
                 + (response.message().isEmpty() ? "" : ' ' + response.message())
                 + ' ' + response.request().url()
@@ -383,7 +390,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
             }
         }
 
-            return response;
+        return response;
     }
 
     private void logHeader(Headers headers, int i) {
