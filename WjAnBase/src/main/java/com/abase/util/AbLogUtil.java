@@ -132,7 +132,23 @@ public class AbLogUtil {
 	 */
 	public static void e(String tag,String message) {
 		if(D){
-			Log.e(tag, message);
+			int strLength = message.length();
+			int start = 0;
+			int end = LOG_MAXLENGTH;
+			int count=1;
+			if(strLength%LOG_MAXLENGTH>0){
+				count=strLength/LOG_MAXLENGTH+1;
+			}else if(strLength%LOG_MAXLENGTH==0){
+				count=strLength/LOG_MAXLENGTH;
+			}
+			if(strLength<=LOG_MAXLENGTH){
+				Log.e(tag, message);
+				return;
+			}
+			while (message.length() > LOG_MAXLENGTH) {
+				Log.e(tag, message.substring(0, LOG_MAXLENGTH));
+				message = message.substring(LOG_MAXLENGTH);
+			}
 		}
 	}
 	
@@ -154,6 +170,53 @@ public class AbLogUtil {
 	public static void e(Class<?> clazz,String message) {
 		String tag = clazz.getSimpleName();
 		e(tag, message);
+	}
+
+	/**
+	 * error日志
+	 * @param tag
+	 * @param message
+	 */
+	public static void w(String tag,String message) {
+		if(D){
+			int strLength = message.length();
+			int start = 0;
+			int end = LOG_MAXLENGTH;
+			int count=1;
+			if(strLength%LOG_MAXLENGTH>0){
+				count=strLength/LOG_MAXLENGTH+1;
+			}else if(strLength%LOG_MAXLENGTH==0){
+				count=strLength/LOG_MAXLENGTH;
+			}
+			if(strLength<=LOG_MAXLENGTH){
+				Log.w(tag, message);
+				return;
+			}
+			while (message.length() > LOG_MAXLENGTH) {
+				Log.w(tag, message.substring(0, LOG_MAXLENGTH));
+				message = message.substring(LOG_MAXLENGTH);
+			}
+		}
+	}
+
+	/**
+	 * error日志
+	 * @param context
+	 * @param message
+	 */
+	public static void w(Context context,String message) {
+		String tag = context.getClass().getSimpleName();
+		w(tag, message);
+	}
+
+	/**
+	 * error日志
+	 * @param clazz
+	 * @param message
+	 */
+	public static void w(Class<?> clazz,String message) {
+		String tag = clazz.getSimpleName();
+		w(tag, message);
 	}
 
 	/**

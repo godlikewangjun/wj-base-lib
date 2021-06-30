@@ -144,20 +144,17 @@ public final class HttpLoggingInterceptor implements Interceptor {
     public interface Logger {
         void log(String message);
 
+        int style_log = 0;//默认是0 自定义i的打印 1是okhttp的打印
         /**
          * A {@link Logger} defaults output appropriate for the current platform.
          */
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-                Platform.get().log(message, WARN, null);
-            }
-        };
-
-        Logger JSON = new Logger() {
-            @Override
-            public void log(String message) {
-                AbLogUtil.e(HttpLoggingInterceptor.class, message);
+                if (style_log == 0)
+                    AbLogUtil.w(HttpLoggingInterceptor.class, message);
+                else
+                    Platform.get().log(message,WARN , null);
             }
         };
     }
