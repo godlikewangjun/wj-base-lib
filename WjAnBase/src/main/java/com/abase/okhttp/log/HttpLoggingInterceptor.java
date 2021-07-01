@@ -60,6 +60,7 @@ import static okhttp3.internal.platform.Platform.WARN;
  */
 public final class HttpLoggingInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
+    public static int style_log = 0;//默认是0 自定义i的打印 1是okhttp的打印
     /**
      * 是否打印json格式化之前的数据
      * 默认是false
@@ -144,7 +145,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
     public interface Logger {
         void log(String message);
 
-        int style_log = 0;//默认是0 自定义i的打印 1是okhttp的打印
         /**
          * A {@link Logger} defaults output appropriate for the current platform.
          */
