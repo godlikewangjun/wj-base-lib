@@ -3,11 +3,9 @@
 @file:kotlin.jvm.JvmName("WjStringsKt")
 package com.wj.ktutils
 
-import android.app.Fragment
 import android.content.Context
 import com.abase.util.AbStrUtil
 import com.abase.util.ToastUtil
-import com.abase.util.Tools
 
 /**
  * String扩展方法
@@ -25,10 +23,7 @@ inline fun CharSequence?.isEmail(): Boolean =
         AbStrUtil.isEmail(this.toString())
 
 inline fun Context?.showTip(string: String) =
-       ToastUtil.showTip(this,string)
-
-inline fun Fragment?.showTip(string: String) =
-        ToastUtil.showTip(this!!.activity,string)
+        this?.runOnUiThread { ToastUtil.showTip(this,string) }
 
 inline fun androidx.fragment.app.Fragment?.showTip(string: String) =
-        ToastUtil.showTip(this!!.activity,string)
+        this?.runOnUiThread { ToastUtil.showTip(this.context,string) }
