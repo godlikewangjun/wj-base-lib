@@ -1,18 +1,10 @@
 # WjAnBase
 android开发的基础框架 。私用框架，不提供demo。
 
-***maven 依赖***<br>
+***https://jitpack.io/ 的gradle 依赖***<br>
+版本：[![](https://jitpack.io/v/godlikewangjun/Wjktlib.svg)](https://jitpack.io/#godlikewangjun/Wjktlib)
 ```
-<dependency>
-  <groupId>com.wj.libs</groupId>
-  <artifactId>wjAndBase</artifactId>
-  <version>1.0.0</version>
-  <type>pom</type>
-</dependency>
-```
-***gradle 依赖***<br>
-```
-compile 'com.wj.libs:wjAndBase:1.0.0'
+ api 'com.github.godlikewangjun.Wjktlib:WjAnBase:1.6.9.5'
 ```
 ***项目简述***<br>
 项目主要有网络请求okhttp的封装,Glide的图片缓存,一些工具类和其他UI效果等，框架还在整理,
