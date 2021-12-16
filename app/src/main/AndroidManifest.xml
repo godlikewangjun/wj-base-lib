@@ -33,7 +33,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme_status"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PermissionCheckActivity">
+        <activity android:name=".PermissionCheckActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
