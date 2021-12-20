@@ -223,7 +223,24 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed();
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setMessage("SSL认证失败，是否继续访问？");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.proceed();
+                }
+            });
+
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.cancel();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     };
 
