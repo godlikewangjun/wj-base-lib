@@ -1,7 +1,7 @@
 apply plugin: 'maven-publish'
 
 
-version '1.2.68'//版本号 gradlew install gradlew bintrayUpload
+version '1.2.69'//版本号 gradlew install gradlew bintrayUpload
 group='com.github.godlikewangjun'
 
 //上传maven
