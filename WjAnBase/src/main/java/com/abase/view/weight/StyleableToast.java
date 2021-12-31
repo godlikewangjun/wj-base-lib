@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FontRes;
@@ -19,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
+
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -67,6 +69,7 @@ public class StyleableToast extends LinearLayout {
     private int gravity;
     private Toast toast;
     private LinearLayout rootLayout;
+    private int viewId = -1;
 
     public static StyleableToast makeText(@NonNull Context context, String text, int length, @StyleRes int style) {
         return new StyleableToast(context, text, length, style);
@@ -99,10 +102,14 @@ public class StyleableToast extends LinearLayout {
         this.text = builder.text;
         this.gravity = builder.gravity;
         this.length = builder.length;
+        this.viewId = builder.viewId;
     }
 
     private void initStyleableToast() {
-        View v = inflate(getContext(), R.layout.styleable_layout, null);
+        View v;
+        if (viewId != -1) v = inflate(getContext(), R.layout.styleable_layout, null);
+        else v = inflate(getContext(), viewId, null);
+
         rootLayout = (LinearLayout) v.getRootView();
         textView = v.findViewById(R.id.textview);
         if (style > 0) {
@@ -280,7 +287,7 @@ public class StyleableToast extends LinearLayout {
         private int iconEnd;
         private int textColor;
         private int font;
-        private int length=Toast.LENGTH_LONG;
+        private int length = Toast.LENGTH_LONG;
         private float textSize;
         private boolean solidBackground;
         private boolean textBold;
@@ -288,7 +295,8 @@ public class StyleableToast extends LinearLayout {
         private int gravity = Gravity.BOTTOM;
         private StyleableToast toast;
         private final Context context;
-        private long showTime=0L;
+        private long showTime = 0L;
+        private int viewId = -1;
 
         public Builder(@NonNull Context context) {
             this.context = context;
@@ -341,6 +349,11 @@ public class StyleableToast extends LinearLayout {
             return this;
         }
 
+        public Builder setView(int viewId) {
+            this.viewId = viewId;
+            return this;
+        }
+
         /**
          * @param cornerRadius Sets the corner radius of the StyleableToast's shape.
          */
@@ -375,15 +388,20 @@ public class StyleableToast extends LinearLayout {
             return this;
         }
 
-        public void show() {
-            if(toast!=null && System.currentTimeMillis()-showTime<3*1000) {
+        public StyleableToast getToast() {
+            if (toast != null && System.currentTimeMillis() - showTime < 3 * 1000) {
                 toast.textView.setText(text);
-                return;
+                return toast;
             }
             toast = new StyleableToast(this);
-            toast.show();
-            showTime=System.currentTimeMillis();
+            return toast;
         }
+
+        public void show() {
+            getToast().show();
+            showTime = System.currentTimeMillis();
+        }
+
         public StyleableToast build() {
             toast = new StyleableToast(this);
             return toast;

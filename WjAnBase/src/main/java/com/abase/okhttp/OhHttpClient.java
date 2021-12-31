@@ -370,8 +370,8 @@ public class OhHttpClient {
     public void destroyAll() {
         if (client != null) {
             client.dispatcher().cancelAll();
-            ohHttpClient = null;
         }
+        ohHttpClient = null;
     }
 
     /**
