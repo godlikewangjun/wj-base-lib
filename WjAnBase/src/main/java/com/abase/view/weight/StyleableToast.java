@@ -107,7 +107,7 @@ public class StyleableToast extends LinearLayout {
 
     private void initStyleableToast() {
         View v;
-        if (viewId != -1) v = inflate(getContext(), R.layout.styleable_layout, null);
+        if (viewId == -1) v = inflate(getContext(), R.layout.styleable_layout, null);
         else v = inflate(getContext(), viewId, null);
 
         rootLayout = (LinearLayout) v.getRootView();
