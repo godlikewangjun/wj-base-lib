@@ -36,14 +36,15 @@ public class AbWifiUtil {
      * @return
      */
     public static boolean isConnectivity(Context context) {
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        TelephonyManager telephonyManager = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return ((connectivityManager.getActiveNetworkInfo() != null && connectivityManager
-                .getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED) || telephonyManager
-                .getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS);
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
     }
 
     /**
