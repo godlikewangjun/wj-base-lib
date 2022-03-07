@@ -47,6 +47,7 @@ class WjSP() {
      * @param key
      * @param object
      */
+    @Synchronized
     fun setValues(key: String?, `object`: Any): WjSP? {
         if (wjContext.get() == null) {
             AbLogUtil.e(WjSP::class.java, "context is null,before init")
@@ -82,6 +83,7 @@ class WjSP() {
      * @param defaultObject
      * @return
      */
+    @Synchronized
     fun <V> getValues(key: String, defaultObject: V?): V {
         return get(key, defaultObject) as V
     }
@@ -97,8 +99,7 @@ class WjSP() {
         if (defaultObject == null) {
             return default_SP!!.getString(key, null)
         }
-        val type = defaultObject.javaClass.simpleName
-        when (type) {
+        when (defaultObject.javaClass.simpleName) {
             "String" -> {
                 return default_SP!!.getString(key, defaultObject as String?)
             }

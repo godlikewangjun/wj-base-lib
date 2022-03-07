@@ -31,11 +31,7 @@ public class ToastUtil {
      * @param text    显示的内容
      */
     public static void showTip(final Context context, final String text) {
-        if (toast != null &&  toast.get()!=null) {
-            toast.get().text(text);
-        } else {
-            toast =new SoftReference<>(cusBuild(context).text(text));
-        }
+        toast =new SoftReference<>(cusBuild(context).text(text));
         toast.get().show();
     }
 
