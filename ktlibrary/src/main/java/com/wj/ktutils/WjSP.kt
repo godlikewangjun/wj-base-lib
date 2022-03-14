@@ -3,6 +3,7 @@ package com.wj.ktutils
 import android.content.Context
 import android.content.SharedPreferences
 import com.abase.util.AbLogUtil
+import com.tencent.mmkv.MMKV
 
 /**
  * 简单的SharedPreferences存储工具
@@ -12,33 +13,15 @@ import com.abase.util.AbLogUtil
  * @date 2018/1/4
  */
 class WjSP() {
-    constructor(context: Context?) : this() {
-        if (wjContext.get() == null) {
-            wjContext = SaveContext(context)
-        }
-        if (default_SP == null) {
-            default_SP = context!!.getSharedPreferences(
-                FILE_NAME,
-                Context.MODE_PRIVATE
-            )
-        }
-    }
 
     /**
      * 切换操作的SharedPreferences的库
      *
      * @param spName 名称
      */
-    fun changSpData(spName: String?): WjSP? {
-        if (wjContext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,before init")
-            return null
-        }
-        default_SP = wjContext.get()!!.getSharedPreferences(
-            spName,
-            Context.MODE_PRIVATE
-        )
-        return init(wjContext.get())
+    fun changSpData(spName: String?): MMKV? {
+        mmkv=MMKV.mmkvWithID(spName)
+        return mmkv
     }
 
     /**
@@ -49,31 +32,28 @@ class WjSP() {
      */
     @Synchronized
     fun setValues(key: String?, `object`: Any): WjSP? {
-        if (wjContext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,before init")
-            return null
-        }
         val type = `object`.javaClass.simpleName
-        val editor = default_SP!!.edit()
         when (type) {
             "String" -> {
-                editor.putString(key, `object` as String)
+                mmkv?.encode(key, `object` as String)
             }
             "Integer" -> {
-                editor.putInt(key, (`object` as Int))
+                mmkv?.encode(key, (`object` as Int))
             }
             "Boolean" -> {
-                editor.putBoolean(key, (`object` as Boolean))
+                mmkv?.encode(key, (`object` as Boolean))
             }
             "Float" -> {
-                editor.putFloat(key, (`object` as Float))
+                mmkv?.encode(key, (`object` as Float))
             }
             "Long" -> {
-                editor.putLong(key, (`object` as Long))
+                mmkv?.encode(key, (`object` as Long))
+            }
+            "ByteArray" -> {
+                mmkv?.encode(key, (`object` as ByteArray))
             }
         }
-        editor.apply()
-        return init(wjContext.get())
+        return getInstance()
     }
 
     /**
@@ -97,23 +77,26 @@ class WjSP() {
      */
     private operator fun get(key: String, defaultObject: Any?): Any? {
         if (defaultObject == null) {
-            return default_SP!!.getString(key, null)
+            return mmkv!!.decodeString(key, null)
         }
         when (defaultObject.javaClass.simpleName) {
             "String" -> {
-                return default_SP!!.getString(key, defaultObject as String?)
+                return mmkv!!.decodeString(key, defaultObject as String?)
             }
             "Integer" -> {
-                return default_SP!!.getInt(key, (defaultObject as Int?)!!)
+                return mmkv!!.decodeInt(key, (defaultObject as Int?)!!)
             }
             "Boolean" -> {
-                return default_SP!!.getBoolean(key, (defaultObject as Boolean?)!!)
+                return mmkv!!.decodeBool(key, (defaultObject as Boolean?)!!)
             }
             "Float" -> {
-                return default_SP!!.getFloat(key, (defaultObject as Float?)!!)
+                return mmkv!!.decodeFloat(key, (defaultObject as Float?)!!)
             }
             "Long" -> {
-                return default_SP!!.getLong(key, (defaultObject as Long?)!!)
+                return mmkv!!.decodeLong(key, (defaultObject as Long?)!!)
+            }
+            "ByteArray" -> {
+                return mmkv!!.decodeBytes(key, (defaultObject as ByteArray?)!!)
             }
             else -> return null
         }
@@ -124,12 +107,8 @@ class WjSP() {
      *
      */
     fun clear(): WjSP? {
-        if (wjContext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,before init")
-            return null
-        }
-        default_SP!!.edit().clear().apply()
-        return init(wjContext.get())
+        mmkv!!.clearAll()
+        return getInstance()
     }
 
     /**
@@ -137,15 +116,11 @@ class WjSP() {
      *
      * @param key
      */
-    fun remove(context: Context?, key: String?): WjSP? {
-        if (wjContext.get() == null) {
-            AbLogUtil.e(WjSP::class.java, "context is null,before init")
-            return null
-        }
-        val editor = default_SP!!.edit()
-        editor.remove(key).apply()
-        return init(wjContext.get())
+    fun remove(key: String?): WjSP? {
+        mmkv!!.removeValueForKey(key)
+        return getInstance()
     }
+
 
     /**
      * 防止内存泄露
@@ -167,24 +142,19 @@ class WjSP() {
          * 获取当前的SharedPreferences
          * @return
          */
-        var default_SP: SharedPreferences? = null
         private var wjSharedPreferences: WjSP? = null
 
-        /**
-         * 缓存context
-         */
-        @Volatile
-        private var wjContext = SaveContext<Context?>(null)
-
+        var mmkv:MMKV?=null
         /**
          * 初始化
          *
          * @param context 最好传ApplicationContext
          */
-        @Synchronized
         fun init(context: Context?): WjSP {
+            MMKV.initialize(context)
+            mmkv= MMKV.defaultMMKV()
             if (wjSharedPreferences == null) {
-                wjSharedPreferences = WjSP(context)
+                wjSharedPreferences = WjSP()
             }
             return wjSharedPreferences!!
         }
@@ -193,9 +163,8 @@ class WjSP() {
          * 获取值
          *
          */
-        @Synchronized
-        fun getInstance(): WjSP {
-            return wjSharedPreferences!!
+        fun getInstance(): WjSP? {
+            return wjSharedPreferences
         }
     }
 }
