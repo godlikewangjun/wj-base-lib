@@ -14,14 +14,17 @@ import com.tencent.mmkv.MMKV
  */
 class WjSP() {
 
+    constructor(context: Context?,spName: String) : this() {
+        init(context,spName)
+    }
     /**
      * 切换操作的SharedPreferences的库
      *
      * @param spName 名称
      */
-    fun changSpData(spName: String?): MMKV? {
+    fun changSpData(spName: String?): WjSP? {
         mmkv=MMKV.mmkvWithID(spName)
-        return mmkv
+        return getInstance()
     }
 
     /**
@@ -150,9 +153,11 @@ class WjSP() {
          *
          * @param context 最好传ApplicationContext
          */
-        fun init(context: Context?): WjSP {
+        fun init(context: Context?,spName: String?=null): WjSP {
             MMKV.initialize(context)
-            mmkv= MMKV.defaultMMKV()
+            mmkv = if (spName==null)
+                MMKV.defaultMMKV()
+            else MMKV.mmkvWithID(spName)
             if (wjSharedPreferences == null) {
                 wjSharedPreferences = WjSP()
             }
@@ -163,8 +168,8 @@ class WjSP() {
          * 获取值
          *
          */
-        fun getInstance(): WjSP? {
-            return wjSharedPreferences
+        fun getInstance(): WjSP {
+            return wjSharedPreferences!!
         }
     }
 }
