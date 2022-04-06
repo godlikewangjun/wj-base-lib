@@ -27,16 +27,22 @@ class PermissionUtils(vararg permissions: String) {
     private var mSimpleCallback: SimpleCallback? = null
     private var mFullCallback: FullCallback? = null
     private var mThemeCallback: ThemeCallback? = null
+
     //拒绝询问是否开启的提示语
-    private val mAskMessages: ArrayList<String>?=null
+    private val mAskMessages: ArrayList<String>? = null
+
     //添加的权限
     private val mPermissions: MutableSet<String>
+
     //需要请求的权限
     private var mPermissionsRequest: ArrayList<String>? = null
+
     //已经同意权限
     private var mPermissionsGranted: ArrayList<String>? = null
+
     //再次请求
     private var mPermissionsDenied: ArrayList<String>? = null
+
     //永久拒绝
     private var mPermissionsDeniedForever: ArrayList<String>? = null
 
@@ -159,9 +165,10 @@ class PermissionUtils(vararg permissions: String) {
                 mPermissionsGranted!!.add(permission)
             } else {
                 mPermissionsDenied!!.add(permission)
-                if (!activity.shouldShowRequestPermissionRationale(permission)) {
-                    mPermissionsDeniedForever!!.add(permission)
-                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    if (!activity.shouldShowRequestPermissionRationale(permission)) {
+                        mPermissionsDeniedForever!!.add(permission)
+                    }
             }
         }
     }
@@ -228,9 +235,11 @@ class PermissionUtils(vararg permissions: String) {
             }
         }
 
-        override fun onRequestPermissionsResult(requestCode: Int,
-                                                permissions: Array<String>,
-                                                grantResults: IntArray) {
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+        ) {
             sInstance!!.onRequestPermissionsResult(this)
             finish()
         }
@@ -272,7 +281,10 @@ class PermissionUtils(vararg permissions: String) {
     interface FullCallback {
         fun onGranted(permissionsGranted: ArrayList<String>)
 
-        fun onDenied(permissionsDeniedForever: ArrayList<String>?, permissionsDenied: ArrayList<String>)
+        fun onDenied(
+            permissionsDeniedForever: ArrayList<String>?,
+            permissionsDenied: ArrayList<String>
+        )
     }
 
     interface ThemeCallback {
@@ -305,7 +317,7 @@ class PermissionUtils(vararg permissions: String) {
             val pm = mApp!!.get()!!.packageManager
             return try {
                 val per = pm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
-                        .requestedPermissions
+                    .requestedPermissions
                 if (per != null) {
                     per.toList() as ArrayList<String>
                 } else {
@@ -334,7 +346,10 @@ class PermissionUtils(vararg permissions: String) {
         }
 
         private fun isGranted(permission: String): Boolean {
-            return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mApp!!.get()!!, permission)
+            return if (mApp!!.get() != null) Build.VERSION.SDK_INT < Build.VERSION_CODES.M || PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                mApp!!.get()!!,
+                permission
+            ) else false
         }
 
         /**
@@ -352,7 +367,8 @@ class PermissionUtils(vararg permissions: String) {
          * @param permissions The permissions.
          * @return the single [PermissionUtils] instance
          */
-        fun permission(mContext: Context, @PermissionConstants.Permission vararg permissions: String
+        fun permission(
+            mContext: Context, @PermissionConstants.Permission vararg permissions: String
         ): PermissionUtils {
             mApp = WeakReference(mContext)
             PERMISSIONS = PermissionUtils.permissions
