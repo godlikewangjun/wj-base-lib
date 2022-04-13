@@ -185,7 +185,7 @@ public class AbStrUtil {
 	  */
  	public static Boolean isEmail(String str) {
  		Boolean isEmail = false;
- 		String expr = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+ 		String expr = "^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$";
  		if (str.matches(expr)) {
  			isEmail = true;
  		}
