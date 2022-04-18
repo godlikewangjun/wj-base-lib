@@ -4,10 +4,12 @@ import java.util.List;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 
 public class AbWifiUtil {
@@ -36,15 +38,39 @@ public class AbWifiUtil {
      * @return
      */
     public static boolean isConnectivity(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
+        if (Build.VERSION.SDK_INT<23){
+            if (context != null) {
+                ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+                if (mNetworkInfo != null) {
+                    return mNetworkInfo.isAvailable();
+                }
+            }
+        }else{
+            ConnectivityManager manager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                NetworkCapabilities networkCapabilities =
+                        manager.getNetworkCapabilities(manager.getActiveNetwork());
+                if (networkCapabilities != null) {
+                   return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+                }
             }
         }
         return false;
+    }
+
+    /**
+     * 判断当前网络是否可用(6.0以上版本)
+     * 实时
+     * @param context
+     * @return
+     */
+    public static boolean isNetSystemUsable(Context context) {
+        boolean isNetUsable = false;
+
+        return isNetUsable;
     }
 
     /**
