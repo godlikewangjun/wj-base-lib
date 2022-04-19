@@ -34,7 +34,12 @@ public class RecyclerSpace extends RecyclerView.ItemDecoration {
         this.lineHeight = lineHeight;
     }
 
-    public RecyclerSpace(int lineWidth) {
+    public RecyclerSpace(int lineWidth,int lineHeight, int color) {
+        init();
+        this.lineWidth = lineWidth;
+    }
+
+    public RecyclerSpace(int lineHeight) {
         init();
         this.lineWidth = lineWidth;
     }
