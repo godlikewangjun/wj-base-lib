@@ -759,12 +759,11 @@ public class AbFileUtil {
      */
     public static void initFileDir(Context context) {
 
-        PackageInfo info = AbAppUtil.getPackageInfo(context);
 
 
         // 默认下载文件根目录.
         String cacheDir = File.separator
-                + info.packageName + File.separator;
+                + context.getPackageName() + File.separator;
         // 默认下载图片文件目录.
         String imageDownloadPath = cacheDir
                 + AbAppConfig.DOWNLOAD_IMAGE_DIR + File.separator;
