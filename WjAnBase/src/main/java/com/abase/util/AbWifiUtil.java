@@ -50,12 +50,10 @@ public class AbWifiUtil {
         }else{
             ConnectivityManager manager = (ConnectivityManager)
                     context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                NetworkCapabilities networkCapabilities =
-                        manager.getNetworkCapabilities(manager.getActiveNetwork());
-                if (networkCapabilities != null) {
-                   return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
-                }
+            NetworkCapabilities networkCapabilities =
+                    manager.getNetworkCapabilities(manager.getActiveNetwork());
+            if (networkCapabilities != null) {
+                return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
             }
         }
         return false;
