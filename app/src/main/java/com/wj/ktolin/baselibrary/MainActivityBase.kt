@@ -63,6 +63,18 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        WjSP.init(activity).setValues("123","1231")
         val result= WjSP.init(activity).getValues("123","")
         println(result+" ---------------------- ")
+        OhHttpClient.getInit().setLogcat()
+        OhHttpClient.getInit().get("https://www.baidu.com",object :OhObjectListener<String>(){
+            override fun onFailure(code: Int, content: String?, error: Throwable?) {
+            }
+
+            override fun onSuccess(content: String?) {
+            }
+
+            override fun onFinish() {
+            }
+
+        })
     }
 
     //    override fun before() {
