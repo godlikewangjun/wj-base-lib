@@ -46,7 +46,6 @@
             android:ellipsize="middle"
             android:textSize="17sp"
             android:textColor="@android:color/white"
-            android:maxEms="8"
             android:singleLine="true" />
 
         <LinearLayout
