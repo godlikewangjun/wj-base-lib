@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 31
+        targetSdkVersion 33
     }
 
     buildTypes {
@@ -37,7 +37,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'com.tencent:mmkv:1.2.12'
+    api 'com.tencent:mmkv:1.2.14'
     api project(':WjAnBase')
 }
 

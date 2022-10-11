@@ -12,14 +12,17 @@ import com.abase.okhttp.util.DownLoad
 import com.abase.util.AbAppUtil
 import com.abase.util.AbDoubleTool
 import com.abase.util.ToastUtil
-import com.wj.ktutils.WjSP
 import com.abase.view.parent.BaseActivity
 import com.abase.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
 import java.util.*
+
 
 class MainActivityBase : BaseActivity(), View.OnClickListener {
 
@@ -75,6 +78,31 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             }
 
         })
+
+        Thread{
+            val client = OkHttpClient().newBuilder().addNetworkInterceptor(OhHttpClient.getInit().logging)
+                .build()
+            val mediaType = "application/x-www-form-urlencoded".toMediaTypeOrNull()
+            val requestBody = FormBody.Builder()
+            requestBody.add("uid","51688448329")
+            requestBody.add("guid","d6f3ad25-b676-4ace-8d29-5f8da765532c")
+            requestBody.add("username","godlike3471")
+            requestBody.add("task_id","5608")
+            requestBody.add("type","1")
+            requestBody.add("_csrftoken","")
+            requestBody.add("account_id","3530")
+           val body = requestBody.build()
+            val request: Request = Request.Builder()
+                .url("https://apiv2.kstarup.com/v2/tasks/uri")
+                .method("POST", body)
+                .addHeader("Authorization",
+                    "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaXYyLmtzdGFydXAuY29tL3YyL2F1dGgvcmVmcmVzaCIsImlhdCI6MTY1NTQ3MjMyNSwiZXhwIjoxNjU2MTQzMDQwLCJuYmYiOjE2NTU4ODM4NDAsImp0aSI6IlZaZlRFNU9GOTF6ZkpSV1UiLCJzdWIiOiIzMTIiLCJwcnYiOiIxZDBhMDIwYWNmNWM0YjZjNDk3OTg5ZGYxYWJmMGZiZDRlOGM4ZDYzIn0.K9U28-183li0EfOSKUkWkCujS1OVL8h9pSnwdz9-aRg")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build()
+            val response = client.newCall(request).execute()
+            println(response.body!!.string()+" ------------------- "+response.code)
+        }.start()
+
     }
 
     //    override fun before() {
