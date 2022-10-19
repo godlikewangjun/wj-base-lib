@@ -22,6 +22,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import androidx.annotation.NonNull;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 /**
@@ -34,7 +35,7 @@ public class GlideModel extends AppGlideModule {
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         try {
-            registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(getSSLOkHttpClient()));
+            registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory((Call.Factory) getSSLOkHttpClient()));
         } catch (Exception e) {
             e.printStackTrace();
         }

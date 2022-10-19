@@ -35,10 +35,15 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
@@ -50,6 +55,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.Authenticator;
@@ -383,6 +390,13 @@ public class OhHttpClient {
         builder.writeTimeout(WRITETIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
+        try {
+            builder.sslSocketFactory(new TLSSocketFactory());
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         client = builder.build();
     }
 
@@ -859,7 +873,7 @@ public class OhHttpClient {
             }
             this.callbackListener = callbackListener;
             this.callbackListener.setHandler(new ResponderHandler(callbackListener));
-            // 设置hander
+            // 设置handler
             this.callbackListener.sendStartMessage();//开始
         }
 
@@ -1175,5 +1189,62 @@ public class OhHttpClient {
 
         return decompressed;
     }
+    public class TLSSocketFactory extends SSLSocketFactory {
 
+        private SSLSocketFactory delegate;
+
+        public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, null, null);
+            delegate = context.getSocketFactory();
+        }
+
+        @Override
+        public String[] getDefaultCipherSuites() {
+            return delegate.getDefaultCipherSuites();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return delegate.getSupportedCipherSuites();
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return enableTLSOnSocket(delegate.createSocket());
+        }
+
+        @Override
+        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
+            return enableTLSOnSocket(delegate.createSocket(s, host, port, autoClose));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+            return enableTLSOnSocket(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+            return enableTLSOnSocket(delegate.createSocket(host, port, localHost, localPort));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return enableTLSOnSocket(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return enableTLSOnSocket(delegate.createSocket(address, port, localAddress, localPort));
+        }
+
+        private Socket enableTLSOnSocket(Socket socket) {
+            if(socket != null && (socket instanceof SSLSocket)) {
+                ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.1", "TLSv1.2"});
+            }
+            return socket;
+        }
+
+    }
 }
