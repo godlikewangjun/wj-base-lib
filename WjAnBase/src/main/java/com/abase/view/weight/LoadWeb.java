@@ -30,8 +30,6 @@ import android.widget.RelativeLayout;
 
 import com.abase.okhttp.OhFileCallBakListener;
 import com.abase.okhttp.OhHttpClient;
-import com.abase.view.weight.web.ObservableWebView;
-import com.abase.view.weight.web.WebMethodsListener;
 import com.wj.eventbus.WjEventBus;
 
 
@@ -44,12 +42,11 @@ import com.wj.eventbus.WjEventBus;
  */
 public class LoadWeb extends RelativeLayout implements DownloadListener {
     public String url;//加载的地址
-    public ObservableWebView mWebView;//网页
+    public WebView mWebView;//网页
     //    private Map<String, String> extraHeaders;//请求头;
     private ProgressDialog alertDialog = null;
     public static String LOADERROE = "webLoadError";
     public static String LOADFINSH = "webLoadFinsh";
-    public WebMethodsListener webMethodsListener;
 
 
     public LoadWeb(Context context) {
@@ -70,7 +67,7 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
 
     /*初始化*/
     private void init() {
-        mWebView = new ObservableWebView(getContext().getApplicationContext());
+        mWebView = new WebView(getContext().getApplicationContext());
         mWebView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         //默认的请求头
 
@@ -120,14 +117,10 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         setting.setLoadWithOverviewMode(true);
         //设置支持 本地存储
         setting.setDomStorageEnabled(true);
-        setting.setAppCacheMaxSize(1024 * 1024 * 8);
-        String appCachePath = getContext().getCacheDir().getAbsolutePath();
-        setting.setAppCachePath(appCachePath);
         setting.setCacheMode(WebSettings.LOAD_DEFAULT);
         setting.setAllowFileAccess(true);
         setting.setGeolocationEnabled(true);//允许地理位置可用
 
-        setting.setAppCacheEnabled(true);
         mWebView.setDownloadListener(this);//设置下载监听
 
         //提供方法
@@ -153,20 +146,12 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
     WebChromeClient chromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int progress) {
-            if (webMethodsListener != null) {
-                webMethodsListener.onProgressChanged(view, progress);
-            }
 
         }
 
         //处理定位权限
         @Override
         public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
-            if (webMethodsListener != null) {
-                if (webMethodsListener.onGeolocationPermissionsShowPrompt(origin, callback)) {
-                    return;
-                }
-            }
             final boolean remember = true;
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("位置信息");

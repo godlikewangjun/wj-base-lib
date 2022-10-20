@@ -45,7 +45,9 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,10 +56,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Authenticator;
 import okhttp3.Cache;
@@ -73,6 +79,7 @@ import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -250,7 +257,7 @@ public class OhHttpClient {
      * 关闭自己的日志
      */
     public void closeLog() {
-
+        AbLogUtil.closeLog();
     }
 
     /**
@@ -390,13 +397,27 @@ public class OhHttpClient {
         builder.writeTimeout(WRITETIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(READTIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);//错误重连
+
+        List<Protocol> protocols = new ArrayList<>();
+        protocols.add(Protocol.HTTP_1_1); // 这里如果，只指定h2的话会抛异常
+        protocols.add(Protocol.HTTP_2); // 这里如果，只指定h2的话会抛异常
+
+
         try {
-            builder.sslSocketFactory(new TLSSocketFactory());
+            builder.sslSocketFactory(new TLSSocketFactory(),trustManager);
         } catch (KeyManagementException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        builder.protocols(protocols).hostnameVerifier(new HostnameVerifier() { // 放过host验证
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
         client = builder.build();
     }
 
@@ -1247,4 +1268,20 @@ public class OhHttpClient {
         }
 
     }
+    final X509TrustManager trustManager = new X509TrustManager() {
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    };
 }

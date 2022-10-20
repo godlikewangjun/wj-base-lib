@@ -97,14 +97,11 @@ public class LoadWeb extends RelativeLayout implements DownloadListener {
         setting.setLoadWithOverviewMode(true);
         //设置支持 本地存储
         setting.setDomStorageEnabled(true);
-        setting.setAppCacheMaxSize(1024 * 1024 * 8);
         String appCachePath = getContext().getCacheDir().getAbsolutePath();
-        setting.setAppCachePath(appCachePath);
         setting.setAllowFileAccess(true);
 
         setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-        setting.setAppCacheEnabled(true);
         mWebView.setDownloadListener(this);//设置下载监听
 
         //提供方法
