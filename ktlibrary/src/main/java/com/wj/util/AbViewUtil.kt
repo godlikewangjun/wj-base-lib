@@ -40,7 +40,7 @@ import android.graphics.Paint
  * @date：2013-01-17 下午11:52:13
  */
 object AbViewUtil {
-    var defaultSancle = 2.0f //默认屏幕的密度
+    var defaultScale = 2.0f //默认屏幕的密度
 
     /**
      * 无效值
