@@ -5,15 +5,15 @@ import android.graphics.PixelFormat
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.abase.okhttp.OhFileCallBakListener
-import com.abase.okhttp.OhHttpClient
-import com.abase.okhttp.OhObjectListener
-import com.abase.okhttp.util.DownLoad
-import com.abase.util.AbAppUtil
-import com.abase.util.AbDoubleTool
-import com.abase.util.ToastUtil
-import com.abase.view.parent.BaseActivity
-import com.abase.view.weight.RecyclerSpace
+import com.wj.okhttp.OhFileCallBakListener
+import com.wj.okhttp.OhHttpClient
+import com.wj.okhttp.OhObjectListener
+import com.wj.okhttp.util.DownLoad
+import com.wj.util.AbAppUtil
+import com.wj.util.AbDoubleTool
+import com.wj.util.ToastUtil
+import com.wj.ui.view.parent.BaseActivity
+import com.wj.ui.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
 import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
@@ -46,7 +46,8 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         pause.setOnClickListener(this)
         stop.setOnClickListener(this)
 
-        recycler_list.addItemDecoration(RecyclerSpace(2, resources.getColor(R.color.colorPrimary)))
+        recycler_list.addItemDecoration(RecyclerSpace(2,
+            resources.getColor(R.color.colorPrimary)))
         recycler_list.adapter = TestAdapter()
         recycler_list.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 6)
 
@@ -66,12 +67,12 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //        WjSP.init(activity).setValues("123","1231")
         val result= WjSP.init(activity).getValues("123","")
         println(result+" ---------------------- ")
-        OhHttpClient.getInit().setLogcat()
-        OhHttpClient.getInit().get("https://www.baidu.com",object :OhObjectListener<String>(){
+        OhHttpClient.init.setLogcat()
+        OhHttpClient.init.get("https://www.baidu.com",object : OhObjectListener<String>() {
             override fun onFailure(code: Int, content: String?, error: Throwable?) {
             }
 
-            override fun onSuccess(content: String?) {
+            override fun onSuccess(content: String) {
             }
 
             override fun onFinish() {
@@ -80,7 +81,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         })
 
         Thread{
-            val client = OkHttpClient().newBuilder().addNetworkInterceptor(OhHttpClient.getInit().logging)
+            val client = OkHttpClient().newBuilder().addNetworkInterceptor(OhHttpClient.init.logging!!)
                 .build()
             val mediaType = "application/x-www-form-urlencoded".toMediaTypeOrNull()
             val requestBody = FormBody.Builder()
@@ -110,7 +111,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 //    }
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.start -> downLoad = OhHttpClient.getInit().downFile(this@MainActivityBase, "http://imtt.dd.qq.com/16891/apk/5BF428A44C92DDE2AEB3EE34E1785EB6.apk?fsname=com.wj.makebai_v1.5.1_38.apk&hsr=4d5s", object : OhFileCallBakListener() {
+            R.id.start -> downLoad = OhHttpClient.init.downFile(this@MainActivityBase, "http://imtt.dd.qq.com/16891/apk/5BF428A44C92DDE2AEB3EE34E1785EB6.apk?fsname=com.wj.makebai_v1.5.1_38.apk&hsr=4d5s", object : OhFileCallBakListener() {
                 override fun onSuccess(content: String) {
                     AbAppUtil.installApk(this@MainActivityBase, File(content))
                 }

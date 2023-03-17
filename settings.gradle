@@ -1,1 +1,1 @@
-include ':app', ':WjAnBase', ':ktlibrary'
+include ':app', ':ktlibrary'

@@ -3,7 +3,7 @@
 @file:kotlin.jvm.JvmName("WjDateUtilsKt")
 package com.wj.ktutils
 
-import com.abase.util.AbStrUtil
+import com.wj.util.AbStrUtil
 import java.util.*
 
 /**

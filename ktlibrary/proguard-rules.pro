@@ -68,6 +68,10 @@
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
+-dontnote android.net.http.*
+-dontnote org.apache.commons.codec.**
+-dontnote org.apache.http.**
+
 # 自身避免混淆
 -dontwarn com.wj.ktutils.**
 -keep class com.wj.ktutils.** { *; }

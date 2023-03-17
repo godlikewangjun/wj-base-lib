@@ -1,12 +1,12 @@
 package com.wj.ktutils
 
 import android.content.Context
-import com.abase.okhttp.OhFileCallBakListener
-import com.abase.okhttp.OhHttpClient
-import com.abase.okhttp.OhHttpParams
-import com.abase.okhttp.OhObjectListener
-import com.abase.okhttp.util.DownLoad
-import com.abase.util.GsonUtil
+import com.wj.okhttp.OhFileCallBakListener
+import com.wj.okhttp.OhHttpClient
+import com.wj.okhttp.OhHttpParams
+import com.wj.okhttp.OhObjectListener
+import com.wj.okhttp.util.DownLoad
+import com.wj.util.GsonUtil
 import java.io.File
 
 /**
@@ -24,7 +24,7 @@ class HttpRequests {
         var DELETE = "delete"
     }
 
-    var url: String? = null
+    var url: String = ""
 
     var requestType: String? = null
     var ohhttpparams: OhHttpParams? = null
@@ -35,7 +35,7 @@ class HttpRequests {
     var fail: (Int, String?, Throwable?) -> Unit = { _: Int, _: String?, _: Throwable? -> }
     var finish: () -> Unit = {}
     var start: () -> Unit = {}
-    var listener: OhObjectListener<*>? = null
+    var listener: OhObjectListener<Any>? = null
 
 
 }
@@ -46,7 +46,7 @@ class HttpFile {
         var UPLOAD = "upload"
     }
 
-    var url: String? = null
+    var url: String = ""
     /**
      * 必须填写
      */
@@ -54,7 +54,7 @@ class HttpFile {
     /**
      * 方便操作下载的逻辑
      */
-    var downLoad:DownLoad?=null
+    var downLoad: DownLoad?=null
 
     var param:String="files"
 
@@ -100,7 +100,7 @@ private fun httpDU(wrap: HttpFile) {
     if (wrap.url.isNullOrEmpty()) {
         return
     }
-    val http = OhHttpClient.getInit()
+    val http = OhHttpClient.init
 
     /**
      * 默认就只能返回string 自定义返回的类型要重写这个方法
@@ -113,15 +113,16 @@ private fun httpDU(wrap: HttpFile) {
                 wrap.start()
             }
 
-            override fun onSuccess(s: String) {
-                wrap.success(s)
+
+            override fun onSuccess(content: String) {
+                wrap.success(content)
             }
 
-            override fun onFailure(s: String, s1: String) {
-                wrap.fail(s, s1)
+            override fun onFailure(code: String, content: String) {
+                wrap.fail(code, content)
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(e: java.lang.Exception) {
                 wrap.error(e)
             }
 
@@ -138,8 +139,8 @@ private fun httpDU(wrap: HttpFile) {
     }
 
     when (wrap.requestType) {
-        HttpFile.DOWN -> wrap.downLoad=http.downFile(wrap.context, wrap.url, httplistener)
-        HttpFile.UPLOAD -> http.upFiles(wrap.url,wrap.param, wrap.ohhttpparams, wrap.upFile, httplistener)
+        HttpFile.DOWN -> wrap.downLoad=http.downFile(wrap.context!!, wrap.url, httplistener)
+        HttpFile.UPLOAD -> http.upFiles(wrap.url,wrap.param, wrap.ohhttpparams, wrap.upFile!!, httplistener)
     }
 }
 
@@ -148,44 +149,44 @@ private fun httpDU(wrap: HttpFile) {
  * 执行请求 支持4中类型
  */
 private fun executeForResult(wrap: HttpRequests) {
-    if (wrap.url.isNullOrEmpty()) {
+    if (wrap.url.isEmpty()) {
         return
     }
-    val http = OhHttpClient.getInit()
+    val http = OhHttpClient.init
     /**
      * 默认就只能返回string 自定义返回的类型要重写这个方法
      * 重写代表 单独的回调不能使用，只能在重写方法里面调用
      */
-    val httplistener: OhObjectListener<*>
-    if (wrap.listener == null) {
-        httplistener = object : OhObjectListener<String>() {
-            override fun onSuccess(p0: String?) {
-                if (wrap.classType == null) wrap.success(p0!!) else try {
-                    wrap.success(GsonUtil.getGson().fromJson(p0!!, wrap.classType))
-                }catch (e:java.lang.Exception){
-                    println("error: $p0")
-                }
-            }
+    val httpListener=if (wrap.listener == null)
+           object : OhObjectListener<String>(){
+               override fun onSuccess(p0: String) {
+                   if (wrap.classType == null) wrap.success(p0) else try {
+                       wrap.success(GsonUtil.gson!!.fromJson(p0, wrap.classType))
+                   }catch (e:java.lang.Exception){
+                       println("error: $p0")
+                   }
+               }
 
-            override fun onFailure(p0: Int, p1: String?, p2: Throwable?) {
-                wrap.fail(p0, p1, p2)
-            }
+               override fun onFailure(p0: Int, p1: String?, p2: Throwable?) {
+                   wrap.fail(p0, p1, p2)
+               }
 
-            override fun onFinish() {
-                wrap.finish()
-            }
+               override fun onFinish() {
+                   wrap.finish()
+               }
 
-            override fun onStart() {
-                wrap.start()
+               override fun onStart() {
+                   wrap.start()
+               }
             }
-        }
-    } else {
-        httplistener = wrap.listener!!
-    }
+        else wrap.listener!!
+
     when (wrap.requestType) {
-        HttpRequests.GET -> http.get(wrap.url,wrap.tag, httplistener)
-        HttpRequests.POST -> http.post(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
-        HttpRequests.PUT -> http.put(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
-        HttpRequests.DELETE -> http.delete(wrap.url, wrap.ohhttpparams,wrap.tag, httplistener)
+        HttpRequests.GET -> http.get(wrap.url,wrap.tag, httpListener as OhObjectListener<Any>)
+        HttpRequests.POST -> http.post(wrap.url, wrap.ohhttpparams,wrap.tag,
+            httpListener as OhObjectListener<Any>)
+        HttpRequests.PUT -> http.put(wrap.url, wrap.ohhttpparams,wrap.tag,
+            httpListener as OhObjectListener<Any>)
+        HttpRequests.DELETE -> http.delete(wrap.url, wrap.ohhttpparams,wrap.tag, httpListener as OhObjectListener<Any>)
     }
 }
