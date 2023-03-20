@@ -78,7 +78,7 @@ class OhHttpClient {
      * 销毁的请求url集合 最大缓存10条
      */
     val destroyUrls = ArrayList<String?>()
-    private var client: OkHttpClient? = null
+    var client: OkHttpClient? = null
     private var cookieStore //cookies
             : PersistentCookieStore? = null
     var logging: HttpLoggingInterceptor? = HttpLoggingInterceptor() //打印日志
@@ -87,14 +87,6 @@ class OhHttpClient {
     fun setLogging(logging: HttpLoggingInterceptor?): OhHttpClient {
         this.logging = logging
         return this
-    }
-
-    fun getClient(): OkHttpClient? {
-        return client
-    }
-
-    fun setClient(client: OkHttpClient?) {
-        this.client = client
     }
 
     /**

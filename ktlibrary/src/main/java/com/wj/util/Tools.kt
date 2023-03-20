@@ -638,9 +638,9 @@ object Tools {
      *
      * 1是宽 2是高
      */
-    fun getScreenWH(context: Context): IntArray? {
+    fun getScreenWH(context: Context): IntArray {
         if (wh != null && wh!![0] != 0 && wh!![1] != 0) {
-            return wh
+            return wh!!
         }
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay
