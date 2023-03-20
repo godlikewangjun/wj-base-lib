@@ -1,7 +1,6 @@
 apply plugin: 'maven-publish'
 
 
-version '2.0.0'//版本号 gradlew install gradlew bintrayUpload
 group='com.github.godlikewangjun'
 
 //上传maven
@@ -9,9 +8,9 @@ group='com.github.godlikewangjun'
 publishing {
     publications {
         Production(MavenPublication) {
-            groupId this.group
+            groupId=group
             artifactId
-            version this.version
+            version=version
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
