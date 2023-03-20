@@ -1,8 +1,6 @@
 package com.wj.ktutils
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.abase.util.AbLogUtil
 import com.tencent.mmkv.MMKV
 
 /**

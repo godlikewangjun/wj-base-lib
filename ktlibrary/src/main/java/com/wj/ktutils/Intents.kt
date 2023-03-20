@@ -27,7 +27,7 @@ import android.os.Build
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.abase.util.AbAppUtil
+import com.wj.util.AbAppUtil
 
 inline fun <reified T: Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
         AnkoInternals.internalStartActivity(this, T::class.java, params)
@@ -244,7 +244,7 @@ fun Activity.showSoftInput(){
 }
 
 fun Fragment.showSoftInput(){
-    AbAppUtil.showSoftInput(this.activity)
+    AbAppUtil.showSoftInput(this.requireActivity())
 }
 
 fun Activity.showSoftInput(view:View){
@@ -252,5 +252,5 @@ fun Activity.showSoftInput(view:View){
 }
 
 fun Fragment.showSoftInput(view:View){
-    AbAppUtil.showSoftInput(this.activity,view)
+    AbAppUtil.showSoftInput(this.requireActivity(),view)
 }

@@ -6,8 +6,8 @@ package com.wj.ktutils
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.abase.util.AbStrUtil
-import com.abase.util.ToastUtil
+import com.wj.util.AbStrUtil
+import com.wj.util.ToastUtil
 
 /**
  * String扩展方法
@@ -28,7 +28,7 @@ fun Context?.showTip(string: String) =
         this!!.runOnUiThread { ToastUtil.showTip(this,string) }
 
 fun androidx.fragment.app.Fragment?.showTip(string: String) =
-        this!!.runOnUiThread { ToastUtil.showTip(this.context,string) }
+        this!!.runOnUiThread { this.context?.let { ToastUtil.showTip(it,string) } }
 
 fun Activity?.showTip(string: String) =
         this!!.runOnUiThread { ToastUtil.showTip(this,string) }

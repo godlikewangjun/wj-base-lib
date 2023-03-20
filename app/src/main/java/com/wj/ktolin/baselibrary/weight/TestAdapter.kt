@@ -1,13 +1,14 @@
 package com.wj.ktolin.baselibrary.weight
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import androidx.annotation.RequiresPermission
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import com.wj.ktolin.baselibrary.R
+import com.wj.ktolin.baselibrary.databinding.ShareListitemLayoutBinding
 import com.wj.ui.base.BaseAdapter
 import com.wj.ui.base.viewhoder.CustomVhoder
-import kotlinx.android.synthetic.main.share_listitem_layout.view.*
 
 /**
  *
@@ -23,25 +24,28 @@ class TestAdapter : BaseAdapter() {
         return CustomVhoder(inflater!!.inflate(R.layout.share_listitem_layout, parent, false))
     }
 
+    @SuppressLint("RecyclerView")
     @RequiresPermission("android.permission.RECORD_AUDIO")
     override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
+        
+        val binding=ShareListitemLayoutBinding.bind(holder.itemView)
 
         val mediaPlayer = MediaPlayer()
         mediaPlayer.setDataSource("http://www.ytmp3.cn/down/51447.mp3")
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            holder.itemView.play.setOnClickListener {
-                holder.itemView.play.isSelected = !holder.itemView.play.isSelected
-                if (holder.itemView.play.isSelected) {
-                    holder.itemView.play.text = "播放"
+           binding.play.setOnClickListener {
+               binding.play.isSelected = !binding.play.isSelected
+                if (binding.play.isSelected) {
+                   binding.play.text = "播放"
                     choose=position
                     stopPlay(position)
                     mediaPlayer.start()
                 } else if(mediaPlayer.isPlaying){
                     mediaPlayer.pause()
                     mediaPlayer.seekTo(0)
-                    holder.itemView.play.text = "停止"
+                   binding.play.text = "停止"
                 }
             }
         }

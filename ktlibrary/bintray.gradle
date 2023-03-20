@@ -9,7 +9,7 @@ group='com.github.godlikewangjun'
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/"+project.getName()+"-release.aar")
+//            artifact("$buildDir/outputs/aar/"+project.getName()+"-release.aar")
             groupId this.group
             artifactId
             version this.version
