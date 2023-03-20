@@ -73,5 +73,5 @@
 -dontnote org.apache.http.**
 
 # 自身避免混淆
--dontwarn com.wj.ktutils.**
--keep class com.wj.ktutils.** { *; }
+-dontwarn com.wj.**
+-keep class com.wj.** { *; }
