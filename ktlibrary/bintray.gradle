@@ -13,7 +13,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = group
-                artifactId
+                artifactId = name
                 version = version
             }
         }
