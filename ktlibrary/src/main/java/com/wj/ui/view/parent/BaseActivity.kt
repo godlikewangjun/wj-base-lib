@@ -43,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var other_icon: ImageView? = null
     var backto_img: ImageView? = null
     var title: RelativeLayout? = null
-    var contentLayoutView : View? = null
+    var mContentView : View? = null
     var title_line: View? = null
     var base_view: View? = null
     var activity: Activity? = null
@@ -61,9 +61,9 @@ abstract class BaseActivity : AppCompatActivity() {
 //            TypedArray typedArray = obtainStyledAttributes(attrsArray);
 //            b = typedArray.getBoolean(0, b);
 //            typedArray.recycle();
-            contentLayoutView = inflater!!.inflate(setContentView(), null)
+            mContentView = inflater!!.inflate(setContentView(), null)
             //            if(b){
-            titlebar!!.addView(contentLayoutView,
+            titlebar!!.addView(mContentView,
                 LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT))
             //            }else{

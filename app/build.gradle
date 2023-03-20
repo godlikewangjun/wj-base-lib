@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 android {
     compileSdkVersion 33
     defaultConfig {
@@ -16,6 +14,9 @@ android {
 //        ndk {
 //            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
 //        }
+    }
+    buildFeatures {
+        viewBinding true
     }
     buildTypes {
         release {
@@ -30,8 +31,8 @@ android {
     }
     //指定jdk版本
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
