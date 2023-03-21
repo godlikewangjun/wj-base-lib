@@ -77,4 +77,4 @@ dependencies {
 }
 
 //上传插件
-apply from: "bintray.gradle"
+//apply from: "bintray.gradle"
