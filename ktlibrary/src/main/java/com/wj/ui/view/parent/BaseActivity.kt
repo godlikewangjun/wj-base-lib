@@ -30,24 +30,24 @@ import com.wj.ktutils.R
  * @date 2017/4/13
  */
 abstract class BaseActivity : AppCompatActivity() {
-    var titlebar: LinearLayout? = null
-    var other_down: LinearLayout? = null
-    var lin_back //标题栏
-            : LinearLayout? = null
-    private var inflater //view实例接口
-            : LayoutInflater? = null
-    var title_content: TextView? = null
-    var backto: TextView? = null
-    var other //标题 返回 新增
-            : TextView? = null
-    var other_icon: ImageView? = null
-    var backto_img: ImageView? = null
-    var title: RelativeLayout? = null
-    var mContentView : View? = null
-    var title_line: View? = null
-    var base_view: View? = null
-    var activity: Activity? = null
-    var title_systembar: View? = null
+    lateinit var titlebar: LinearLayout
+    lateinit var other_down: LinearLayout
+    lateinit var lin_back //标题栏
+            : LinearLayout
+    lateinit var inflater //view实例接口
+            : LayoutInflater
+    lateinit var title_content: TextView
+    lateinit var backto: TextView
+    lateinit var other //标题 返回 新增
+            : TextView
+    lateinit var other_icon: ImageView
+    lateinit var backto_img: ImageView
+    lateinit var title: RelativeLayout
+    lateinit var mContentView: View
+    lateinit var title_line: View
+    lateinit var base_view: View
+    lateinit var activity: Activity
+    lateinit var title_systembar: View
     var glide: RequestManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +61,9 @@ abstract class BaseActivity : AppCompatActivity() {
 //            TypedArray typedArray = obtainStyledAttributes(attrsArray);
 //            b = typedArray.getBoolean(0, b);
 //            typedArray.recycle();
-            mContentView = inflater!!.inflate(setContentView(), null)
+            mContentView = inflater.inflate(setContentView(), null)
             //            if(b){
-            titlebar!!.addView(mContentView,
+            titlebar.addView(mContentView,
                 LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT))
             //            }else{
@@ -82,7 +82,7 @@ abstract class BaseActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        glide!!.onStop()
+        glide?.onStop()
     }
 
     /**
@@ -90,10 +90,10 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     fun setBackFinish(@DrawableRes rif: Int) {
         if (rif != 0) {
-            val wh = dp2px(activity!!, 15f)
-            backto_img!!.setImageResource(rif)
-            backto_img!!.layoutParams.height = wh
-            backto_img!!.layoutParams.width = wh
+            val wh = dp2px(activity, 15f)
+            backto_img.setImageResource(rif)
+            backto_img.layoutParams.height = wh
+            backto_img.layoutParams.width = wh
         }
     }
 
@@ -102,9 +102,9 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     fun setBackFinish(@DrawableRes rif: Int, width: Int, height: Int) {
         if (rif != 0) {
-            backto_img!!.setImageResource(rif)
-            backto_img!!.layoutParams.height = width
-            backto_img!!.layoutParams.width = height
+            backto_img.setImageResource(rif)
+            backto_img.layoutParams.height = width
+            backto_img.layoutParams.width = height
         }
     }
 
@@ -132,31 +132,31 @@ abstract class BaseActivity : AppCompatActivity() {
         title_systembar = findViewById(R.id.title_systembar)
 
         //设置事件
-        backto!!.setOnClickListener(parentClick)
-        lin_back!!.setOnClickListener(parentClick)
+        backto.setOnClickListener(parentClick)
+        lin_back.setOnClickListener(parentClick)
     }
 
     /**
      * 设置主题色
      */
     fun setThemeColor(@ColorRes color: Int) {
-        title_systembar!!.setBackgroundColor(resources.getColor(color))
-        title!!.setBackgroundColor(resources.getColor(color))
+        title_systembar.setBackgroundColor(resources.getColor(color))
+        title.setBackgroundColor(resources.getColor(color))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //如果大于4.4 沉浸式导航栏
 //            setTranslucentStatus(true);
             var b = false
             val attrsArray = intArrayOf(android.R.attr.windowTranslucentStatus)
-            val typedArray = activity!!.obtainStyledAttributes(attrsArray)
+            val typedArray = activity.obtainStyledAttributes(attrsArray)
             b = typedArray.getBoolean(0, b)
             typedArray.recycle()
             if (b) {
-                val layoutParams = title_systembar!!.layoutParams
-                layoutParams.height = getStatusBarHeight(activity!!)
-                title_systembar!!.layoutParams = layoutParams
-                title_systembar!!.visibility = View.VISIBLE
+                val layoutParams = title_systembar.layoutParams
+                layoutParams.height = getStatusBarHeight(activity)
+                title_systembar.layoutParams = layoutParams
+                title_systembar.visibility = View.VISIBLE
             }
         } else {
-            title_systembar!!.visibility = View.GONE
+            title_systembar.visibility = View.GONE
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //大于21 去掉阴影
             window.statusBarColor = Color.TRANSPARENT // SDK21
@@ -192,19 +192,17 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     fun setTitleBarShow(isHide: Boolean) {
         if (!isHide) {
-            title_line!!.visibility = View.GONE
-            title!!.visibility = View.GONE
+            title_line.visibility = View.GONE
+            title.visibility = View.GONE
         } else {
-            title_line!!.visibility = View.VISIBLE
-            title!!.visibility = View.VISIBLE
+            title_line.visibility = View.VISIBLE
+            title.visibility = View.VISIBLE
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (glide != null) {
-            glide!!.pauseRequests()
-        }
+        glide?.pauseRequests()
     }
 
     override fun onResume() {
@@ -212,16 +210,14 @@ abstract class BaseActivity : AppCompatActivity() {
         if (Looper.myLooper() == null) {
             Looper.prepare()
         }
-        if (glide != null) {
-            glide!!.resumeRequests()
-        }
+        glide?.resumeRequests()
     }
 
     /**
      * 关闭
      */
     fun finishTo() {
-        closeSoftInput(activity!!)
+        closeSoftInput(activity)
         finish()
     } //    @Override
     //    public void onConfigurationChanged(Configuration newConfig) {
