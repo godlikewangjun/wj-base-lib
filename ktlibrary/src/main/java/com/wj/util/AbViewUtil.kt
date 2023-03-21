@@ -208,7 +208,7 @@ object AbViewUtil {
      */
     fun px2dip(context: Context, pxValue: Float): Float {
         val mDisplayMetrics = AbAppUtil.getDisplayMetrics(context)
-        return pxValue / mDisplayMetrics!!.density
+        return pxValue / mDisplayMetrics.density
     }
 
     /**
@@ -231,7 +231,7 @@ object AbViewUtil {
      */
     fun px2sp(context: Context, pxValue: Float): Float {
         val mDisplayMetrics = AbAppUtil.getDisplayMetrics(context)
-        return pxValue / mDisplayMetrics!!.scaledDensity
+        return pxValue / mDisplayMetrics.scaledDensity
     }
 
     /**
@@ -251,7 +251,7 @@ object AbViewUtil {
      * @param dp
      * @return
      */
-    fun dp2px(context: Context?, scale: Float, dp: Float): Int {
+    fun dp2px(scale: Float, dp: Float): Int {
         return (dp * scale + 0.5f).toInt()
     }
 
@@ -263,7 +263,7 @@ object AbViewUtil {
      */
     fun scale(context: Context, value: Float): Int {
         val mDisplayMetrics = AbAppUtil.getDisplayMetrics(context)
-        return scale(context, mDisplayMetrics!!.widthPixels,
+        return scale(mDisplayMetrics.widthPixels,
             mDisplayMetrics.heightPixels, value)
     }
 
@@ -275,7 +275,7 @@ object AbViewUtil {
      * @param pxValue the px value
      * @return the int
      */
-    fun scale(context: Context?, displayWidth: Int, displayHeight: Int, pxValue: Float): Int {
+    fun scale(displayWidth: Int, displayHeight: Int, pxValue: Float): Int {
         if (pxValue == 0f) {
             return 0
         }

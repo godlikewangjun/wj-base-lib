@@ -18,6 +18,7 @@ import com.wj.ui.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
 import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
+import com.wj.util.Tools
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
@@ -54,6 +55,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@MainActivityBase, 6)
         }
 
+        println( Tools.getAppVersionCode(this).toString()+" --------------")
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){

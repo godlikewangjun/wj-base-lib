@@ -361,9 +361,6 @@ object Tools {
             val pm = context.packageManager
             val pi = pm.getPackageInfo(context.packageName, 0)
             versioncode = pi.versionCode
-            if (versioncode!=0) {
-                return 0
-            }
         } catch (_: Exception) {
         }
         return versioncode
@@ -382,9 +379,6 @@ object Tools {
             val pm = context.packageManager
             val pi = pm.getPackageInfo(context.packageName, 0)
             versionName = pi.versionName
-            if (versionName.isEmpty()) {
-                return ""
-            }
         } catch (_: Exception) {
         }
         return versionName
