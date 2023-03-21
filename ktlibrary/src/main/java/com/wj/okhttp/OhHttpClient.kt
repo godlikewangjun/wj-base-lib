@@ -20,7 +20,6 @@ import com.wj.okhttp.util.DownLoad
 import com.wj.okhttp.cookies.PersistentCookieStore
 import java.io.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
-import android.os.Looper
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
 import com.wj.okhttp.Interceptor.GzipRequestInterceptor
@@ -31,7 +30,6 @@ import com.wj.eventbus.WjEventBus
 import com.wj.util.GsonUtil
 import java.util.Objects
 import android.annotation.SuppressLint
-import android.os.Handler
 import android.os.Message
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.jvm.Synchronized
@@ -84,6 +82,7 @@ class OhHttpClient {
     var logging: HttpLoggingInterceptor? = HttpLoggingInterceptor() //打印日志
         private set
     private val UTF8 = Charset.forName("UTF-8")
+
     fun setLogging(logging: HttpLoggingInterceptor?): OhHttpClient {
         this.logging = logging
         return this
@@ -107,16 +106,11 @@ class OhHttpClient {
     /**
      * 添加头
      */
-    fun setHeaders(headers: Headers?): OhHttpClient? {
-        Companion.headers = headers
+    fun setHeaders(mHeaders: Headers?): OhHttpClient? {
+        headers = mHeaders
         return ohHttpClient
     }
 
-    /**
-     * 获取头
-     */
-    val headers: Headers?
-        get() = Companion.headers
 
     /**
      * 设置Cookies
@@ -147,15 +141,15 @@ class OhHttpClient {
      * 设置读取缓存的头
      */
     fun setCacheHeader(context: Context): OhHttpClient? {
-        if (Companion.headers != null) {
-            Companion.headers!!.newBuilder().add("Cache-Control", "max-stale=10")
+        if (headers != null) {
+            headers!!.newBuilder().add("Cache-Control", "max-stale=10")
         } else {
-            Companion.headers = Headers.Builder().add("Cache-Control", "max-stale=10").build()
+            headers = Headers.Builder().add("Cache-Control", "max-stale=10").build()
         }
         val file: File = if (CACHEPATH == null) {
             context.cacheDir
         } else {
-            File(CACHEPATH)
+            File(CACHEPATH!!)
         }
         val cache = Cache(file, cacheSize.toLong())
         client!!.newBuilder().cache(cache).build()
@@ -165,6 +159,7 @@ class OhHttpClient {
     /**
      * 销毁请求的url
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun destroyUrl(url: String?) {
         if (destroyUrls.size > 10) {
             destroyUrls.removeAt(0)
@@ -416,7 +411,7 @@ class OhHttpClient {
     }
 
     /**
-     * dedelete请求
+     * delete请求
      */
     fun delete(
         url: String, requestParams: OhHttpParams?,
@@ -732,7 +727,7 @@ class OhHttpClient {
                     val body = responseBody.source().readString(charset!!)
                     if (String::class.java != (callbackListener as OhObjectListener<out Any>).classname) {
                         try {
-                            GsonUtil.gson!!.fromJson(body,
+                            GsonUtil.gson.fromJson(body,
                                 (callbackListener as OhObjectListener<out Any>).classname)
                                 ?.let { callbackListener?.sendSuccessMessage(it) }
                         } catch (e: Exception) {
