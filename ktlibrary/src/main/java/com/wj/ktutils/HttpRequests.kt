@@ -97,7 +97,7 @@ fun httpfile(init: HttpFile.() -> Unit) {
  * 下载上传
  */
 private fun httpDU(wrap: HttpFile) {
-    if (wrap.url.isNullOrEmpty()) {
+    if (wrap.url.isEmpty()) {
         return
     }
     val http = OhHttpClient.init
@@ -106,9 +106,9 @@ private fun httpDU(wrap: HttpFile) {
      * 默认就只能返回string 自定义返回的类型要重写这个方法
      * 重写代表 单独的回调不能使用，只能在重写方法里面调用
      */
-    val httplistener: OhFileCallBakListener
+    val httpListener: OhFileCallBakListener
     if (wrap.listener == null) {
-        httplistener = object : OhFileCallBakListener() {
+        httpListener = object : OhFileCallBakListener() {
             override fun onStart() {
                 wrap.start()
             }
@@ -135,12 +135,12 @@ private fun httpDU(wrap: HttpFile) {
             }
         }
     } else {
-        httplistener = wrap.listener!!
+        httpListener = wrap.listener!!
     }
 
     when (wrap.requestType) {
-        HttpFile.DOWN -> wrap.downLoad=http.downFile(wrap.context!!, wrap.url, httplistener)
-        HttpFile.UPLOAD -> http.upFiles(wrap.url,wrap.param, wrap.ohhttpparams, wrap.upFile!!, httplistener)
+        HttpFile.DOWN -> wrap.downLoad=http.downFile(wrap.context!!, wrap.url, httpListener)
+        HttpFile.UPLOAD -> http.upFiles(wrap.url,wrap.param, wrap.ohhttpparams, wrap.upFile!!, httpListener)
     }
 }
 

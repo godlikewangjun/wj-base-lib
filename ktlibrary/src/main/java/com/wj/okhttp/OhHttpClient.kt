@@ -82,7 +82,6 @@ class OhHttpClient {
     private var cookieStore //cookies
             : PersistentCookieStore? = null
     var logging: HttpLoggingInterceptor? = HttpLoggingInterceptor() //打印日志
-        private set
     private val UTF8 = Charset.forName("UTF-8")
     fun setLogging(logging: HttpLoggingInterceptor?): OhHttpClient {
         this.logging = logging
@@ -102,21 +101,23 @@ class OhHttpClient {
      */
     fun closeLog() {
         AbLogUtil.closeLog()
+        client= client?.newBuilder()?.apply {
+            interceptors().forEach {
+                if (it==logging) {
+                    interceptors().remove(it)
+                }
+            }
+        }!!.build()
     }
 
     /**
      * 添加头
      */
-    fun setHeaders(headers: Headers?): OhHttpClient? {
-        Companion.headers = headers
+    fun setHeaders(mHeaders: Headers?): OhHttpClient? {
+        headers = mHeaders
         return ohHttpClient
     }
 
-    /**
-     * 获取头
-     */
-    val headers: Headers?
-        get() = Companion.headers
 
     /**
      * 设置Cookies
@@ -147,10 +148,10 @@ class OhHttpClient {
      * 设置读取缓存的头
      */
     fun setCacheHeader(context: Context): OhHttpClient? {
-        if (Companion.headers != null) {
-            Companion.headers!!.newBuilder().add("Cache-Control", "max-stale=10")
+        if (headers != null) {
+            headers!!.newBuilder().add("Cache-Control", "max-stale=10")
         } else {
-            Companion.headers = Headers.Builder().add("Cache-Control", "max-stale=10").build()
+            headers = Headers.Builder().add("Cache-Control", "max-stale=10").build()
         }
         val file: File = if (CACHEPATH == null) {
             context.cacheDir
@@ -416,7 +417,7 @@ class OhHttpClient {
     }
 
     /**
-     * dedelete请求
+     * delete请求
      */
     fun delete(
         url: String, requestParams: OhHttpParams?,
