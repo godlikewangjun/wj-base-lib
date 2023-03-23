@@ -5,6 +5,7 @@ import android.graphics.PixelFormat
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wj.ktolin.baselibrary.databinding.ActivityMainBinding
 import com.wj.okhttp.OhFileCallBakListener
 import com.wj.okhttp.OhHttpClient
@@ -16,6 +17,7 @@ import com.wj.util.ToastUtil
 import com.wj.ui.view.parent.BaseActivity
 import com.wj.ui.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
+import com.wj.ktutils.BuildConfig
 import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
 import okhttp3.*
@@ -53,7 +55,6 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             adapter = TestAdapter()
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@MainActivityBase, 6)
         }
-
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){
@@ -82,6 +83,8 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             }
 
         })
+
+
 
         Thread {
             val client =

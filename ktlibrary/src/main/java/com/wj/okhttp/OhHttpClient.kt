@@ -2,7 +2,6 @@ package com.wj.okhttp
 
 import okhttp3.Credentials.basic
 import android.content.Context
-import org.json.JSONObject
 import org.json.JSONException
 import java.lang.Exception
 import com.wj.okhttp.db.SQLTools
@@ -20,7 +19,6 @@ import com.wj.okhttp.util.DownLoad
 import com.wj.okhttp.cookies.PersistentCookieStore
 import java.io.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
-import android.os.Looper
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
 import com.wj.okhttp.Interceptor.GzipRequestInterceptor
@@ -31,7 +29,6 @@ import com.wj.eventbus.WjEventBus
 import com.wj.util.GsonUtil
 import java.util.Objects
 import android.annotation.SuppressLint
-import android.os.Handler
 import android.os.Message
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.jvm.Synchronized
@@ -585,7 +582,6 @@ class OhHttpClient {
      * 下载文件
      *
      * @param url
-     * @param isBreakpoint     是否支持断点下载
      * @param callbackListener
      */
     fun downFile(
@@ -615,8 +611,8 @@ class OhHttpClient {
         val file = File(DOWNDIR, "$id.temp")
         if (file.exists()) {
             var total = ""
-            val jsonObject: JSONObject = SQLTools.init(context)!!.selectDownLoad(id)
-            if (jsonObject != null && jsonObject.has("id")) {
+            val jsonObject = SQLTools.init(context)!!.selectDownLoad(id)
+            if (jsonObject.has("id")) {
                 try {
                     total = jsonObject.getLong("totallength").toString() + ""
                 } catch (e: JSONException) {
@@ -773,7 +769,7 @@ class OhHttpClient {
                     }
                 }
             } else if (code == 401) { // 用户认证
-                client!!.newBuilder().authenticator { route, response ->
+                client!!.newBuilder().authenticator { _, response ->
                     val credential = basic("user", "password")
                     response.request.newBuilder().header("Authorization", credential).build()
                 }
@@ -838,7 +834,7 @@ class OhHttpClient {
                     responseListener.onFailure(response!![0].toString() + "",
                         response!![1].toString() + "")
                 }
-                ERROE_MESSAGE -> if (responseListener is OhObjectListener<out Any>) { // 字符串的请求
+                ERROR_MESSAGE -> if (responseListener is OhObjectListener<out Any>) { // 字符串的请求
                     responseListener.onFailure(-1,
                         "报错",
                         response!![0] as Exception)
@@ -852,7 +848,7 @@ class OhHttpClient {
                 } else {
                     AbLogUtil.e(OhHttpClient::class.java, "PROGRESS_MESSAGE ")
                 }
-                FINSH_MESSAGE -> if (responseListener is OhObjectListener<*>) { // 字符串的请求
+                FINISH_MESSAGE -> if (responseListener is OhObjectListener<*>) { // 字符串的请求
                     responseListener.onFinish()
                 } else if (responseListener is OhFileCallBakListener) { // 文件
                     responseListener.onFinish()
@@ -930,7 +926,7 @@ class OhHttpClient {
         }
 
         private fun enableTLSOnSocket(socket: Socket): Socket {
-            if (socket != null && socket is SSLSocket) {
+            if (socket is SSLSocket) {
                 socket.enabledProtocols = arrayOf("TLSv1.1", "TLSv1.2")
             }
             return socket
@@ -988,7 +984,7 @@ class OhHttpClient {
         /**
          * 报错
          */
-        protected const val ERROE_MESSAGE = 2
+        const val ERROR_MESSAGE = 2
 
         /**
          * 进度消息
@@ -998,7 +994,7 @@ class OhHttpClient {
         /**
          * 完成消息
          */
-        const val FINSH_MESSAGE = 4
+        const val FINISH_MESSAGE = 4
 
         /**
          * 开始消息
