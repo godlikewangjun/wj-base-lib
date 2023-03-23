@@ -2,7 +2,6 @@ package com.wj.okhttp
 
 import okhttp3.Credentials.basic
 import android.content.Context
-import org.json.JSONObject
 import org.json.JSONException
 import java.lang.Exception
 import com.wj.okhttp.db.SQLTools
@@ -80,9 +79,7 @@ class OhHttpClient {
     private var cookieStore //cookies
             : PersistentCookieStore? = null
     var logging: HttpLoggingInterceptor? = HttpLoggingInterceptor() //打印日志
-        private set
     private val UTF8 = Charset.forName("UTF-8")
-
     fun setLogging(logging: HttpLoggingInterceptor?): OhHttpClient {
         this.logging = logging
         return this
@@ -101,6 +98,13 @@ class OhHttpClient {
      */
     fun closeLog() {
         AbLogUtil.closeLog()
+        client= client?.newBuilder()?.apply {
+            interceptors().forEach {
+                if (it==logging) {
+                    interceptors().remove(it)
+                }
+            }
+        }!!.build()
     }
 
     /**
@@ -149,7 +153,7 @@ class OhHttpClient {
         val file: File = if (CACHEPATH == null) {
             context.cacheDir
         } else {
-            File(CACHEPATH!!)
+            File(CACHEPATH)
         }
         val cache = Cache(file, cacheSize.toLong())
         client!!.newBuilder().cache(cache).build()
@@ -159,7 +163,6 @@ class OhHttpClient {
     /**
      * 销毁请求的url
      */
-    @OptIn(DelicateCoroutinesApi::class)
     fun destroyUrl(url: String?) {
         if (destroyUrls.size > 10) {
             destroyUrls.removeAt(0)
@@ -579,7 +582,6 @@ class OhHttpClient {
      * 下载文件
      *
      * @param url
-     * @param isBreakpoint     是否支持断点下载
      * @param callbackListener
      */
     fun downFile(
@@ -609,8 +611,8 @@ class OhHttpClient {
         val file = File(DOWNDIR, "$id.temp")
         if (file.exists()) {
             var total = ""
-            val jsonObject: JSONObject = SQLTools.init(context)!!.selectDownLoad(id)
-            if (jsonObject != null && jsonObject.has("id")) {
+            val jsonObject = SQLTools.init(context)!!.selectDownLoad(id)
+            if (jsonObject.has("id")) {
                 try {
                     total = jsonObject.getLong("totallength").toString() + ""
                 } catch (e: JSONException) {
@@ -727,7 +729,7 @@ class OhHttpClient {
                     val body = responseBody.source().readString(charset!!)
                     if (String::class.java != (callbackListener as OhObjectListener<out Any>).classname) {
                         try {
-                            GsonUtil.gson.fromJson(body,
+                            GsonUtil.gson!!.fromJson(body,
                                 (callbackListener as OhObjectListener<out Any>).classname)
                                 ?.let { callbackListener?.sendSuccessMessage(it) }
                         } catch (e: Exception) {
@@ -767,7 +769,7 @@ class OhHttpClient {
                     }
                 }
             } else if (code == 401) { // 用户认证
-                client!!.newBuilder().authenticator { route, response ->
+                client!!.newBuilder().authenticator { _, response ->
                     val credential = basic("user", "password")
                     response.request.newBuilder().header("Authorization", credential).build()
                 }
@@ -832,7 +834,7 @@ class OhHttpClient {
                     responseListener.onFailure(response!![0].toString() + "",
                         response!![1].toString() + "")
                 }
-                ERROE_MESSAGE -> if (responseListener is OhObjectListener<out Any>) { // 字符串的请求
+                ERROR_MESSAGE -> if (responseListener is OhObjectListener<out Any>) { // 字符串的请求
                     responseListener.onFailure(-1,
                         "报错",
                         response!![0] as Exception)
@@ -846,7 +848,7 @@ class OhHttpClient {
                 } else {
                     AbLogUtil.e(OhHttpClient::class.java, "PROGRESS_MESSAGE ")
                 }
-                FINSH_MESSAGE -> if (responseListener is OhObjectListener<*>) { // 字符串的请求
+                FINISH_MESSAGE -> if (responseListener is OhObjectListener<*>) { // 字符串的请求
                     responseListener.onFinish()
                 } else if (responseListener is OhFileCallBakListener) { // 文件
                     responseListener.onFinish()
@@ -924,7 +926,7 @@ class OhHttpClient {
         }
 
         private fun enableTLSOnSocket(socket: Socket): Socket {
-            if (socket != null && socket is SSLSocket) {
+            if (socket is SSLSocket) {
                 socket.enabledProtocols = arrayOf("TLSv1.1", "TLSv1.2")
             }
             return socket
@@ -982,7 +984,7 @@ class OhHttpClient {
         /**
          * 报错
          */
-        protected const val ERROE_MESSAGE = 2
+        const val ERROR_MESSAGE = 2
 
         /**
          * 进度消息
@@ -992,7 +994,7 @@ class OhHttpClient {
         /**
          * 完成消息
          */
-        const val FINSH_MESSAGE = 4
+        const val FINISH_MESSAGE = 4
 
         /**
          * 开始消息

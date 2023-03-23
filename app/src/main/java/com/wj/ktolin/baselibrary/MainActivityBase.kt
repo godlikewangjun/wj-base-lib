@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 import com.wj.ktolin.baselibrary.databinding.ActivityMainBinding
 import com.wj.okhttp.OhFileCallBakListener
-import com.wj.okhttp.OhHttpClient
 import com.wj.okhttp.OhObjectListener
 import com.wj.okhttp.util.DownLoad
 import com.wj.util.AbAppUtil
@@ -16,7 +15,6 @@ import com.wj.util.ToastUtil
 import com.wj.ui.view.parent.BaseActivity
 import com.wj.ui.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
-import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
 import com.wj.util.Tools
 import okhttp3.*

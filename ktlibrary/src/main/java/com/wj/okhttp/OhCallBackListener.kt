@@ -57,7 +57,7 @@ abstract class OhCallBackListener<T> {
      * 完成消息
      */
     fun sendFinishMessage() {
-        sendMessage(obtainMessage(OhHttpClient.FINSH_MESSAGE, arrayOf<Any>()))
+        sendMessage(obtainMessage(OhHttpClient.FINISH_MESSAGE, arrayOf<Any>()))
     }
 
     /**

@@ -5,7 +5,6 @@ import java.lang.Exception
 import java.io.IOException
 import com.wj.util.AbLogUtil
 import kotlin.Throws
-import com.wj.okhttp.OhHttpClient
 import java.io.File
 import com.wj.okhttp.OhFileCallBakListener
 import java.io.RandomAccessFile

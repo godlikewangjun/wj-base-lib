@@ -29,7 +29,7 @@ import java.util.*
 @Deprecated(message = "Use the Android KTX version", replaceWith = ReplaceWith("forEach(action)", "androidx.core.util.forEach"))
 inline fun <E> SparseArray<E>.forEach(action: (Int, E) -> Unit) {
     val size = this.size()
-    for (i in 0..size - 1) {
+    for (i in 0 until size) {
         if (size != this.size()) throw ConcurrentModificationException()
         action(this.keyAt(i), this.valueAt(i))
     }
@@ -43,7 +43,7 @@ inline fun <E> SparseArray<E>.forEach(action: (Int, E) -> Unit) {
 @Deprecated(message = "Use the Android KTX version", replaceWith = ReplaceWith("forEach(action)", "androidx.core.util.forEach"))
 inline fun SparseBooleanArray.forEach(action: (Int, Boolean) -> Unit) {
     val size = this.size()
-    for (i in 0..size - 1) {
+    for (i in 0 until size) {
         if (size != this.size()) throw ConcurrentModificationException()
         action(this.keyAt(i), this.valueAt(i))
     }
@@ -57,7 +57,7 @@ inline fun SparseBooleanArray.forEach(action: (Int, Boolean) -> Unit) {
 @Deprecated(message = "Use the Android KTX version", replaceWith = ReplaceWith("forEach(action)", "androidx.core.util.forEach"))
 inline fun SparseIntArray.forEach(action: (Int, Int) -> Unit) {
     val size = this.size()
-    for (i in 0..size - 1) {
+    for (i in 0 until size) {
         if (size != this.size()) throw ConcurrentModificationException()
         action(this.keyAt(i), this.valueAt(i))
     }

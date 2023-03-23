@@ -7,9 +7,7 @@ import java.lang.Exception
 import com.wj.okhttp.db.SQLTools
 import okhttp3.Response
 import com.wj.util.AbLogUtil
-import com.wj.okhttp.OhHttpClient
 import java.io.File
-import com.wj.okhttp.OhCallBackListener
 import com.wj.util.Tools
 import com.wj.util.AbFileUtil
 import java.util.ArrayList

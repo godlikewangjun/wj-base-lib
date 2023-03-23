@@ -26,7 +26,6 @@ import kotlin.Throws
 import java.nio.charset.Charset
 import java.net.URLDecoder
 import java.io.UnsupportedEncodingException
-import com.wj.okhttp.OhHttpClient
 import com.wj.util.AbStrUtil
 import java.io.EOFException
 import okhttp3.*

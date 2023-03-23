@@ -32,9 +32,8 @@ class WjSP() {
      * @param object
      */
     @Synchronized
-    fun setValues(key: String?, `object`: Any): WjSP? {
-        val type = `object`.javaClass.simpleName
-        when (type) {
+    fun setValues(key: String?, `object`: Any): WjSP {
+        when (`object`.javaClass.simpleName) {
             "String" -> {
                 mmkv?.encode(key, `object` as String)
             }
@@ -107,7 +106,7 @@ class WjSP() {
      * 清除所有数据
      *
      */
-    fun clear(): WjSP? {
+    fun clear(): WjSP {
         mmkv!!.clearAll()
         return getInstance()
     }
@@ -117,7 +116,7 @@ class WjSP() {
      *
      * @param key
      */
-    fun remove(key: String?): WjSP? {
+    fun remove(key: String?): WjSP {
         mmkv!!.removeValueForKey(key)
         return getInstance()
     }
@@ -134,11 +133,6 @@ class WjSP() {
     }
 
     companion object {
-        /**
-         * 保存在手机里面的文件名
-         */
-        private const val FILE_NAME = "save_cache"
-
         /**
          * 获取当前的SharedPreferences
          * @return
