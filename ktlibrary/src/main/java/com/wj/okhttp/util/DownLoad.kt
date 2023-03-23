@@ -1,6 +1,8 @@
 package com.wj.okhttp.util
 
 import android.content.Context
+import com.wj.okhttp.OhCallBackListener
+import com.wj.okhttp.OhHttpClient
 import org.json.JSONObject
 import org.json.JSONException
 import java.lang.Exception
@@ -42,7 +44,8 @@ class DownLoad(private val context: Context) {
             id = Tools.setMD5(url)
             source = response.body!!.source()
             var total = response.body!!.contentLength()
-            AbLogUtil.i(OhHttpClient::class.java, """${response.request.url},
+            AbLogUtil.i(
+                OhHttpClient::class.java, """${response.request.url},
  下载文件地址：$destFileDir/$destFileName;大小:$total""")
             if (!SQLTools.Companion.init(context)!!.selectDownLoad(id).has("id")) {
                 SQLTools.Companion.init(context)!!.saveDownloadInfo(id, total.toString() + "")

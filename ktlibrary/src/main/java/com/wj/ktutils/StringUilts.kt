@@ -8,6 +8,10 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import com.wj.util.AbStrUtil
 import com.wj.util.ToastUtil
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * String扩展方法
@@ -24,11 +28,14 @@ fun CharSequence?.isPhoneNum(): Boolean =
 fun CharSequence?.isEmail(): Boolean =
         AbStrUtil.isEmail(this.toString())
 
-fun Context?.showTip(string: String) =
-        this!!.runOnUiThread { ToastUtil.showTip(this,string) }
+@OptIn(DelicateCoroutinesApi::class)
+fun Context?.showTip(string: String)=
+        GlobalScope.launch(Dispatchers.Main) {  ToastUtil.showTip(this@showTip!!,string) }
 
+
+@OptIn(DelicateCoroutinesApi::class)
 fun androidx.fragment.app.Fragment?.showTip(string: String) =
-        this!!.runOnUiThread { this.context?.let { ToastUtil.showTip(it,string) } }
+        GlobalScope.launch(Dispatchers.Main) {   this@showTip!!.context?.let { ToastUtil.showTip(it,string) } }
 
 fun Activity?.showTip(string: String) =
         this!!.runOnUiThread { ToastUtil.showTip(this,string) }

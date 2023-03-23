@@ -12,6 +12,7 @@ import android.app.AlertDialog
 import android.net.http.SslError
 import android.webkit.*
 import com.wj.okhttp.OhFileCallBakListener
+import com.wj.okhttp.OhHttpClient
 import java.lang.Exception
 
 /**

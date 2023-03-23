@@ -32,7 +32,7 @@ class WjSP() {
      * @param object
      */
     @Synchronized
-    fun setValues(key: String?, `object`: Any): WjSP {
+    fun setValues(key: String?, `object`: Any): WjSP? {
         when (`object`.javaClass.simpleName) {
             "String" -> {
                 mmkv?.encode(key, `object` as String)
@@ -106,7 +106,7 @@ class WjSP() {
      * 清除所有数据
      *
      */
-    fun clear(): WjSP {
+    fun clear(): WjSP? {
         mmkv!!.clearAll()
         return getInstance()
     }
@@ -116,7 +116,7 @@ class WjSP() {
      *
      * @param key
      */
-    fun remove(key: String?): WjSP {
+    fun remove(key: String?): WjSP? {
         mmkv!!.removeValueForKey(key)
         return getInstance()
     }
@@ -160,8 +160,8 @@ class WjSP() {
          * 获取值
          *
          */
-        fun getInstance(): WjSP {
-            return wjSharedPreferences!!
+        fun getInstance(): WjSP? {
+            return wjSharedPreferences
         }
     }
 }

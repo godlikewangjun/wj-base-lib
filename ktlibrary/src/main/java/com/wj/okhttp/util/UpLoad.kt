@@ -15,6 +15,7 @@ import com.wj.okhttp.OhHttpParams
 import java.lang.Runnable
 import android.os.Handler
 import android.os.Looper
+import com.wj.okhttp.OhHttpClient
 
 /**
  * 断点上传

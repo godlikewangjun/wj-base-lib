@@ -15,6 +15,7 @@
  */
 package com.wj.okhttp.log
 
+import com.wj.okhttp.OhHttpClient
 import java.lang.Exception
 import java.io.IOException
 import kotlin.jvm.JvmOverloads
