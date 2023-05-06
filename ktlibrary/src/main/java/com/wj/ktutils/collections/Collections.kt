@@ -66,19 +66,3 @@ inline fun <T> List<T>.forEachReversedWithIndex(f: (Int, T) -> Unit) {
         i--
     }
 }
-
-/**
- * Convert the Android pair to a Kotlin one.
- *
- * @see [toAndroidPair].
- */
-@Deprecated(message = "Use the Android KTX version", replaceWith = ReplaceWith("toKotlinPair()", "androidx.core.util.toKotlinPair"))
-inline fun <F, S> android.util.Pair<F, S>.toKotlinPair(): Pair<F, S> = first to second
-
-/**
- * Convert the Kotlin pair to an Android one.
- *
- * @see [toKotlinPair].
- */
-@Deprecated(message = "Use the Android KTX version", replaceWith = ReplaceWith("toAndroidPair()", "androidx.core.util.toAndroidPair"))
-inline fun <F, S> Pair<F, S>.toAndroidPair(): android.util.Pair<F, S> = android.util.Pair(first, second)

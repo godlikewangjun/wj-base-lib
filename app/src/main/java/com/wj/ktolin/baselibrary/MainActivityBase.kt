@@ -19,6 +19,10 @@ import com.wj.ktutils.WjSP
 import com.wj.okhttp.OhHttpClient
 import com.wj.permission.PermissionUtils
 import com.wj.util.Tools
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
@@ -49,13 +53,17 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
         stop.setOnClickListener(this)
 
         binding.recyclerList.apply {
-            addItemDecoration(RecyclerSpace(2,
-                resources.getColor(R.color.colorPrimary)))
+            addItemDecoration(
+                RecyclerSpace(
+                    2,
+                    resources.getColor(R.color.colorPrimary)
+                )
+            )
             adapter = TestAdapter()
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@MainActivityBase, 6)
         }
 
-        println( Tools.getAppVersionCode(this).toString()+" --------------")
+        println(Tools.getAppVersionCode(this).toString() + " --------------")
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){
@@ -85,7 +93,7 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
 
         })
 
-        Thread {
+        GlobalScope.launch {
             val client =
                 OkHttpClient().newBuilder().addNetworkInterceptor(OhHttpClient.init.logging!!)
                     .build()
@@ -102,14 +110,26 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             val request: Request = Request.Builder()
                 .url("https://apiv2.kstarup.com/v2/tasks/uri")
                 .method("POST", body)
-                .addHeader("Authorization",
-                    "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaXYyLmtzdGFydXAuY29tL3YyL2F1dGgvcmVmcmVzaCIsImlhdCI6MTY1NTQ3MjMyNSwiZXhwIjoxNjU2MTQzMDQwLCJuYmYiOjE2NTU4ODM4NDAsImp0aSI6IlZaZlRFNU9GOTF6ZkpSV1UiLCJzdWIiOiIzMTIiLCJwcnYiOiIxZDBhMDIwYWNmNWM0YjZjNDk3OTg5ZGYxYWJmMGZiZDRlOGM4ZDYzIn0.K9U28-183li0EfOSKUkWkCujS1OVL8h9pSnwdz9-aRg")
+                .addHeader(
+                    "Authorization",
+                    "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaXYyLmtzdGFydXAuY29tL3YyL2F1dGgvcmVmcmVzaCIsImlhdCI6MTY1NTQ3MjMyNSwiZXhwIjoxNjU2MTQzMDQwLCJuYmYiOjE2NTU4ODM4NDAsImp0aSI6IlZaZlRFNU9GOTF6ZkpSV1UiLCJzdWIiOiIzMTIiLCJwcnYiOiIxZDBhMDIwYWNmNWM0YjZjNDk3OTg5ZGYxYWJmMGZiZDRlOGM4ZDYzIn0.K9U28-183li0EfOSKUkWkCujS1OVL8h9pSnwdz9-aRg"
+                )
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build()
             val response = client.newCall(request).execute()
+            testNew(this)
+            println("33333---------------")
             println(response.body!!.string() + " ------------------- " + response.code)
-        }.start()
+        }
 
+    }
+
+    suspend fun testNew(){
+        delay(500)
+        println("1111111---------------")
+
+        delay(200)
+        println("222222---------------")
     }
 
     //    override fun before() {
