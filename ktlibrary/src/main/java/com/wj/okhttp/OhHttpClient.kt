@@ -683,9 +683,9 @@ class OhHttpClient {
                 AbLogUtil.d(OhHttpClient::class.java,
                     "连接不到:" + request.url.toString() + ",重试" + failNum + "次")
                 if (failNum > 2) { //失败消息为0
-                    callbackListener!!.sendFailureMessage(0,
+                    callbackListener?.sendFailureMessage(0,
                         "连接不到:" + request.url.toString() + ",重试超过最大的次数" + failNum, null)
-                    callbackListener!!.sendFinishMessage()
+                    callbackListener?.sendFinishMessage()
 
                     //打印错误和发送通知方便全局处理
                     e.printStackTrace()
@@ -701,7 +701,7 @@ class OhHttpClient {
             } else { //code==-1 不是超时错误
                 AbLogUtil.e(OhHttpClient::class.java, request.url.toString() + "," + e.message)
                 e.printStackTrace()
-                callbackListener!!.sendFailureMessage(-1, e.message!!, e)
+                callbackListener?.sendFailureMessage(-1, e.message!!, e)
                 WjEventBus.getInit().post(OKHTTP_FAILURE, e) //错误了就通知全局进行处理
             }
         }
@@ -729,7 +729,7 @@ class OhHttpClient {
                     val body = responseBody.source().readString(charset!!)
                     if (String::class.java != (callbackListener as OhObjectListener<out Any>).classname) {
                         try {
-                            GsonUtil.gson!!.fromJson(body,
+                            GsonUtil.gson.fromJson(body,
                                 (callbackListener as OhObjectListener<out Any>).classname)
                                 ?.let { callbackListener?.sendSuccessMessage(it) }
                         } catch (e: Exception) {
@@ -769,9 +769,9 @@ class OhHttpClient {
                     }
                 }
             } else if (code == 401) { // 用户认证
-                client!!.newBuilder().authenticator { _, response ->
+                client!!.newBuilder().authenticator { _, response1 ->
                     val credential = basic("user", "password")
-                    response.request.newBuilder().header("Authorization", credential).build()
+                    response1.request.newBuilder().header("Authorization", credential).build()
                 }
                 val bodyError = Objects.requireNonNull(response.body!!).string()
                 callbackListener!!.sendFailureMessage(code, bodyError, null)
