@@ -430,7 +430,7 @@ class OhHttpClient {
         url: String, requestParams: OhHttpParams?,
         callbackListener: OhCallBackListener<out Any>, type: Int, tag: String?
     ) {
-        val body: RequestBody = if (requestParams!!.keys.contains(JSONTYE)) {
+        val body = if (requestParams!!.keys.contains(JSONTYE)) {
             (requestParams[JSONTYE] as String).toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         } else {
             val requestBody = FormBody.Builder()
@@ -449,7 +449,7 @@ class OhHttpClient {
             3 -> builder.delete(body)
         }
         headers?.let { builder.headers(headers!!) }
-        val request: Request = builder.build()
+        val request = builder.build()
         client!!.newCall(request).enqueue(OKHttpCallBack(request, callbackListener))
     }
 
