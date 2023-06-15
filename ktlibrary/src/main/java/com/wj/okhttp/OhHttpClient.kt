@@ -734,12 +734,14 @@ class OhHttpClient {
                                 ?.let { callbackListener?.sendSuccessMessage(it) }
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            AbLogUtil.e(OhHttpClient::class.java,
-                                (callbackListener as OhObjectListener<*>).classname.toString() + ";" + url + ",返回json格式化错误" + body)
-                            if (failNum == 3) {
-                                (callbackListener as OhObjectListener<*>).onFailure(400,
-                                    "类格式化错误",
-                                    e)
+                            callbackListener?.let {
+                                AbLogUtil.e(OhHttpClient::class.java,
+                                    (it as OhObjectListener<*>).classname.toString() + ";" + url + ",返回json格式化错误" + body)
+                                if (failNum == 3) {
+                                    (it as OhObjectListener<*>).onFailure(400,
+                                        "类格式化错误",
+                                        e)
+                                }
                             }
                             return
                         }
