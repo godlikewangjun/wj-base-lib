@@ -5,7 +5,6 @@ import android.graphics.PixelFormat
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wj.ktolin.baselibrary.databinding.ActivityMainBinding
 import com.wj.okhttp.OhFileCallBakListener
 import com.wj.okhttp.OhHttpClient
