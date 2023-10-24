@@ -16,13 +16,7 @@ import com.google.gson.JsonObject
  */
 object GsonUtil {
     @get:Synchronized
-    var gson: Gson? = null
-        get() {
-            if (field == null) {
-                field = Gson()
-            }
-            return field
-        }
+    val gson: Gson by lazy {  Gson() }
 
     /**
      * 对象转成json
@@ -31,7 +25,7 @@ object GsonUtil {
      * @return
      */
     fun gson2String(`object`: Any?): String {
-        return gson!!.toJson(`object`)
+        return gson.toJson(`object`)
     }
 
     /**
@@ -42,7 +36,7 @@ object GsonUtil {
      * @return
      */
     fun <T> gson2Object(gsonStr: String?, cls: Class<T>?): T {
-        return gson!!.fromJson(gsonStr, cls)
+        return gson.fromJson(gsonStr, cls)
     }
 
     /**
@@ -53,7 +47,7 @@ object GsonUtil {
      * @return
      */
     fun <T> Gson2List(gsonStr: String?, cls: Class<T>?): List<T> {
-        return gson!!.fromJson(gsonStr, object : TypeToken<List<T>?>() {}.type)
+        return gson.fromJson(gsonStr, object : TypeToken<List<T>?>() {}.type)
     }
 
     /**
@@ -65,7 +59,7 @@ object GsonUtil {
      * @return
     </T> */
     fun <T> Gson2ArryList(s: String?, clazz: Class<Array<T>>?): List<T> {
-        val arr = gson!!.fromJson(s, clazz)
+        val arr = gson.fromJson(s, clazz)
         return ArrayList(Arrays.asList(*arr)) //or return Arrays.asList(new Gson().fromJson(s, clazz)); for a one-liner
     }
 
@@ -76,7 +70,7 @@ object GsonUtil {
      * @return
      */
     fun <T> GsonToMap(gsonStr: String?): Map<String, T> {
-        return gson!!.fromJson(gsonStr, object : TypeToken<Map<String?, T>?>() {}.type)
+        return gson.fromJson(gsonStr, object : TypeToken<Map<String?, T>?>() {}.type)
     }
 
     /**
@@ -86,7 +80,7 @@ object GsonUtil {
      * @return
      */
     fun <T> GsonToListMap(gsonStr: String?): List<Map<String, T>> {
-        return gson!!.fromJson(gsonStr,
+        return gson.fromJson(gsonStr,
             object : TypeToken<List<Map<String?, T>?>?>() {}.type)
     }
 
