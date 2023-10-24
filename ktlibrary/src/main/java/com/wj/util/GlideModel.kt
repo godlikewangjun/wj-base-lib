@@ -15,6 +15,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import java.security.SecureRandom
 import com.bumptech.glide.annotation.GlideModule
+import com.wj.okhttp.OhHttpClient
 import okhttp3.Call
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -43,25 +44,6 @@ class GlideModel : AppGlideModule() {
     @get:Throws(Exception::class)
     private val sSLOkHttpClient: OkHttpClient
         get() {
-            val trustManager: X509TrustManager = object : X509TrustManager {
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-                }
-
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                }
-
-                override fun getAcceptedIssuers(): Array<X509Certificate?> {
-                    return arrayOfNulls(0)
-                }
-            }
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
-            val sslSocketFactory = sslContext.socketFactory
-            return OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory, trustManager)
-                .hostnameVerifier { hostname, session -> true }
-                .build()
+            return OhHttpClient.init.client!!
         }
 }

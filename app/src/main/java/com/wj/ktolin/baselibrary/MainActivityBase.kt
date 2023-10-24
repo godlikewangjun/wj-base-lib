@@ -16,16 +16,24 @@ import com.wj.util.ToastUtil
 import com.wj.ui.view.parent.BaseActivity
 import com.wj.ui.view.weight.RecyclerSpace
 import com.wj.ktolin.baselibrary.weight.TestAdapter
-import com.wj.ktutils.BuildConfig
 import com.wj.ktutils.WjSP
 import com.wj.permission.PermissionUtils
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.kodein.di.Copy
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.DIContext
+import org.kodein.di.android.retainedSubDI
+import org.kodein.di.diContext
+import org.kodein.di.instance
 import java.io.File
 import java.util.*
 
 
-class MainActivityBase : BaseActivity(), View.OnClickListener {
+class MainActivityBase : BaseActivity(),DIAware, View.OnClickListener {
+
+    override val di by lazy { (application as App).di }
 
     val binding: ActivityMainBinding by lazy { ActivityMainBinding.bind(mContentView!!) }
     override fun setContentView(): Int {
@@ -35,7 +43,6 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
     private var cpc: Button? = null
     private var downLoad: DownLoad? = null
     private var textView: TextView? = null
-
     override fun init() {
         window.setFormat(PixelFormat.TRANSLUCENT)
 //        AndroidKeyboardHeight.assistActivity(this)
@@ -54,6 +61,9 @@ class MainActivityBase : BaseActivity(), View.OnClickListener {
             adapter = TestAdapter()
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@MainActivityBase, 6)
         }
+       val log: TextView by instance()
+        binding.root.addView(log,0)
+        log.text="12313"
 //        QqWebHelper.X5Init(this)
 //        web.loadUrl("https://baidu.com")
 //        web.webMethodsListener=object : WebMethodsListener(){
