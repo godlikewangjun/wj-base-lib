@@ -34,19 +34,19 @@ fun Activity?.showTip(string: String) =
         this!!.runOnUiThread { ToastUtil.showTip(this,string) }
 
 fun Activity?.putValue(key: String,string: Any) =
-       WjSP.getInstance()?.setValues(key,string)
+       WjSP.getInstance().setValues(key,string)
 
 fun Activity?.getValue(key: String,string: Any) =
-        WjSP.getInstance()?.getValues(key,string)
+        WjSP.getInstance().getValues(key,string)
 
 fun Fragment?.putValue(key: String,string: Any) =
-        WjSP.getInstance()?.setValues(key,string)
+        WjSP.getInstance().setValues(key,string)
 
 fun Fragment?.getValue(key: String,string: Any) =
-        WjSP.getInstance()?.getValues(key,string)
+        WjSP.getInstance().getValues(key,string)
 
 fun Context?.putValue(key: String,string: Any) =
-        WjSP.getInstance()?.setValues(key,string)
+        WjSP.getInstance().setValues(key,string)
 
 fun Context?.getValue(key: String,string: Any) =
-        WjSP.getInstance()?.getValues(key,string)
+        WjSP.getInstance().getValues(key,string)

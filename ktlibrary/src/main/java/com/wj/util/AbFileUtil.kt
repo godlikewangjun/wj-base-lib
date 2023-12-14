@@ -35,6 +35,7 @@ import java.lang.StringBuilder
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import android.content.Intent
+import android.os.Build
 import java.io.InputStream
 import java.lang.Thread
 import java.util.Comparator
@@ -106,13 +107,13 @@ class AbFileUtil {
     fun copyFolder(fromFile: String?, toFile: String): Int {
         //要复制的文件目录
         val fromList: Array<File>
-        val file = File(fromFile)
+        val file = fromFile?.let { File(it) }
         //判断文件是否存在
-        if (!file.exists()) {
+        if (!file!!.exists()) {
             return -1
         }
         //如果存在则获取当前目录下的所有文件，填充数组
-        fromList = file.listFiles()
+        fromList = file.listFiles()!!
         //目标目录
         val toList = File(toFile)
         //创建目录
@@ -175,13 +176,13 @@ class AbFileUtil {
          *
          * @return
          */
-        fun writeData(filename: String, data: String?): Boolean {
-            var filename = filename
+        fun writeData(filename1: String, data: String?): Boolean {
+            var filename = filename1
             filename += ".txt"
             var fos: FileOutputStream? = null
             var dis: DataInputStream? = null
             var bis: ByteArrayInputStream? = null
-            var file: File? = null
+            var file: File?
             try {
                 if (data != null) {
                     file = File(cacheDownloadDir + "/" + filename)
@@ -189,7 +190,7 @@ class AbFileUtil {
                         file.createNewFile()
                     }
                     fos = FileOutputStream(file)
-                    var readLength = 0
+                    var readLength: Int
                     bis = ByteArrayInputStream(data.toByteArray())
                     dis = DataInputStream(bis)
                     val buffer = ByteArray(1024)
@@ -205,18 +206,21 @@ class AbFileUtil {
                     try {
                         dis.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
                 if (bis != null) {
                     try {
                         bis.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
                 if (fos != null) {
                     try {
                         fos.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -228,14 +232,12 @@ class AbFileUtil {
          *
          * @return
          */
-        fun writeAppend(filename: String, data: String?): Boolean {
-            var filename = filename
+        fun writeAppend(filename1: String, data: String?): Boolean {
+            var filename = filename1
             filename += ".txt"
-            var file: File? = null
-            val bufferSize = 2 * 1024 //2kb
+            var file: File?
             var bufferedSink: BufferedSink? = null
             val bufferedSource: BufferedSource? = null
-            val len: Long = 0
             try {
                 if (data != null) {
                     file = File(logloadDir + "/" + filename)
@@ -282,14 +284,12 @@ class AbFileUtil {
                 // 读入多个字符到字符数组中，charread为一次读取字符数
                 while (reader.read(tempchars).also { charread = it } != -1) {
                     // 同样屏蔽掉\r不显示
-                    if (charread == tempchars.size
-                        && tempchars[tempchars.size - 1] != '\r'
+                    if (charread != tempchars.size
+                        && tempchars[tempchars.size - 1] == '\r'
                     ) {
-                    } else {
                         for (i in 0 until charread) {
                             if (tempchars[i] == '\r') {
                                 continue
-                            } else {
                             }
                         }
                     }
@@ -350,14 +350,22 @@ class AbFileUtil {
                 }
 
                 // 文件存在
-                bitmap = if (type == AbImageUtil.CUTIMG) {
-                    AbImageUtil.getCutBitmap(file, desiredWidth,
-                        desiredHeight)
-                } else if (type == AbImageUtil.SCALEIMG) {
-                    AbImageUtil.getScaleBitmap(file, desiredWidth,
-                        desiredHeight)
-                } else {
-                    AbImageUtil.getBitmap(file)
+                bitmap = when (type) {
+                    AbImageUtil.CUTIMG -> {
+                        AbImageUtil.getCutBitmap(
+                            file, desiredWidth,
+                            desiredHeight
+                        )
+                    }
+                    AbImageUtil.SCALEIMG -> {
+                        AbImageUtil.getScaleBitmap(
+                            file, desiredWidth,
+                            desiredHeight
+                        )
+                    }
+                    else -> {
+                        AbImageUtil.getBitmap(file)
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -438,7 +446,7 @@ class AbFileUtil {
             var dis: DataInputStream? = null
             var bis: ByteArrayInputStream? = null
             var bitmap: Bitmap? = null
-            var file: File? = null
+            val file: File?
             try {
                 if (imgByte != null) {
                     file = File(imageDownloadDir + fileName)
@@ -446,7 +454,7 @@ class AbFileUtil {
                         file.createNewFile()
                     }
                     fos = FileOutputStream(file)
-                    var readLength = 0
+                    var readLength: Int
                     bis = ByteArrayInputStream(imgByte)
                     dis = DataInputStream(bis)
                     val buffer = ByteArray(1024)
@@ -458,8 +466,10 @@ class AbFileUtil {
                         }
                     }
                     fos.flush()
-                    bitmap = getBitmapFromSD(file, type, desiredWidth,
-                        desiredHeight)
+                    bitmap = getBitmapFromSD(
+                        file, type, desiredWidth,
+                        desiredHeight
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -468,18 +478,21 @@ class AbFileUtil {
                     try {
                         dis.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
                 if (bis != null) {
                     try {
                         bis.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
                 if (fos != null) {
                     try {
                         fos.close()
                     } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -495,8 +508,12 @@ class AbFileUtil {
         fun getBitmapFromSrc(src: String?): Bitmap? {
             var bit: Bitmap? = null
             try {
-                bit = BitmapFactory.decodeStream(AbFileUtil::class.java
-                    .getResourceAsStream(src))
+                bit = BitmapFactory.decodeStream(
+                    src?.let {
+                        AbFileUtil::class.java
+                            .getResourceAsStream(it)
+                    }
+                )
             } catch (e: Exception) {
                 AbLogUtil.d(AbFileUtil::class.java, "获取图片异常：" + e.message)
             }
@@ -558,14 +575,16 @@ class AbFileUtil {
                 mHttpURLConnection
                     .setRequestProperty(
                         "Accept",
-                        "image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*")
+                        "image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*"
+                    )
                 mHttpURLConnection.setRequestProperty("Accept-Language", "zh-CN")
                 mHttpURLConnection.setRequestProperty("Referer", Url)
                 mHttpURLConnection.setRequestProperty("Charset", "UTF-8")
                 mHttpURLConnection
                     .setRequestProperty(
                         "User-Agent",
-                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)")
+                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)"
+                    )
                 mHttpURLConnection.setRequestProperty("Connection", "Keep-Alive")
                 mHttpURLConnection.connect()
                 if (mHttpURLConnection.responseCode == 200) {
@@ -599,7 +618,8 @@ class AbFileUtil {
                 mHttpURLConnection
                     .setRequestProperty(
                         "Accept",
-                        "image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*")
+                        "image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*"
+                    )
                 mHttpURLConnection.setRequestProperty("Accept-Language", "zh-CN")
                 mHttpURLConnection.setRequestProperty("Referer", url)
                 mHttpURLConnection.setRequestProperty("Charset", "UTF-8")
@@ -614,7 +634,8 @@ class AbFileUtil {
                                 .getHeaderFieldKey(i).lowercase(Locale.getDefault())
                         ) {
                             val m = Pattern.compile(".*filename=(.*)").matcher(
-                                mine.lowercase(Locale.getDefault()))
+                                mine.lowercase(Locale.getDefault())
+                            )
                             if (m.find()) return m.group(1).replace("\"", "")
                         }
                         i++
@@ -720,6 +741,7 @@ class AbFileUtil {
                     try {
                         `is`.close()
                     } catch (e: IOException) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -730,7 +752,6 @@ class AbFileUtil {
          * @author guoxk
          *
          * 方法描述：根据文件路径获取文件头信息
-         * @param filePath 文件路径
          * @return 文件头信息
          */
         fun getFileType(file: File?): String? {
@@ -753,6 +774,7 @@ class AbFileUtil {
                     try {
                         `is`.close()
                     } catch (e: IOException) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -849,39 +871,52 @@ class AbFileUtil {
                 if (!isCanUseSD) {
                     return
                 } else {
-                    val root = Environment.getExternalStorageDirectory() //获取外置sdcasrd的路径
-                    val downloadDir = File(root.absolutePath
-                            + cacheDir)
+                    val root =
+                        if (Build.VERSION.SDK_INT >= 29) context.filesDir else Environment.getExternalStorageDirectory() //获取外置sdcasrd的路径
+                    val downloadDir = File(
+                        root.absolutePath
+                                + cacheDir
+                    )
                     if (!downloadDir.exists()) {
                         downloadDir.mkdirs()
                     }
                     downloadRootDir = downloadDir.path
-                    val cacheDownloadDirFile = File(root.absolutePath
-                            + cacheDownloadPath)
+                    val cacheDownloadDirFile = File(
+                        root.absolutePath
+                                + cacheDownloadPath
+                    )
                     if (!cacheDownloadDirFile.exists()) {
                         cacheDownloadDirFile.mkdirs()
                     }
                     cacheDownloadDir = cacheDownloadDirFile.path
-                    val imageDownloadDirFile = File(root.absolutePath
-                            + imageDownloadPath)
+                    val imageDownloadDirFile = File(
+                        root.absolutePath
+                                + imageDownloadPath
+                    )
                     if (!imageDownloadDirFile.exists()) {
                         imageDownloadDirFile.mkdirs()
                     }
                     imageDownloadDir = imageDownloadDirFile.path
-                    val fileDownloadDirFile = File(root.absolutePath
-                            + fileDownloadPath)
+                    val fileDownloadDirFile = File(
+                        root.absolutePath
+                                + fileDownloadPath
+                    )
                     if (!fileDownloadDirFile.exists()) {
                         fileDownloadDirFile.mkdirs()
                     }
                     fileDownloadDir = fileDownloadDirFile.path
-                    val dbDownloadDirFile = File(root.absolutePath
-                            + dbDownloadPath)
+                    val dbDownloadDirFile = File(
+                        root.absolutePath
+                                + dbDownloadPath
+                    )
                     if (!dbDownloadDirFile.exists()) {
                         dbDownloadDirFile.mkdirs()
                     }
                     dbDownloadDir = dbDownloadDirFile.path
-                    val logDownloadPathDirFile = File(root.absolutePath
-                            + logDownloadPath)
+                    val logDownloadPathDirFile = File(
+                        root.absolutePath
+                                + logDownloadPath
+                    )
                     if (!logDownloadPathDirFile.exists()) {
                         logDownloadPathDirFile.mkdirs()
                     }
@@ -898,8 +933,10 @@ class AbFileUtil {
          * @return the int
          */
         fun freeSpaceOnSD(): Int {
-            val stat = StatFs(Environment.getExternalStorageDirectory()
-                .path)
+            val stat = StatFs(
+                Environment.getExternalStorageDirectory()
+                    .path
+            )
             val sdFreeMB = stat.availableBlocks.toDouble() * stat
                 .blockSize.toDouble() / 1024 * 1024
             return sdFreeMB.toInt()
@@ -912,7 +949,7 @@ class AbFileUtil {
          */
         fun clearDownloadFile(): Boolean {
             try {
-                val fileDirectory = File(downloadRootDir)
+                val fileDirectory = downloadRootDir?.let { File(it) }
                 deleteFile(fileDirectory)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -936,8 +973,10 @@ class AbFileUtil {
                 }
                 if (file.isDirectory) {
                     val files = file.listFiles()
-                    for (i in files.indices) {
-                        deleteFile(files[i])
+                    if (files != null) {
+                        for (i in files.indices) {
+                            deleteFile(files[i])
+                        }
                     }
                 } else {
                     file.delete()
@@ -967,7 +1006,7 @@ class AbFileUtil {
             try {
                 inputReader = InputStreamReader(context.assets.open(name!!))
                 bufReader = BufferedReader(inputReader)
-                var line: String? = null
+                var line: String?
                 val buffer = StringBuffer()
                 while (bufReader.readLine().also { line = it } != null) {
                     buffer.append(line)
@@ -999,10 +1038,12 @@ class AbFileUtil {
             var inputReader: InputStreamReader? = null
             var bufReader: BufferedReader? = null
             try {
-                inputReader = InputStreamReader(context.resources
-                    .openRawResource(id))
+                inputReader = InputStreamReader(
+                    context.resources
+                        .openRawResource(id)
+                )
                 bufReader = BufferedReader(inputReader)
-                var line: String? = null
+                var line: String?
                 val buffer = StringBuffer()
                 while (bufReader.readLine().also { line = it } != null) {
                     buffer.append(line)
@@ -1162,8 +1203,6 @@ class AbFileUtil {
                     e.printStackTrace()
                 }
             }
-            val bufferSize = 100 * 1024 //200kb
-            val len: Long = 0
             var bufferedSink: BufferedSink? = null
             try {
                 bufferedSink = file.sink().buffer()
