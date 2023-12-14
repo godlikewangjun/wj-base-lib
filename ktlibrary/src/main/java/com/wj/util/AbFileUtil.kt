@@ -1213,7 +1213,7 @@ class AbFileUtil {
             } catch (e: IOException) {
                 e.printStackTrace()
             } finally {
-                bufferedSink!!.closeQuietly()
+                bufferedSink?.closeQuietly()
             }
         }
     }
