@@ -872,7 +872,7 @@ class AbFileUtil {
                     return
                 } else {
                     val root =
-                        if (Build.VERSION.SDK_INT >= 29) context.filesDir else Environment.getExternalStorageDirectory() //获取外置sdcasrd的路径
+                        Environment.getExternalStorageDirectory() //获取外置sdcasrd的路径
                     val downloadDir = File(
                         root.absolutePath
                                 + cacheDir
