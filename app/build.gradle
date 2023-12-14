@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    compileSdk 33
     defaultConfig {
         applicationId "com.wj.ktolin.baselibrary"
         minSdkVersion 21
@@ -30,8 +31,8 @@ android {
     }
     //指定jdk版本
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.wj.ktolin.baselibrary'
 }

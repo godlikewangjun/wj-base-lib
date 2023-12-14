@@ -12,15 +12,10 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 33
-
+    compileSdk 33
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 33
-
-        ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
-        }
 
         externalNativeBuild {
             cmake {
@@ -51,11 +46,8 @@ android {
         exclude 'LICENSE.txt'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = '11'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.wj.ktutils'
 }
