@@ -15,44 +15,38 @@
  */
 package com.wj.util
 
-import okio.appendingSink
-import okio.buffer
-import okio.source
-import okio.sink
-import okhttp3.internal.closeQuietly
-import android.graphics.Bitmap
 import android.content.Context
-import java.io.IOException
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import java.lang.StringBuffer
-import java.util.HashMap
-import android.os.Environment
-import java.lang.StringBuilder
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import android.content.Intent
 import android.os.Build
-import java.io.InputStream
-import java.lang.Thread
-import java.util.Comparator
-import java.io.FileInputStream
-import java.io.OutputStream
-import java.io.DataInputStream
-import java.io.ByteArrayInputStream
-import okio.BufferedSink
-import okio.BufferedSource
-import java.io.FileNotFoundException
-import java.net.URL
-import java.net.HttpURLConnection
-import java.util.Locale
+import android.os.Environment
 import android.os.StatFs
-import java.nio.charset.Charset
 import androidx.core.content.FileProvider
 import okhttp3.internal.and
+import okhttp3.internal.closeQuietly
+import okio.BufferedSink
+import okio.BufferedSource
+import okio.appendingSink
+import okio.buffer
+import okio.sink
+import okio.source
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
+import java.io.DataInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import java.nio.charset.Charset
+import java.util.Locale
 import java.util.regex.Pattern
 
 /**
@@ -872,9 +866,9 @@ class AbFileUtil {
                     return
                 } else {
                     val root =
-                        Environment.getExternalStorageDirectory() //获取外置sdcasrd的路径
+                        getFileRoot(context) //获取外置sdcasrd的路径
                     val downloadDir = File(
-                        root.absolutePath
+                        root
                                 + cacheDir
                     )
                     if (!downloadDir.exists()) {
@@ -882,7 +876,7 @@ class AbFileUtil {
                     }
                     downloadRootDir = downloadDir.path
                     val cacheDownloadDirFile = File(
-                        root.absolutePath
+                        root
                                 + cacheDownloadPath
                     )
                     if (!cacheDownloadDirFile.exists()) {
@@ -890,7 +884,7 @@ class AbFileUtil {
                     }
                     cacheDownloadDir = cacheDownloadDirFile.path
                     val imageDownloadDirFile = File(
-                        root.absolutePath
+                        root
                                 + imageDownloadPath
                     )
                     if (!imageDownloadDirFile.exists()) {
@@ -898,7 +892,7 @@ class AbFileUtil {
                     }
                     imageDownloadDir = imageDownloadDirFile.path
                     val fileDownloadDirFile = File(
-                        root.absolutePath
+                        root
                                 + fileDownloadPath
                     )
                     if (!fileDownloadDirFile.exists()) {
@@ -906,7 +900,7 @@ class AbFileUtil {
                     }
                     fileDownloadDir = fileDownloadDirFile.path
                     val dbDownloadDirFile = File(
-                        root.absolutePath
+                        root
                                 + dbDownloadPath
                     )
                     if (!dbDownloadDirFile.exists()) {
@@ -914,7 +908,7 @@ class AbFileUtil {
                     }
                     dbDownloadDir = dbDownloadDirFile.path
                     val logDownloadPathDirFile = File(
-                        root.absolutePath
+                        root
                                 + logDownloadPath
                     )
                     if (!logDownloadPathDirFile.exists()) {
@@ -926,7 +920,17 @@ class AbFileUtil {
                 e.printStackTrace()
             }
         }
-
+        private fun getFileRoot(context: Context): String? {
+            if (Environment.getExternalStorageState() ==
+                Environment.MEDIA_MOUNTED
+            ) {
+                val external = context.getExternalFilesDir(null)
+                if (external != null) {
+                    return external.absolutePath
+                }
+            }
+            return context.filesDir.absolutePath
+        }
         /**
          * 计算sdcard上的剩余空间.
          *
