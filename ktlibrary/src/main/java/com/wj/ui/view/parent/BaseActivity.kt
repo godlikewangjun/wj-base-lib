@@ -140,8 +140,8 @@ abstract class BaseActivity : AppCompatActivity() {
      * 设置主题色
      */
     fun setThemeColor(@ColorRes color: Int) {
-        title_systembar.setBackgroundColor(resources.getColor(color))
-        title.setBackgroundColor(resources.getColor(color))
+        title_systembar.setBackgroundResource(color)
+        title.setBackgroundResource(color)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //如果大于4.4 沉浸式导航栏
 //            setTranslucentStatus(true);
             var b = false
